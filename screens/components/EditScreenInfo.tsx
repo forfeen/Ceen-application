@@ -1,15 +1,14 @@
 import * as WebBrowser from 'expo-web-browser';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
-import Colors from '../constants/Colors';
+import Colors from '../../constants/Colors';
 import { MonoText } from './StyledText';
 import { Text, View } from './Themed';
 
-export default function VaccinationCharts({ path }: { path: string }) {
+export default function EditScreenInfo({ path }: { path: string }) {
   return (
     <View>
-      <Text style={styles.text}> Chart </Text>
-      {/* <View style={styles.getStartedContainer}>
+      <View style={styles.getStartedContainer}>
         <Text
           style={styles.getStartedText}
           lightColor="rgba(0,0,0,0.8)"
@@ -17,7 +16,12 @@ export default function VaccinationCharts({ path }: { path: string }) {
           Open up the code for this screen:
         </Text>
 
-
+        <View
+          style={[styles.codeHighlightContainer, styles.homeScreenFilename]}
+          darkColor="rgba(255,255,255,0.05)"
+          lightColor="rgba(0,0,0,0.05)">
+          <MonoText>{path}</MonoText>
+        </View>
 
         <Text
           style={styles.getStartedText}
@@ -33,7 +37,7 @@ export default function VaccinationCharts({ path }: { path: string }) {
             Tap here if your app doesn't automatically update after making changes
           </Text>
         </TouchableOpacity>
-      </View> */}
+      </View>
     </View>
   );
 }
@@ -45,34 +49,31 @@ function handleHelpPress() {
 }
 
 const styles = StyleSheet.create({
-  text: {
-    // backgroundColor: 'white'
-  }
-  // getStartedContainer: {
-  //   alignItems: 'center',
-  //   marginHorizontal: 50,
-  // },
-  // homeScreenFilename: {
-  //   marginVertical: 7,
-  // },
-  // codeHighlightContainer: {
-  //   borderRadius: 3,
-  //   paddingHorizontal: 4,
-  // },
-  // getStartedText: {
-  //   fontSize: 17,
-  //   lineHeight: 24,
-  //   textAlign: 'center',
-  // },
-  // helpContainer: {
-  //   marginTop: 15,
-  //   marginHorizontal: 20,
-  //   alignItems: 'center',
-  // },
-  // helpLink: {
-  //   paddingVertical: 15,
-  // },
-  // helpLinkText: {
-  //   textAlign: 'center',
-  // },
+  getStartedContainer: {
+    alignItems: 'center',
+    marginHorizontal: 50,
+  },
+  homeScreenFilename: {
+    marginVertical: 7,
+  },
+  codeHighlightContainer: {
+    borderRadius: 3,
+    paddingHorizontal: 4,
+  },
+  getStartedText: {
+    fontSize: 17,
+    lineHeight: 24,
+    textAlign: 'center',
+  },
+  helpContainer: {
+    marginTop: 15,
+    marginHorizontal: 20,
+    alignItems: 'center',
+  },
+  helpLink: {
+    paddingVertical: 15,
+  },
+  helpLinkText: {
+    textAlign: 'center',
+  },
 });
