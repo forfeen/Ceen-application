@@ -82,11 +82,12 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 30,
     marginTop: 24,
+    marginBottom: 20,
     // backgroundColor: 'white',
     borderRadius: 20,
     fontSize: 18,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 10 },
+    shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.14,
     shadowRadius: 15,  
     elevation: 3

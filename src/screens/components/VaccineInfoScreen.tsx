@@ -5,6 +5,7 @@ import Colors from '../../constants/Colors';
 import { MonoText } from './StyledText';
 import { Text, View } from './Themed';
 import React, {useContext} from 'react';
+// import Swiper from 'react-native-animated-swiper';
 
 export default function VaccineInfoScreen({ vaccine }: { vaccine: string }) {
 
