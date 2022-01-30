@@ -3,6 +3,7 @@ import Vaccine from '../types/vaccine.type';
 import VaccinationCharts from './components/VaccinationsCharts';
 import EditScreenInfo from './components/EditScreenInfo';
 import { Text, View } from './components/Themed';
+import { Card } from 'react-native-elements';
 import React, {useState, useEffect} from 'react';
 import {AxiosResponse} from 'axios';
 import vaccineService from './services/vaccine.service';
@@ -37,11 +38,16 @@ import vaccineService from './services/vaccine.service';
                                   () => navigation.navigate('Details', {vaccine: item.id})}
                                   >
                               <View style={{alignItems: 'center'}}>
-                                  <View style={styles.row}>
-                                      <Text style={styles.name}>{item.name}</Text>
+                                    <Card 
+                                      containerStyle={styles.card}
+                                    >
+                                      <View style={styles.list}>
+                                        <Text style={styles.name}>{item.name}</Text>
+                                        <Text style={styles.review_title}>{item.review} reviews</Text>
+                                      </View>
                                       <Text>{item.short_description}</Text>
+                                    </Card>
                                   </View>
-                              </View>
                           </TouchableOpacity>
                           );
                       }}/>
@@ -74,26 +80,34 @@ const styles = StyleSheet.create({
     width: '80%',
     top: '10%'
   },
-  row: {
+  list: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    backgroundColor: 'transparent'
+  },
+  card: {
     width: 309,
     height: 85,
-    paddingVertical: 20,
-    paddingHorizontal: 30,
-    marginTop: 24,
+    paddingVertical: 25,
+    paddingHorizontal: 20,
+    marginTop: 10,
     marginBottom: 20,
-    // backgroundColor: 'white',
     borderRadius: 20,
     fontSize: 18,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 5 },
+    shadowOffset: { width: 0, height: 12 },
     shadowOpacity: 0.14,
-    shadowRadius: 15,  
+    shadowRadius: 5,  
     elevation: 3
-},
-name: {
-    fontSize: 18,
-    letterSpacing: 0.75
-},
+  },
+  name: {
+      fontSize: 18,
+      letterSpacing: 0.75,
+  },
+  review_title: {
+    textAlign: 'right',
+    fontSize: 12,
+    color: "#2F80ED",
+    marginTop: 5.5
+  },
 });
