@@ -106,6 +106,9 @@ export default function VaccineInfoScreen({ vaccine }: { vaccine: string }) {
             </View>
           </View>
         </Swiper>
+        <Card containerStyle={styles.add_button}>
+                <Text style={{color: 'white', fontSize: 20}}>+</Text>
+        </Card>
     {/* </ScrollView> */}
     </View>
   );
@@ -185,5 +188,15 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 30,
     fontWeight: 'bold'
-  }
+  },
+  add_button: {
+    backgroundColor: '#2F80ED',
+    width: 122,
+    height:53,
+    borderRadius: 100,
+    elevation:0,                                             
+    position: 'absolute',
+    bottom: 15,   
+    alignItems: 'center',                                 
+  },
 });
