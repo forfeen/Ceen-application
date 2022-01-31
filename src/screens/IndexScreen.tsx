@@ -38,9 +38,7 @@ import vaccineService from './services/vaccine.service';
                                   () => navigation.navigate('Details', {vaccine: item.id})}
                                   >
                               <View style={{alignItems: 'center'}}>
-                                    <Card 
-                                      containerStyle={styles.card}
-                                    >
+                                    <Card containerStyle={styles.card_vaccine}>
                                       <View style={styles.list}>
                                         <Text style={styles.name}>{item.name}</Text>
                                         <Text style={styles.review_title}>{item.review} reviews</Text>
@@ -85,7 +83,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: 'transparent'
   },
-  card: {
+  card_vaccine: {
     width: 309,
     height: 85,
     paddingVertical: 25,
