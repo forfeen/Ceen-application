@@ -8,8 +8,8 @@ class VaccineDataService {
         return axios.get<Vaccine[]>(baseURL + '/vaccines');
     }
 
-    getVaccine() {
-
+    getVaccine(id) {
+        return axios.get<Vaccine>(baseURL + '/vaccines/' + id);
     }
 
 }

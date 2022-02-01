@@ -5,11 +5,27 @@ import Colors from '../../constants/Colors';
 import { MonoText } from './StyledText';
 import { Text, View } from './Themed';
 import { Card } from 'react-native-elements';
-import React, {useContext} from 'react';  
+import React, {useState, useEffect} from 'react';
 import Swiper from 'react-native-swiper';
+import vaccineService from '../services/vaccine.service';
 
-export default function VaccineInfoScreen({ vaccine }: { vaccine: string }) {
+const  VaccineInfoScreen = ({route, navigation}) => {
+  const { vaccineId } = route.params;
+  const [vaccine, setVaccine] = useState<Vaccine>();
 
+  console.log(vaccineId);
+  
+  useEffect(() => {
+    vaccineService
+      .getVaccine(vaccineId)
+      .then((responese: AxiosResponse) => {
+        // setVaccine({});
+          setVaccine(responese.data);          
+      });
+    }, []);
+
+  console.log(vaccine);
+  
   return (
     <View style={styles.container}>
       {/* <ScrollView> */}
@@ -18,14 +34,14 @@ export default function VaccineInfoScreen({ vaccine }: { vaccine: string }) {
                 <Text style={styles.info}>Information </Text>
           </Card>
           <Text style={{marginVertical: 10, marginHorizontal: 10}}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis </Text>
+            {vaccine?.long_description || ''} </Text>
             <Text style={styles.more_info}>more infomation...</Text>
           <View style={styles.vac_info}>
-            <Text style={styles.info_text}>Name: </Text>
-            <Text style={styles.info_text}>Developer: </Text>
-            <Text style={styles.info_text}>Performance: </Text>
-            <Text style={styles.info_text}>Average price per dose: </Text>
+            <Text style={styles.info_text}>Name: {vaccine?.name || ''}</Text>
+            <Text style={styles.info_text}>Type: {vaccine?.type || ''}</Text>
+            <Text style={styles.info_text}>Developer: {vaccine?.manufacturer || ''}</Text>
+            <Text style={styles.info_text}>Performance: {vaccine?.performance || ''}</Text>
+            <Text style={styles.info_text}>Average price per dose: {vaccine?.average_per_dose || '0'}</Text>
           </View>
         </Card>
 
@@ -114,11 +130,13 @@ export default function VaccineInfoScreen({ vaccine }: { vaccine: string }) {
   );
 }
 
-function handleHelpPress() {
-  WebBrowser.openBrowserAsync(
-    'https://docs.expo.io/get-started/create-a-new-app/#opening-the-app-on-your-phonetablet'
-  );
-}
+export default VaccineInfoScreen;
+
+// function handleHelpPress() {
+//   WebBrowser.openBrowserAsync(
+//     'https://docs.expo.io/get-started/create-a-new-app/#opening-the-app-on-your-phonetablet'
+//   );
+// }
 
 const styles = StyleSheet.create({
   container: {
