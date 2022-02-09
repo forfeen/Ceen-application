@@ -11,6 +11,7 @@ import { Card } from 'react-native-elements';
 import React, { useState, useEffect } from 'react';
 import Swiper from 'react-native-swiper';
 import vaccineService from '../services/vaccine.service';
+import { AntDesign, FontAwesome} from '@expo/vector-icons'; 
 import { ListItem } from 'react-native-elements/dist/list/ListItem';
 
 const  VaccineInfoScreen = ({route, navigation}) => {
@@ -170,7 +171,7 @@ const  VaccineInfoScreen = ({route, navigation}) => {
                     </View>
                       <View style={styles.like}>
                         <Text>
-                          likes: {item.likes} | dislike: {item.dislikes}
+                        <AntDesign name="like2" size={16} color="black" /> {item.likes}   <AntDesign name="dislike2" size={16} color="black" /> {item.dislikes}
                         </Text>
                       </View>
                     </View>
@@ -194,7 +195,7 @@ const  VaccineInfoScreen = ({route, navigation}) => {
                     </View>
                       <View style={styles.like}>
                         <Text>
-                          likes: {item.likes} | dislike: {item.dislikes}
+                        <AntDesign name="like2" size={16} color="black" /> {item.likes}   <AntDesign name="dislike2" size={16} color="black" /> {item.dislikes}  <FontAwesome name="comment-o" size={16} color="black" /> 
                         </Text>
                       </View>
                     </View>
