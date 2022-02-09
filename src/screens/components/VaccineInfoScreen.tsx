@@ -110,8 +110,8 @@ const  VaccineInfoScreen = ({route, navigation}) => {
             <Text style={styles.info_text}>Name: {vaccine?.name || ''}</Text>
             <Text style={styles.info_text}>Type: {vaccine?.type || ''}</Text>
             <Text style={styles.info_text}>Developer: {vaccine?.manufacturer || ''}</Text>
-            <Text style={styles.info_text}>Performance: {vaccine?.performance || ''}</Text>
-            <Text style={styles.info_text}>Average price per dose: {vaccine?.average_per_dose || '0'}</Text>
+            <Text style={styles.info_text}>Performance: {vaccine?.performance || ''}%</Text>
+            <Text style={styles.info_text}>Average price per dose: {vaccine?.average_per_dose || '0'} Baht</Text>
           </View>
         </Card>
 
@@ -219,7 +219,7 @@ const  VaccineInfoScreen = ({route, navigation}) => {
                     </View>
                       <View style={styles.like}>
                         <Text>
-                          likes: {item.likes} | dislike: {item.dislikes}
+                        <AntDesign name="like2" size={16} color="black" /> {item.likes}   <AntDesign name="dislike2" size={16} color="black" /> {item.dislikes}
                         </Text>
                       </View>
                     </View>
