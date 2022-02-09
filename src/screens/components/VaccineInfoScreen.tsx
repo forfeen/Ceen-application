@@ -1,30 +1,100 @@
 import * as WebBrowser from 'expo-web-browser';
-import { StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, TouchableOpacity, ScrollView , FlatList} from 'react-native';
 import Vaccine from '../../types/vaccine.type';
+import Review from '../../types/reviews.type';
+import Question from '../../types/questions.type';
+import Post from '../../types/posts.type';
 import Colors from '../../constants/Colors';
 import { MonoText } from './StyledText';
 import { Text, View } from './Themed';
 import { Card } from 'react-native-elements';
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import Swiper from 'react-native-swiper';
 import vaccineService from '../services/vaccine.service';
+import { AntDesign, FontAwesome} from '@expo/vector-icons'; 
+import { ListItem } from 'react-native-elements/dist/list/ListItem';
 
 const  VaccineInfoScreen = ({route, navigation}) => {
   const { vaccineId } = route.params;
   const [vaccine, setVaccine] = useState<Vaccine>();
-
-  console.log(vaccineId);
+  const [review, setReviews] = useState<Review>();
+  const [question, setQuestions] = useState<Question>();
+  const [post, setPosts] = useState<Post>();
   
   useEffect(() => {
-    vaccineService
-      .getVaccine(vaccineId)
-      .then((responese: AxiosResponse) => {
-        // setVaccine({});
-          setVaccine(responese.data);          
-      });
-    }, []);
+    const fetchInfos = async () => {
+      const vaccine = await getAllInfos();
+      setVaccine(vaccine);
+    }
+    
+    const fetchReviews = async () => {
+      const review = await getAllReviews();
+      setReviews(review);
+    }
 
-  console.log(vaccine);
+    const fetchQuestions = async () => {
+      const question = await getAllQuestions();
+      setQuestions(question);
+    }
+    
+    const fetchPosts = async () => {
+      const post = await getAllPosts();
+      setPosts(post);
+    }
+ 
+   fetchInfos();
+   fetchReviews();
+   fetchQuestions();
+   fetchPosts();
+}, []);
+
+  async function getAllInfos() {
+    const data = await vaccineService.getVaccine(vaccineId)
+        .then(response => {
+            return response.data;
+        })
+        .catch(e => {
+            console.error(e);
+        })
+        return data;
+  }
+
+  async function getAllReviews() {
+    const data = await vaccineService.getReview(vaccineId)
+        .then(response => {
+            return response.data.items;
+        })
+        .catch(e => {
+            console.error(e);
+        })
+        return data;
+  }
+
+  async function getAllQuestions() {
+    const data = await vaccineService.getQuestion(vaccineId)
+        .then(response => {
+            return response.data.items;
+        })
+        .catch(e => {
+            console.error(e);
+        })
+        return data;
+  }
+
+  async function getAllPosts() {
+    const data = await vaccineService.getPost(vaccineId)
+        .then(response => {
+            return response.data.items;
+        })
+        .catch(e => {
+            console.error(e);
+        })
+        return data;
+  }
+
+
+  // console.log(vaccine);
+  // console.log(review);
   
   return (
     <View style={styles.container}>
@@ -40,8 +110,8 @@ const  VaccineInfoScreen = ({route, navigation}) => {
             <Text style={styles.info_text}>Name: {vaccine?.name || ''}</Text>
             <Text style={styles.info_text}>Type: {vaccine?.type || ''}</Text>
             <Text style={styles.info_text}>Developer: {vaccine?.manufacturer || ''}</Text>
-            <Text style={styles.info_text}>Performance: {vaccine?.performance || ''}</Text>
-            <Text style={styles.info_text}>Average price per dose: {vaccine?.average_per_dose || '0'}</Text>
+            <Text style={styles.info_text}>Performance: {vaccine?.performance || ''}%</Text>
+            <Text style={styles.info_text}>Average price per dose: {vaccine?.average_per_dose || '0'} Baht</Text>
           </View>
         </Card>
 
@@ -87,39 +157,74 @@ const  VaccineInfoScreen = ({route, navigation}) => {
         >
           <View style={{backgroundColor: 'transparent'}}>
             <Text style={styles.title_section}>Review</Text>
-            <View style={styles.card_section}>
-            <Text style={{marginVertical: 10, marginHorizontal: 10}}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis </Text>
-            </View>
-            <View style={styles.card_section}>
-            <Text style={{marginVertical: 10, marginHorizontal: 10}}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis </Text>
-            </View>
-            <View style={styles.card_section}>
-            <Text style={{marginVertical: 10, marginHorizontal: 10}}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis </Text>
-            </View>
+            <FlatList 
+              data={review}
+              renderItem={( {item} ) => {
+                  return (
+                    <View style={styles.card_section}>
+                      <View style={styles.list}>
+                        <View style={styles.circle}>
+                        <Text>{item.id}</Text>
+                        </View> 
+                        <Text style={{marginStart: 20, marginTop: 5, marginHorizontal: 60}}>
+                        {item.description}</Text>
+                    </View>
+                      <View style={styles.like}>
+                        <Text>
+                        <AntDesign name="like2" size={16} color="black" /> {item.likes}   <AntDesign name="dislike2" size={16} color="black" /> {item.dislikes}
+                        </Text>
+                      </View>
+                    </View>
+                  );
+              }}/>
           </View>
 
           <View style={{backgroundColor: 'transparent'}}>
             <Text style={styles.title_section}>Questions/Answer</Text>
-            <View style={styles.card_section}>
-            <Text style={{marginVertical: 10, marginHorizontal: 10}}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis </Text>
-            </View>
+            <FlatList 
+              data={question}
+              renderItem={( {item} ) => {
+                  return (
+                    <View style={styles.card_section}>
+                      <View style={styles.list}>
+                        <View style={styles.circle}>
+                        <Text>{item.id}</Text>
+                        </View> 
+                        <Text style={{marginStart: 20, marginTop: 5, marginHorizontal: 60}}>
+                        {item.description}</Text>
+                    </View>
+                      <View style={styles.like}>
+                        <Text>
+                        <AntDesign name="like2" size={16} color="black" /> {item.likes}   <AntDesign name="dislike2" size={16} color="black" /> {item.dislikes}  <FontAwesome name="comment-o" size={16} color="black" /> 
+                        </Text>
+                      </View>
+                    </View>
+                  );
+              }}/>
           </View>
           
           <View style={{backgroundColor: 'transparent'}}>
             <Text style={styles.title_section}>Timeline</Text>
-            <View style={styles.card_section}>
-            <Text style={{marginVertical: 10, marginHorizontal: 10}}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis </Text>
-            </View>
+            <FlatList 
+              data={post}
+              renderItem={( {item} ) => {
+                  return (
+                    <View style={styles.card_section}>
+                      <View style={styles.list}>
+                        <View style={styles.circle}>
+                        <Text>{item.id}</Text>
+                        </View> 
+                        <Text style={{marginStart: 20, marginTop: 5, marginHorizontal: 60}}>
+                        {item.description}</Text>
+                    </View>
+                      <View style={styles.like}>
+                        <Text>
+                        <AntDesign name="like2" size={16} color="black" /> {item.likes}   <AntDesign name="dislike2" size={16} color="black" /> {item.dislikes}
+                        </Text>
+                      </View>
+                    </View>
+                  );
+              }}/>
           </View>
         </Swiper>
         <Card containerStyle={styles.add_button}>
@@ -154,6 +259,19 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     elevation:0,
     borderWidth: 0
+  },
+  list: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    backgroundColor: 'transparent',
+    marginTop: 20,
+    marginLeft: 20,
+  },
+  like:{
+    backgroundColor: 'transparent',
+    position: 'absolute',
+    bottom: 5,
+    right: 15,
   },
   title_info: {
     backgroundColor: '#E2FFE9',
@@ -217,4 +335,12 @@ const styles = StyleSheet.create({
     bottom: 15,   
     alignItems: 'center',                                 
   },
+  circle: {
+    width: 44,
+    height: 44,
+    borderRadius: 100,
+    backgroundColor: '#2F80ED',
+    alignItems: 'center',
+    justifyContent: 'center'
+ }
 });

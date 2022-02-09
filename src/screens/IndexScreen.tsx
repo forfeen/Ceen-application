@@ -23,7 +23,12 @@ import vaccineService from './services/vaccine.service';
         return (
             <View style={styles.container}>
               <Text style={styles.title}>Vaccinations Overview</Text>
-              <VaccinationCharts path="/screens/ModalScreen.tsx" />
+              <View style={{alignItems: 'center'}}>
+              <Card containerStyle={{width: 309, height: 140}}>
+                {/* <VaccinationCharts path="/screens/ModalScreen.tsx" /> */}
+                <Text>Chart</Text>
+              </Card>
+             </View>
         
               {/* <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" /> */}
         
