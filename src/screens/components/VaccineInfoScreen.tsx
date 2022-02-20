@@ -13,6 +13,8 @@ import Swiper from 'react-native-swiper';
 import vaccineService from '../services/vaccine.service';
 import { AntDesign, FontAwesome} from '@expo/vector-icons'; 
 import { ListItem } from 'react-native-elements/dist/list/ListItem';
+import Svg, { Rect, Circle} from 'react-native-svg';
+import ContentLoader from 'react-native-masked-loader';
 
 const  VaccineInfoScreen = ({route, navigation}) => {
   const { vaccineId } = route.params;
@@ -20,33 +22,8 @@ const  VaccineInfoScreen = ({route, navigation}) => {
   const [review, setReviews] = useState<Review>();
   const [question, setQuestions] = useState<Question>();
   const [post, setPosts] = useState<Post>();
-  
-  useEffect(() => {
-    const fetchInfos = async () => {
-      const vaccine = await getAllInfos();
-      setVaccine(vaccine);
-    }
-    
-    const fetchReviews = async () => {
-      const review = await getAllReviews();
-      setReviews(review);
-    }
-
-    const fetchQuestions = async () => {
-      const question = await getAllQuestions();
-      setQuestions(question);
-    }
-    
-    const fetchPosts = async () => {
-      const post = await getAllPosts();
-      setPosts(post);
-    }
- 
-   fetchInfos();
-   fetchReviews();
-   fetchQuestions();
-   fetchPosts();
-}, []);
+  const MaskedInfoElement = getMaskedInfoElement();
+  const MaskedElement = getMaskedElement();
 
   async function getAllInfos() {
     const data = await vaccineService.getVaccine(vaccineId)
@@ -91,10 +68,80 @@ const  VaccineInfoScreen = ({route, navigation}) => {
         })
         return data;
   }
+  
+  useEffect(() => {
+    const fetchInfos = async () => {
+      const vaccine = await getAllInfos();
+      setVaccine(vaccine);
+    }
+    
+    const fetchReviews = async () => {
+      const review = await getAllReviews();
+      setReviews(review);
+    }
 
+    const fetchQuestions = async () => {
+      const question = await getAllQuestions();
+      setQuestions(question);
+    }
+    
+    const fetchPosts = async () => {
+      const post = await getAllPosts();
+      setPosts(post);
+    }
+ 
+   fetchInfos();
+   fetchReviews();
+   fetchQuestions();
+   fetchPosts();
+  }, []);
 
-  // console.log(vaccine);
-  // console.log(review);
+  function getMaskedInfoElement() {
+    return (
+      <Svg height="100%" width="100%" fill={'black'}>
+        <Rect x="10" y="10" rx="0" ry="0" width="40%" height="8" />
+        <Rect x="10" y="30" rx="0" ry="0" width="94%" height="8" />
+        <Rect x="10" y="50" rx="0" ry="0" width="94%" height="8" />
+        <Rect x="67%" y="70" rx="0" ry="0" width="30%" height="8" />
+        <Rect x="10" y="90" rx="0" ry="0" width="94%" height="120" />
+      </Svg>
+    );
+  }
+
+  function getMaskedElement() {
+    return (
+      <Svg height="100%" width="100%" fill={'black'}>
+        <Circle cx="28" cy="28" r="22" />
+        <Rect x="70" y="12" rx="0" ry="0" width="75%" height="8" />
+        <Rect x="60" y="32" rx="0" ry="0" width="78%" height="8" />
+        <Rect x="62%" y="52" rx="0" ry="0" width="35%" height="8" />
+      </Svg> 
+    );
+  }
+
+  if (vaccine === undefined && review === undefined
+    && question === undefined && post === undefined) {
+    return <View style={styles.masked_container}>
+    <Card containerStyle={styles.masked_info}>
+      <ContentLoader MaskedElement={MaskedInfoElement} dir={'rtl'} duration={2000} forColor="#93c2db" backColor="#5c96b8"/>
+      {/* <ContentLoader MaskedElement={MaskedElement} dir={'rtl'} duration={2000} forColor="#87b9d4" backColor="#529fcc"/> */}
+    </Card>
+    <View style={{marginVertical: 30, backgroundColor: 'transparent'}}>
+      <Card containerStyle={styles.masked_card}>
+        <ContentLoader MaskedElement={MaskedElement} dir={'rtl'} duration={2000} forColor="#93c2db" backColor="#5c96b8"/>
+      </Card>
+      <Card containerStyle={styles.masked_card}>
+        <ContentLoader MaskedElement={MaskedElement} dir={'rtl'} duration={2000} forColor="#93c2db" backColor="#5c96b8"/>
+      </Card>
+      <Card containerStyle={styles.masked_card}>
+        <ContentLoader MaskedElement={MaskedElement} dir={'rtl'} duration={2000} forColor="#93c2db" backColor="#5c96b8"/>
+      </Card>
+      <Card containerStyle={styles.masked_card}>
+        <ContentLoader MaskedElement={MaskedElement} dir={'rtl'} duration={2000} forColor="#93c2db" backColor="#5c96b8"/>
+      </Card>
+    </View>
+  </View>
+  }
   
   return (
     <View style={styles.container}>
@@ -113,7 +160,7 @@ const  VaccineInfoScreen = ({route, navigation}) => {
             <Text style={styles.info_text}>Performance: {vaccine?.performance || ''}%</Text>
             <Text style={styles.info_text}>Average price per dose: {vaccine?.average_per_dose || '0'} Baht</Text>
           </View>
-        </Card>
+      </Card>
 
 
         <Swiper
@@ -342,5 +389,32 @@ const styles = StyleSheet.create({
     backgroundColor: '#2F80ED',
     alignItems: 'center',
     justifyContent: 'center'
- }
+ },
+
+//  masked_element
+  masked_container: {
+    flex: 1,
+    backgroundColor: '#CAEAF2',
+    alignItems: 'center',
+  },
+  masked_info: {
+    backgroundColor: 'white',
+    // padding: 20,
+    marginVertical: 20,
+    // borderRadius: 10,
+    width: 343,
+    height: 250,
+    borderRadius: 20,
+    elevation:0,
+    borderWidth: 0
+  },
+  masked_card: {
+    backgroundColor: 'white',
+    marginVertical: 15,
+    width: 343,
+    height: 100,
+    borderRadius: 20,
+    elevation:0,
+    borderWidth: 0
+  },
 });
