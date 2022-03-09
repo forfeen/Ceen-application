@@ -1,39 +1,52 @@
 import * as WebBrowser from 'expo-web-browser';
+import { Dimensions } from 'react-native';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-
+import {
+  LineChart,
+  BarChart,
+  PieChart,
+  ProgressChart,
+  ContributionGraph,
+  StackedBarChart
+} from "react-native-chart-kit";
 import Colors from '../../constants/Colors';
 import { MonoText } from './StyledText';
 import { Text, View } from './Themed';
 
 export default function VaccinationCharts({ path }: { path: string }) {
+  const screenWidth = Dimensions.get("window").width;
+
+  const data = {
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+    datasets: [
+      {
+        data: [20, 45, 50, 80, 99, 120],
+      }
+    ],
+  };
+
+  const chartConfig = {
+    backgroundGradientFrom: "#FFF",
+    backgroundGradientTo: "#FFF",
+    color: (opacity = 1) => "#313552",
+  };
   return (
     <View>
-      <Text style={styles.text}> Chart </Text>
-      {/* <View style={styles.getStartedContainer}>
-        <Text
-          style={styles.getStartedText}
-          lightColor="rgba(0,0,0,0.8)"
-          darkColor="rgba(255,255,255,0.8)">
-          Open up the code for this screen:
-        </Text>
+    <LineChart
+      data={data}
+      width={330}
+      height={256}
+      chartConfig={chartConfig}
+      // bezier
+      style={{
+        marginTop: 2,
+        marginVertical: 8,
+        marginHorizontal: 8,
+        // borderRadi
+        borderRadius: 16
+      }}
+    />
 
-
-
-        <Text
-          style={styles.getStartedText}
-          lightColor="rgba(0,0,0,0.8)"
-          darkColor="rgba(255,255,255,0.8)">
-          Change any of the text, save the file, and your app will automatically update.
-        </Text>
-      </View>
-
-      <View style={styles.helpContainer}>
-        <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
-          <Text style={styles.helpLinkText} lightColor={Colors.light.tint}>
-            Tap here if your app doesn't automatically update after making changes
-          </Text>
-        </TouchableOpacity>
-      </View> */}
     </View>
   );
 }
