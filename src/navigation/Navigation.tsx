@@ -3,17 +3,19 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
-import { FontAwesome } from '@expo/vector-icons';
+import { Feather, FontAwesome } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
-import { ColorSchemeName, Pressable } from 'react-native';
+import { ColorSchemeName, Pressable, Text } from 'react-native';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import IndexScreen from '../screens/IndexScreen';
 import VaccineInfoScreen from '../screens/components/VaccineInfoScreen';
+import SignUpScreen from '../screens/components/SignUpScreen';
+import LoginScreen from '../screens/components/LoginScreen';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import TabOneScreen from '../screens/TabOneScreen';
@@ -41,29 +43,100 @@ function RootNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen 
-        name="Root" 
-        component={IndexScreen} 
-        options={{
-          title: 'Ceen',
+      name="SignUp" 
+      component={SignUpScreen} 
+      options ={({ route, navigation }) => ({ 
+        headertitle: 'Sign Up',
+        headerShadowVisible: false,
+        headerStatusBarHeight: 50,
+        headerStyle: {
+          backgroundColor: 'white',
+        },
+        headerTintColor: '#000',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+          fontSize: 25,
+        },
+        headerRight: () => (
+          <Pressable
+            onPress={() => {
+              navigation.navigate('Login');
+            }}
+            style={({ pressed }) => ({
+              opacity: pressed ? 0.5 : 1,
+            })}>
+              {({ pressed }) => (
+            <Text style={{color: "#2D9CDB", fontSize: 16}}>
+              {pressed ? 'Log in' : 'Log in'}
+            </Text>
+        )}
+          </Pressable>
+        ),
+      })}
+      />
+      <Stack.Screen 
+        name="Login"
+        component={LoginScreen}
+        options ={({ route, navigation }) => ({ 
+          headertitle: 'Sign Up',
+          headerShadowVisible: false,
+          headerStatusBarHeight: 50,
           headerStyle: {
-            backgroundColor: '#E4F3F6',
+            backgroundColor: 'white',
           },
           headerTintColor: '#000',
           headerTitleStyle: {
             fontWeight: 'bold',
-            fontSize: 20,
+            fontSize: 25,
           },
-          headerRight: () => (
+          headerLeft: () => (
             <Pressable
-              
+              onPress={() => {
+                navigation.navigate('SignUp');
+              }}
               style={({ pressed }) => ({
                 opacity: pressed ? 0.5 : 1,
               })}>
-              <FontAwesome
-                name="info-circle"
-                size={25}
-                // color={Colors[colorScheme].text}
-                style={{ marginRight: 15 }}
+                {({ pressed }) => (
+              <Text style={{color: "#2D9CDB", fontSize: 16}}>
+                {pressed ? 'Sign Up' : 'Sign Up'}
+              </Text>
+          )}
+            </Pressable>
+          ),
+        })}
+        />
+      <Stack.Screen 
+        name="Index" 
+        component={IndexScreen} 
+        options={{
+          title: '',
+          headerShadowVisible: false,
+          headerStyle: {
+            backgroundColor: '#E4F3F6',
+            
+          },
+          // headerTintColor: '#000',
+          // headerTitleStyle: {
+          //   fontWeight: 'bold',
+          //   fontSize: 20,
+          // },
+          headerLeft: () => (
+            <Text style={{fontWeight: 'bold', fontSize: 25}}>Ceen</Text>
+          ),
+          headerRight: () => (
+            <Pressable
+              onPress={() => {
+              
+              }}
+              style={({ pressed }) => ({
+                opacity: pressed ? 0.5 : 1,
+              })}>
+              <Feather
+                name="user"
+                size={22}
+                color="#B1B1B3"
+                style={{ marginRight: 5 }}
               />
             </Pressable>
           ),
