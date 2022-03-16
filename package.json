@@ -30,6 +30,7 @@
     "react-hook-form": "^7.28.0",
     "react-native": "0.64.3",
     "react-native-animated-swiper": "^0.0.23",
+    "react-native-chart-kit": "^6.12.0",
     "react-native-elements": "^3.4.2",
     "react-native-masked-loader": "^1.1.4",
     "react-native-masked-view": "^0.2.0",
