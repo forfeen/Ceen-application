@@ -75,6 +75,38 @@ function RootNavigator() {
       })}
       />
       <Stack.Screen 
+        name="Login"
+        component={LoginScreen}
+        options ={({ route, navigation }) => ({ 
+          headertitle: 'Sign Up',
+          headerShadowVisible: false,
+          headerStatusBarHeight: 50,
+          headerStyle: {
+            backgroundColor: 'white',
+          },
+          headerTintColor: '#000',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 25,
+          },
+          headerLeft: () => (
+            <Pressable
+              onPress={() => {
+                navigation.navigate('SignUp');
+              }}
+              style={({ pressed }) => ({
+                opacity: pressed ? 0.5 : 1,
+              })}>
+                {({ pressed }) => (
+              <Text style={{color: "#2D9CDB", fontSize: 16}}>
+                {pressed ? 'Sign Up' : 'Sign Up'}
+              </Text>
+          )}
+            </Pressable>
+          ),
+        })}
+        />
+      <Stack.Screen 
         name="Index" 
         component={IndexScreen} 
         options={{
