@@ -1,7 +1,9 @@
 export default interface Question {
-    id: string,
-    description: string,
-    like: number,
-    dislike: number,
-    date: string
+    id?: string,
+    title?: string,
+    type?: string,
+    description?: string,
+    likes?: number,
+    dislikes?: number,
+    date?: string
   }
