@@ -17,27 +17,35 @@ class VaccineDataService {
     }
 
     getReview(id) {
-        return axios.get<Vaccine>(baseURL + '/reviews/'+id);
+        return axios.get<Vaccine>(baseURL + '/reviews/'+ id);
     }
 
     getQuestion(id) {
-        return axios.get<Vaccine>(baseURL + '/questions/'+id);
+        return axios.get<Vaccine>(baseURL + '/questions/'+ id);
     }
 
     getPost(id) {
-        return axios.get<Vaccine>(baseURL + '/timelines/'+id);
+        return axios.get<Vaccine>(baseURL + '/timelines/'+ id);
     }
 
     getCovidCase() {
         return axios.get<Covid>(covidURl);
     }
 
-    // getVaccinationData() {
-    //     return axios.get<VaccinationData>(vaccinationUrl + 'fullData=false');
-    // }
-
     getVaccinationFullData() {
         return axios.get<VaccinationData>(vaccinationUrl);
+    }
+
+    createQuestion(id, data) {
+        return axios.post<Vaccine>(baseURL + '/questions/'+ id, data);
+    }
+
+    createPost(id, data) {
+        return axios.post<Vaccine>(baseURL + '/timelines/'+ id, data);
+    }
+
+    createReview(id, data) {
+        return axios.post<Vaccine>(baseURL + '/reviews/'+ id, data);
     }
 
 }

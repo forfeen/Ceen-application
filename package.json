@@ -40,6 +40,7 @@
     "react-native-elements": "^3.4.2",
     "react-native-masked-loader": "^1.1.4",
     "react-native-masked-view": "^0.2.0",
+    "react-native-multi-selectbox": "^1.5.0",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "~3.10.1",
     "react-native-svg": "12.1.1",

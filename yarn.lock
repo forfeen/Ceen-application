@@ -8890,6 +8890,11 @@
   "resolved" "https://registry.npmjs.org/react-native-masked-view/-/react-native-masked-view-0.2.0.tgz"
   "version" "0.2.0"
 
+"react-native-multi-selectbox@^1.5.0":
+  "integrity" "sha512-yRxV8PPD0TIRoXK4WduHcADzroB2UWGbJIlKEGkvz8sPPs80o8wdJDthuqbvO7U6rIP2ABb/TRaJAFAxFTi8jw=="
+  "resolved" "https://registry.npmjs.org/react-native-multi-selectbox/-/react-native-multi-selectbox-1.5.0.tgz"
+  "version" "1.5.0"
+
 "react-native-progress@^3.4.0":
   "integrity" "sha512-zzTe595xaaskyfR5OzaGrU4O0R+YkgdEw+EspgGD7wh8Hu0fs6ue3xLW+HEbTjOCn62pCRivwi3NxbpWNBCC7Q=="
   "resolved" "https://registry.npmjs.org/react-native-progress/-/react-native-progress-3.6.0.tgz"
