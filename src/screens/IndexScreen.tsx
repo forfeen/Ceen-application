@@ -22,13 +22,15 @@ import vaccineService from './services/vaccine.service';
 
         return (
             <View style={styles.container}>
-              <Text style={styles.title}>Vaccinations Overview</Text>
+              {/* <Text style={styles.title}>Vaccinations Overview</Text> */}
               <View style={{alignItems: 'center'}}>
               <VaccinationCharts path="/screens/ModalScreen.tsx" />
              </View>
         
               {/* <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" /> */}
-        
+            <View>
+
+            </View>
               <Text style={styles.title}>Vaccines</Text>
                 <FlatList 
                       data={vaccine}
@@ -53,7 +55,6 @@ import vaccineService from './services/vaccine.service';
                           </TouchableOpacity>
                           );
                       }}/>
-    
               {/* Use a light status bar on iOS to account for the black space above the modal */}
               {/* <StatusBar style={Platform.OS === 'ios' ? 'black' : 'auto'} /> */}
             </View>

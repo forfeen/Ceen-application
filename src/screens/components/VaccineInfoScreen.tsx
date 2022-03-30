@@ -15,6 +15,8 @@ import { AntDesign, FontAwesome} from '@expo/vector-icons';
 import { ListItem } from 'react-native-elements/dist/list/ListItem';
 import Svg, { Rect, Circle} from 'react-native-svg';
 import ContentLoader from 'react-native-masked-loader';
+import ActionButton from 'react-native-action-button';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const VaccineInfoScreen = ({route, navigation}) => {
   const { vaccineId } = route.params;
@@ -95,6 +97,7 @@ const VaccineInfoScreen = ({route, navigation}) => {
    fetchQuestions();
    fetchPosts();
   }, []);
+
   function getMaskedInfoElement() {
     return (
       <Svg height="100%" width="100%" fill={'black'}>
@@ -272,21 +275,22 @@ const VaccineInfoScreen = ({route, navigation}) => {
               }}/>
           </View>
         </Swiper>
-        <Card containerStyle={styles.add_button}>
-                <Text style={{color: 'white', fontSize: 20}}>+</Text>
-        </Card>
-    {/* </ScrollView> */}
+       <ActionButton buttonColor="rgba(231,76,60,1)">
+          <ActionButton.Item buttonColor='#9b59b6' title="New Review" onPress={() => navigation.navigate('Review', {vaccineId: vaccineId})}>
+            <Icon name="md-create" style={styles.actionButtonIcon} />
+          </ActionButton.Item>
+          <ActionButton.Item buttonColor='#3498db' title="New Question" onPress={() => navigation.navigate('Question', {vaccineId: vaccineId})}>
+            <Icon name="md-create" style={styles.actionButtonIcon} />
+          </ActionButton.Item>
+          <ActionButton.Item buttonColor='#1abc9c' title="New Post" onPress={() => navigation.navigate('Post', {vaccineId: vaccineId})}>
+            <Icon name="md-create" style={styles.actionButtonIcon} />
+          </ActionButton.Item>
+        </ActionButton>
     </View>
   );
 }
 
 export default VaccineInfoScreen;
-
-// function handleHelpPress() {
-//   WebBrowser.openBrowserAsync(
-//     'https://docs.expo.io/get-started/create-a-new-app/#opening-the-app-on-your-phonetablet'
-//   );
-// }
 
 const styles = StyleSheet.create({
   container: {
@@ -300,7 +304,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     // borderRadius: 10,
     width: 343,
-    height: 272,
+    // height: 272,
     borderRadius: 20,
     elevation:0,
     borderWidth: 0
@@ -414,5 +418,10 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     elevation:0,
     borderWidth: 0
+  },
+  actionButtonIcon: {
+    fontSize: 25,
+    height: 30,
+    color: 'white',
   },
 });

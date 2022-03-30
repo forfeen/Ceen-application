@@ -23,6 +23,10 @@ import TabOneScreen from '../screens/TabOneScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../../types';
 import LinkingConfiguration from './LinkingConfiguration';
+import CreateReviewScreen from '../screens/components/CreateReview';
+import CreateQuestionScreen from '../screens/components/CreateQuestion';
+import CreatePostScreen from '../screens/components/CreatePost';
+
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -189,6 +193,11 @@ function RootNavigator() {
           ),
         })}
       />
+      <Stack.Screen name="Details" component={VaccineInfoScreen} />
+      <Stack.Screen name="Review" component={CreateReviewScreen} />
+      <Stack.Screen name="Post" component={CreatePostScreen} />
+      <Stack.Screen name="Question" component={CreateQuestionScreen} />
+      
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       {/* <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
