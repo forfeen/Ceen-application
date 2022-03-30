@@ -63,7 +63,7 @@ export default function VaccinationCharts({ path }: { path: string }) {
       setDay(day);
       setMonth(month);
       setYear(year);
-      console.log(vaccination);
+      console.log(vaccinationData);
       
     }
 
@@ -141,7 +141,7 @@ export default function VaccinationCharts({ path }: { path: string }) {
             <View>
                 <View style={{ flexDirection: 'row', flex:1, margin: 10 }}>
                   <View style={{ width: 120, height: 245, backgroundColor: '#fff', borderRadius: 15}} >
-                      <Text style={styles.textVacHeader}> Today </Text>
+                      <Text style={styles.textVacHeader}> Last updated {'\n'} 1 day ago </Text>
                       <Text style={styles.textVacBody}> {vaccinationDaily || '-'} </Text>
                       <Text style={styles.textVacHeader}> Total </Text>
                       <Text style={styles.textVacBody}> {vaccinationTotal || '-'} </Text>
