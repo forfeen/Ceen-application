@@ -193,7 +193,6 @@ function RootNavigator() {
           ),
         })}
       />
-      <Stack.Screen name="Details" component={VaccineInfoScreen} />
       <Stack.Screen name="Review" component={CreateReviewScreen} />
       <Stack.Screen name="Post" component={CreatePostScreen} />
       <Stack.Screen name="Question" component={CreateQuestionScreen} />
