@@ -16,7 +16,7 @@ import { ListItem } from 'react-native-elements/dist/list/ListItem';
 import Svg, { Rect, Circle} from 'react-native-svg';
 import ContentLoader from 'react-native-masked-loader';
 
-const  VaccineInfoScreen = ({route, navigation}) => {
+const VaccineInfoScreen = ({route, navigation}) => {
   const { vaccineId } = route.params;
   const [vaccine, setVaccine] = useState<Vaccine>();
   const [review, setReviews] = useState<Review>();
@@ -95,7 +95,6 @@ const  VaccineInfoScreen = ({route, navigation}) => {
    fetchQuestions();
    fetchPosts();
   }, []);
-
   function getMaskedInfoElement() {
     return (
       <Svg height="100%" width="100%" fill={'black'}>
@@ -142,7 +141,6 @@ const  VaccineInfoScreen = ({route, navigation}) => {
     </View>
   </View>
   }
-  
   return (
     <View style={styles.container}>
       {/* <ScrollView> */}

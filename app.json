@@ -19,9 +19,20 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ske16.ceen",
+      "config": {
+        "googleMapsApiKey": "${process.env.iOSMapsApiKey}"
+      }
+      
     },
     "android": {
+      "package": "com.ske16.ceen",
+      "config" : {
+        "googleMaps": {
+        "apiKey": "${process.env.iOSMapsApiKey}"
+        }
+      },
       "adaptiveIcon": {
         "foregroundImage": "src/assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"

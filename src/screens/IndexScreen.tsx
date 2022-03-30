@@ -37,8 +37,10 @@ import vaccineService from './services/vaccine.service';
                           return (
                           <TouchableOpacity 
                               onPress={
-                                  () => navigation.navigate('Details', {vaccineId: item.id})}
-                                  >
+                                  () => {
+                                    navigation.navigate('Details', {vaccineId: item.id});
+                                  }
+                              }>
                               <View style={{alignItems: 'center'}}>
                                     <Card containerStyle={styles.card_vaccine}>
                                       <View style={styles.list}>

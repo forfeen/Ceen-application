@@ -28,6 +28,10 @@ class VaccineDataService {
         return axios.get<Vaccine>(baseURL + '/timelines/'+id);
     }
 
+    getHospital(id) {
+        return axios.get<Vaccine>(baseURL + '/hospitals/'+id);
+    }
+
     getCovidCase() {
         return axios.get<Covid>(covidURl);
     }
