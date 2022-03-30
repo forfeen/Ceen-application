@@ -18,7 +18,7 @@ import ContentLoader from 'react-native-masked-loader';
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const  VaccineInfoScreen = ({route, navigation}) => {
+const VaccineInfoScreen = ({route, navigation}) => {
   const { vaccineId } = route.params;
   const [vaccine, setVaccine] = useState<Vaccine>();
   const [review, setReviews] = useState<Review>();
@@ -98,7 +98,6 @@ const  VaccineInfoScreen = ({route, navigation}) => {
    fetchPosts();
   }, []);
 
-
   function getMaskedInfoElement() {
     return (
       <Svg height="100%" width="100%" fill={'black'}>
@@ -145,7 +144,6 @@ const  VaccineInfoScreen = ({route, navigation}) => {
     </View>
   </View>
   }
-  
   return (
     <View style={styles.container}>
       {/* <ScrollView> */}

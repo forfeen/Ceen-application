@@ -16,6 +16,7 @@ import IndexScreen from '../screens/IndexScreen';
 import VaccineInfoScreen from '../screens/components/VaccineInfoScreen';
 import SignUpScreen from '../screens/components/SignUpScreen';
 import LoginScreen from '../screens/components/LoginScreen';
+import MapScreen from '../screens/components/MapScreen';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import TabOneScreen from '../screens/TabOneScreen';
@@ -50,7 +51,7 @@ function RootNavigator() {
       name="SignUp" 
       component={SignUpScreen} 
       options ={({ route, navigation }) => ({ 
-        headertitle: 'Sign Up',
+        title: 'Sign Up',
         headerShadowVisible: false,
         headerStatusBarHeight: 50,
         headerStyle: {
@@ -82,7 +83,7 @@ function RootNavigator() {
         name="Login"
         component={LoginScreen}
         options ={({ route, navigation }) => ({ 
-          headertitle: 'Sign Up',
+          title: 'Log In',
           headerShadowVisible: false,
           headerStatusBarHeight: 50,
           headerStyle: {
@@ -109,7 +110,7 @@ function RootNavigator() {
             </Pressable>
           ),
         })}
-        />
+      />
       <Stack.Screen 
         name="Index" 
         component={IndexScreen} 
@@ -146,11 +147,56 @@ function RootNavigator() {
           ),
         }}
          />
-      <Stack.Screen name="Details" component={VaccineInfoScreen} />
+      <Stack.Screen name="Map" 
+        component={MapScreen}
+        options={{
+          title: 'Location',
+          headerShadowVisible: false,
+          headerStyle: {
+            backgroundColor: 'white',
+          },
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 23,
+          },
+        }}
+      />
+      <Stack.Screen name="Details"
+        component={VaccineInfoScreen}
+        options ={({ route, navigation }) => ({ 
+          title: 'Details',
+          headerTintColor: '#000',
+          headerStyle: {
+            backgroundColor: 'white',
+          },
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 23,
+          },
+          headerRight: () => (
+            <Pressable
+              onPress={() => {
+                navigation.navigate('Map', {vaccineId: 1});
+              }}
+              style={({ pressed }) => ({
+                opacity: pressed ? 0.5 : 1,
+              })}>
+                {({ pressed }) => (
+              <FontAwesome
+              name="map-marker"
+              size={28}
+              color="#b34646"
+              style={{ marginRight: 5 }}/>
+              
+          )}
+            </Pressable>
+          ),
+        })}
+      />
       <Stack.Screen name="Review" component={CreateReviewScreen} />
       <Stack.Screen name="Post" component={CreatePostScreen} />
       <Stack.Screen name="Question" component={CreateQuestionScreen} />
-
+      
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       {/* <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
