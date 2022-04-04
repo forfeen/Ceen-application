@@ -1,4 +1,5 @@
 export default interface Review {
+    '#'?: string,
     id: string,
     description: string,
     price:number ,
@@ -9,7 +10,12 @@ export default interface Review {
     secondDose: string,
     thridDose: string,
     fourthDose: string,
-    like: number,
-    dislike: number,
-    date: string
+    likes: number,
+    dislikes: number,
+    date: string,
+    isLike: boolean,
+    isDislike: boolean
+    
   }
+
+  

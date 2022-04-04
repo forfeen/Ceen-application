@@ -14,8 +14,8 @@ export default function VaccinationCharts({ path }: { path: string }) {
   const [covid, setCovid] = useState<Covid>();
   const [vaccination, setVaccination] = useState<VaccinationData[]>([]);
   const [vaccinationData, setVaccinationData] = useState<Number[]>([]);
-  const [vaccinationDaily, setDaily] = useState<Number>();
-  const [vaccinationTotal, setTotal] = useState<Number>();
+  const [vaccinationDaily, setDaily] = useState<Number>(0);
+  const [vaccinationTotal, setTotal] = useState<Number>(0);
 
   const [newCase, setNewCase] = useState<Number>();
   const [recoveryCase, setNewRecover] = useState<Number>();
@@ -81,7 +81,9 @@ export default function VaccinationCharts({ path }: { path: string }) {
       const total = vaccination[9].total;      
       setDaily(daily);
       setTotal(total);
-      
+      console.log(vaccination);
+      console.log(vaccinationData);
+
     };
 
     fetchCovidCase();
@@ -142,9 +144,9 @@ export default function VaccinationCharts({ path }: { path: string }) {
                 <View style={{ flexDirection: 'row', flex:1, margin: 10 }}>
                   <View style={{ width: 120, height: 245, backgroundColor: '#fff', borderRadius: 15}} >
                       <Text style={styles.textVacHeader}> Last updated {'\n'} 1 day ago </Text>
-                      <Text style={styles.textVacBody}> {vaccinationDaily || '-'} </Text>
+                      <Text style={styles.textVacBody}> {vaccinationDaily.toLocaleString() || '-'} </Text>
                       <Text style={styles.textVacHeader}> Total </Text>
-                      <Text style={styles.textVacBody}> {vaccinationTotal || '-'} </Text>
+                      <Text style={styles.textVacBody}> {vaccinationTotal.toLocaleString()  || '-'} </Text>
 
                   </View>
                   <View style={{justifyContent: 'center' }} >

@@ -52,6 +52,18 @@ class VaccineDataService {
         return axios.post<Vaccine>(baseURL + '/reviews/'+ id, data);
     }
 
+    likeReview(id, data) {
+        return axios.post<Vaccine>(baseURL + '/reviews/'+ id + '&method=PUT' , data);
+    }
+
+    likePost(id, data) {
+        return axios.post<Vaccine>(baseURL + '/timelines/'+ id + '&method=PUT' , data);
+    }
+
+    likeQuestion(id, data) {
+        return axios.post<Vaccine>(baseURL + '/questions/'+ id + '&method=PUT' , data);
+    }
+
 }
 
 export default new VaccineDataService;
