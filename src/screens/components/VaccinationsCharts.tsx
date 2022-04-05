@@ -1,6 +1,4 @@
-import * as WebBrowser from 'expo-web-browser';
-import { Dimensions } from 'react-native';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
 import {LineChart,} from "react-native-chart-kit";
 import Swiper from 'react-native-swiper';
 import { Text, View } from './Themed';
@@ -64,7 +62,6 @@ export default function VaccinationCharts({ path }: { path: string }) {
       setMonth(month);
       setYear(year);
       console.log(vaccinationData);
-      
     }
 
     const fetchVaccinationData = async () => {

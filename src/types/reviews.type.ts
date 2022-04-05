@@ -8,7 +8,7 @@ export default interface Review {
     currentDose: number,
     firstDose: string,
     secondDose: string,
-    thridDose: string,
+    thirdDose: string,
     fourthDose: string,
     likes: number,
     dislikes: number,

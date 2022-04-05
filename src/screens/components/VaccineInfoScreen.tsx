@@ -113,7 +113,7 @@ const VaccineInfoScreen = ({route, navigation}) => {
        date: question.date
     };
     await putLikeQuestion(dislikeData);
-    }
+  }
 
   async function likeQuestion(question) {
     const likeData = {
@@ -140,7 +140,7 @@ const VaccineInfoScreen = ({route, navigation}) => {
        date: post.date
     };
     await putLikePost(dislikeData);
-    }
+  }
 
   async function likePost(post) {
     const likeData = {
@@ -349,20 +349,28 @@ const VaccineInfoScreen = ({route, navigation}) => {
               data={question}
               renderItem={( {item} ) => {
                   return (
-                    <View style={styles.card_section}>
-                      <View style={styles.list}>
-                        <View style={styles.circle}>
-                        <Text>{item.id}</Text>
-                        </View> 
-                        <Text style={{marginStart: 20, marginTop: 5, marginHorizontal: 60}}>
-                        {item.description}</Text>
-                    </View>
-                      <View style={styles.like}>
-                        <Text>
-                        <AntDesign name="like2" size={16} color="green" onPress={ () => {  likeQuestion(item)}} /> {item.likes}   <AntDesign name="dislike2" size={16} color="red" onPress={ () => {  dislikeQuestion(item)}} /> {item.dislikes}  <FontAwesome name="comment-o" size={16} color="black" /> 
-                        </Text>
+                    <TouchableOpacity
+                      onPress={
+                        () => {
+                         console.log(item['#']);
+                         ;
+                        }
+                    }>
+                      <View style={styles.card_section} >
+                        <View style={styles.list}>
+                          <View style={styles.circle}>
+                          <Text>{item.id}</Text>
+                          </View> 
+                          <Text style={{marginStart: 20, marginTop: 5, marginHorizontal: 60}}>
+                          {item.description}</Text>
                       </View>
-                    </View>
+                        <View style={styles.like}>
+                          <Text>
+                          <AntDesign name="like2" size={16} color="green" onPress={ () => {  likeQuestion(item)}} /> {item.likes}   <AntDesign name="dislike2" size={16} color="red" onPress={ () => {  dislikeQuestion(item)}} /> {item.dislikes}  <FontAwesome name="comment-o" size={16} color="black" /> 
+                          </Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
                   );
               }}/>
           </View>
