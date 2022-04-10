@@ -26,6 +26,8 @@ import LinkingConfiguration from './LinkingConfiguration';
 import CreateReviewScreen from '../screens/components/CreateReview';
 import CreateQuestionScreen from '../screens/components/CreateQuestion';
 import CreatePostScreen from '../screens/components/CreatePost';
+import QuestionScreen from '../screens/components/QuestionScreen';
+import CreateAnswerScreen from '../screens/components/CreateAnswer';
 
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
@@ -193,10 +195,25 @@ function RootNavigator() {
           ),
         })}
       />
-      <Stack.Screen name="Review" component={CreateReviewScreen} />
-      <Stack.Screen name="Post" component={CreatePostScreen} />
-      <Stack.Screen name="Question" component={CreateQuestionScreen} />
-      
+      <Stack.Screen name="Question" 
+        component={QuestionScreen}
+        // options={{
+        //   title: 'Location',
+        //   headerShadowVisible: false,
+        //   headerStyle: {
+        //     backgroundColor: 'white',
+        //   },
+        //   headerTitleStyle: {
+        //     fontWeight: 'bold',
+        //     fontSize: 23,
+        //   },
+        // }}
+      />
+      <Stack.Screen name="Create Review" component={CreateReviewScreen} />
+      <Stack.Screen name="Create Post" component={CreatePostScreen} />
+      <Stack.Screen name="Create Question" component={CreateQuestionScreen} />
+      <Stack.Screen name="Create Answer" component={CreateAnswerScreen} />
+
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       {/* <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />

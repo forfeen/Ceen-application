@@ -3,24 +3,52 @@ import { Text, View } from './Themed';
 import { Button, Card } from 'react-native-elements';
 import React, { useState, useEffect } from 'react';
 import vaccineService from '../services/vaccine.service';
-
+import SelectBox from 'react-native-multi-selectbox';
+import { xorBy } from 'lodash';
 
 const CreateQuestionScreen = ({route, navigation}) => {
  const { vaccineId } = route.params;
  const [vaccineName, setName] = useState('');
  const [title, onChangeText] = React.useState('');
  const [description, onChangeDes] = React.useState('');
+ const [typeItems, setTypes] = useState([]);
+
+ const TYPE_OPTIONS = [
+  {
+    item: 'Location',
+    id: 'Location'
+  },
+  {
+    item: 'Price', 
+    id: 'Price'
+  },
+  {
+    item: 'Effects', 
+    id: 'Effects'
+  },
+]
+
+function onMultiChange() {
+  return (item) => setTypes(xorBy(typeItems, [item], 'id'));
+}
 
  async function createQuestion() {
+
+  var type = '';
+   typeItems.map((x) => {
+    type += x.id;
+    type += ', ';
+   });
+
   const question = {
-     //id: 0, // make it unique
      title: title,
      description: description,
-     type: '',
+     type: type,
      likes: 0,
      dislikes: 0,
      date: 0
   };
+
   const data = await vaccineService.createQuestion(vaccineId, question)
       .then(response => {
           onChangeText('');
@@ -28,8 +56,8 @@ const CreateQuestionScreen = ({route, navigation}) => {
           Alert.alert(
             'Success',
             'The question was created',
-            [   
-                {text: 'OK', 
+            [
+                {text: 'OK',
                 onPress: () => navigation.navigate('Details', {vaccineId: vaccineId})},
             ]
           );
@@ -73,6 +101,16 @@ const CreateQuestionScreen = ({route, navigation}) => {
             onChangeText={onChangeText} 
             value={title} 
             placeholder="Type a title" />
+         <Text style={styles.des_title}> Type: </Text>       
+         <SelectBox
+                  label
+                  options={TYPE_OPTIONS}
+                  selectedValues={typeItems}
+                  onMultiSelect={onMultiChange()}
+                  onTapClose={onMultiChange()}
+                  isMulti
+                  hideInputFilter
+                />
           <Text style={styles.des_title}> Description: </Text>       
          <TextInput 
             multiline 
@@ -102,11 +140,8 @@ const styles = StyleSheet.create({
   },
   card_info: {
     backgroundColor: 'white',
-    // padding: 20,
     marginVertical: 20,
-    // borderRadius: 10,
     width: 343,
-    // height: 300,
     borderRadius: 20,
     elevation:0,
     borderWidth: 0
@@ -114,7 +149,6 @@ const styles = StyleSheet.create({
   vaccine_name: {
     top: 10.73,
     left: 5,
-    // width: 105,
     height: 30.36,
     fontWeight: '500',
     fontSize: 24
@@ -127,10 +161,10 @@ const styles = StyleSheet.create({
       lineHeight: 14
   },
   des_title: {
-    left: 5
+    left: 5,
+    marginTop: 20
   },
   input: {
-    // height: 34,
     width: 230,
     margin: 12,
     borderWidth: 1,
