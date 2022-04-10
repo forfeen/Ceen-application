@@ -140,11 +140,8 @@ const styles = StyleSheet.create({
   },
   card_info: {
     backgroundColor: 'white',
-    // padding: 20,
     marginVertical: 20,
-    // borderRadius: 10,
     width: 343,
-    // height: 300,
     borderRadius: 20,
     elevation:0,
     borderWidth: 0
@@ -152,7 +149,6 @@ const styles = StyleSheet.create({
   vaccine_name: {
     top: 10.73,
     left: 5,
-    // width: 105,
     height: 30.36,
     fontWeight: '500',
     fontSize: 24
@@ -169,7 +165,6 @@ const styles = StyleSheet.create({
     marginTop: 20
   },
   input: {
-    // height: 34,
     width: 230,
     margin: 12,
     borderWidth: 1,
