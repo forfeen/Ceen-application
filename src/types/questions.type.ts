@@ -1,4 +1,5 @@
 export default interface Question {
+    '#'?: string,
     id?: string,
     title?: string,
     type?: string,

@@ -4,15 +4,12 @@ import Vaccine from '../../types/vaccine.type';
 import Review from '../../types/reviews.type';
 import Question from '../../types/questions.type';
 import Post from '../../types/posts.type';
-import Colors from '../../constants/Colors';
-import { MonoText } from './StyledText';
 import { Text, View } from './Themed';
 import { Card } from 'react-native-elements';
 import React, { useState, useEffect } from 'react';
 import Swiper from 'react-native-swiper';
 import vaccineService from '../services/vaccine.service';
 import { AntDesign, FontAwesome} from '@expo/vector-icons'; 
-import { ListItem } from 'react-native-elements/dist/list/ListItem';
 import Svg, { Rect, Circle} from 'react-native-svg';
 import ContentLoader from 'react-native-masked-loader';
 import ActionButton from 'react-native-action-button';
@@ -69,6 +66,123 @@ const VaccineInfoScreen = ({route, navigation}) => {
             console.error(e);
         })
         return data;
+  }
+
+  function putLikeQuestion(putData) {
+    const data = vaccineService.likeQuestion(vaccineId, putData)
+        .then(response => {          
+            return response.data;
+        })
+        .catch(e => {
+            console.error(e);
+        })
+        return data;
+  }
+  
+  function putLikeReview(putData) {
+    const data = vaccineService.likeReview(vaccineId, putData)
+        .then(response => {          
+            return response.data;
+        })
+        .catch(e => {
+            console.error(e);
+        })
+        return data;
+  }
+
+  function putLikePost(putData) {
+    const data = vaccineService.likePost(vaccineId, putData)
+        .then(response => {          
+            return response.data;
+        })
+        .catch(e => {
+            console.error(e);
+        })
+        return data;
+  }
+
+  async function dislikeQuestion(question) {
+    const dislikeData = {
+       '#': question['#'],
+       id: question.id,
+       description: question.description,
+       title: question.title,
+       type: question.type,
+       likes: question.likes,
+       dislikes: question.dislikes + 1,
+       date: question.date
+    };
+    await putLikeQuestion(dislikeData);
+  }
+
+  async function likeQuestion(question) {
+    const likeData = {
+       '#': question['#'],
+       id: question.id,
+       description: question.description,
+       title: question.title,
+       type: question.type,
+       likes: question.likes + 1,
+       dislikes: question.dislikes,
+       date: question.date
+    };
+    await putLikeQuestion(likeData);
+  }
+
+  async function dislikePost(post) {
+    const dislikeData = {
+       '#': post['#'],
+       id: post.id,
+       description: post.description,
+       title: post.title,
+       likes: post.likes,
+       dislikes: post.dislikes + 1,
+       date: post.date
+    };
+    await putLikePost(dislikeData);
+  }
+
+  async function likePost(post) {
+    const likeData = {
+       '#': post['#'],
+       id: post.id,
+       description: post.description,
+       title: post.title,
+       likes: post.likes + 1,
+       dislikes: post.dislikes,
+       date: post.date
+    };
+    await putLikePost(likeData);
+  }
+
+  async function dislikeReview(review) {
+    const dislikeData = {
+       '#': review['#'],
+       id: review.id,
+       description: review.description,
+       price: review.price,
+       location: review.location,
+       effects: review.effects,
+       likes: review.likes,
+       dislikes: review.dislikes + 1,
+       date: review.date
+    };
+    await putLikeReview(dislikeData);
+  }
+
+  async function likeReview(review) {
+    const likeData = {
+       '#': review['#'],
+       id: review.id,
+       description: review.description,
+       price: review.price,
+       location: review.location,
+       effects: review.effects,
+       likes: review.likes + 1,
+       dislikes: review.dislikes,
+       date: review.date
+    };
+    await putLikeReview(likeData);
   }
   
   useEffect(() => {
@@ -162,9 +276,7 @@ const VaccineInfoScreen = ({route, navigation}) => {
             <Text style={styles.info_text}>Average price per dose: {vaccine?.average_per_dose || '0'} Baht</Text>
           </View>
       </Card>
-
-
-        <Swiper
+      <Swiper
           style={styles.wrapper}
           paginationStyle={{
             position: 'absolute',
@@ -204,10 +316,11 @@ const VaccineInfoScreen = ({route, navigation}) => {
           }
         >
           <View style={{backgroundColor: 'transparent'}}>
-            <Text style={styles.title_section}>Review</Text>
+            <Text style={styles.title_section}>Reviews</Text>
             <FlatList 
               data={review}
               renderItem={( {item} ) => {
+                // item.'#'
                   return (
                     <View style={styles.card_section}>
                       <View style={styles.list}>
@@ -219,7 +332,8 @@ const VaccineInfoScreen = ({route, navigation}) => {
                     </View>
                       <View style={styles.like}>
                         <Text>
-                        <AntDesign name="like2" size={16} color="black" /> {item.likes}   <AntDesign name="dislike2" size={16} color="black" /> {item.dislikes}
+                          {/* { item.isLike ? <AntDesign name="like1"  size={16} color="green" onPress={ () => {  LikeReview(item);}} /> : <AntDesign name="like2" size={16} color="green" onPress={ () => {  LikeReview(item);}} />  } {item.likes} { item.isDislike ? <AntDesign name="dislike1"  size={16} color="red"/> : <AntDesign name="dislike2" size={16} color="red"/> } {item.dislikes}  */}
+                          <AntDesign name="like2" size={16} color="green"  onPress={ () => {  likeReview(item)}} /> {item.likes}   <AntDesign name="dislike2" size={16} color="red" onPress={ () => {  dislikeReview(item)}} /> {item.dislikes}
                         </Text>
                       </View>
                     </View>
@@ -228,31 +342,38 @@ const VaccineInfoScreen = ({route, navigation}) => {
           </View>
 
           <View style={{backgroundColor: 'transparent'}}>
-            <Text style={styles.title_section}>Questions/Answer</Text>
+            <Text style={styles.title_section}>Questions/Answers</Text>
             <FlatList 
               data={question}
               renderItem={( {item} ) => {
                   return (
-                    <View style={styles.card_section}>
-                      <View style={styles.list}>
-                        <View style={styles.circle}>
-                        <Text>{item.id}</Text>
-                        </View> 
-                        <Text style={{marginStart: 20, marginTop: 5, marginHorizontal: 60}}>
-                        {item.description}</Text>
-                    </View>
-                      <View style={styles.like}>
-                        <Text>
-                        <AntDesign name="like2" size={16} color="black" /> {item.likes}   <AntDesign name="dislike2" size={16} color="black" /> {item.dislikes}  <FontAwesome name="comment-o" size={16} color="black" /> 
-                        </Text>
+                    <TouchableOpacity
+                      onPress={
+                        () => {
+                          navigation.navigate('Question', {vaccineId: vaccineId, questionId: item['#']});
+                        }
+                    }>
+                      <View style={styles.card_section} >
+                        <View style={styles.list}>
+                          <View style={styles.circle}>
+                          <Text>{item.id}</Text>
+                          </View> 
+                          <Text style={{marginStart: 20, marginTop: 5, marginHorizontal: 60}}>
+                          {item.description}</Text>
                       </View>
-                    </View>
+                        <View style={styles.like}>
+                          <Text>
+                          <AntDesign name="like2" size={16} color="green" onPress={ () => {  likeQuestion(item)}} /> {item.likes}   <AntDesign name="dislike2" size={16} color="red" onPress={ () => {  dislikeQuestion(item)}} /> {item.dislikes}  <FontAwesome name="comment-o" size={16} color="black" /> 
+                          </Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
                   );
               }}/>
           </View>
           
           <View style={{backgroundColor: 'transparent'}}>
-            <Text style={styles.title_section}>Timeline</Text>
+            <Text style={styles.title_section}>Timelines</Text>
             <FlatList 
               data={post}
               renderItem={( {item} ) => {
@@ -267,7 +388,7 @@ const VaccineInfoScreen = ({route, navigation}) => {
                     </View>
                       <View style={styles.like}>
                         <Text>
-                        <AntDesign name="like2" size={16} color="black" /> {item.likes}   <AntDesign name="dislike2" size={16} color="black" /> {item.dislikes}
+                        <AntDesign name="like2" size={16} color="green" onPress={ () => {  likePost(item)}} /> {item.likes}   <AntDesign name="dislike2" size={16} color="red" onPress={ () => {  dislikePost(item)}} /> {item.dislikes}
                         </Text>
                       </View>
                     </View>

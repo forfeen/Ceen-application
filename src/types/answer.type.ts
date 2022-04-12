@@ -1,9 +1,9 @@
-export default interface Post {
+export default interface Answer {
     '#'?: string,
+    answer_id: string,
     id: string,
-    title: string,
     description: string,
     like: number,
     dislike: number,
     date: string
-  }
+}
