@@ -14,10 +14,6 @@ const QuestionScreen = ({route, navigation}) => {
     const vaccineId  = route.params.vaccineId;
     const questionId = route.params.questionId;
 
-    console.log(vaccineId);
-    console.log(questionId);
-
-    
     const [ question, setQuestion ] = useState<Question>();
     const [ answer, setAnswer] = useState<Answer>();
 
@@ -52,7 +48,6 @@ const QuestionScreen = ({route, navigation}) => {
         const fetchAnswer = async () => {
           const answers = await getAnswer();
           const answerSameId = answers.filter((a) => a.answer_id === questionId);
-          console.log(answerSameId);
           setAnswer(answerSameId);
         }
 
@@ -103,10 +98,10 @@ const QuestionScreen = ({route, navigation}) => {
                     </View>
                   );
               }}/>
-              <ActionButton buttonColor="rgba(231,76,60,1)">
-                <ActionButton.Item buttonColor='#1abc9c' title="Create Answer" onPress={() => navigation.navigate('Create Answer', {vaccineId: vaccineId, questionId: question['#'], question: question.title})}>
+              <ActionButton buttonColor="rgba(231,76,60,1)" onPress={() => navigation.navigate('Create Answer', {vaccineId: vaccineId, question: question})}>
+                {/* <ActionButton.Item buttonColor='#1abc9c' title="Create Answer" onPress={() => navigation.navigate('Create Answer', {vaccineId: vaccineId, questionId: question['#'], question: question.title})}>
                 < Icon name="md-create" style={styles.actionButtonIcon} />
-                </ActionButton.Item>
+                </ActionButton.Item> */}
               </ActionButton>
         </View>
         
