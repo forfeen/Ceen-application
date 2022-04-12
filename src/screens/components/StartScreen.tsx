@@ -2,11 +2,20 @@ import { StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
 import { Text, View } from '../components/Themed';
 import { Card } from 'react-native-elements';
 import React, {useState, useEffect} from 'react';
+import { auth } from '../../../firebase'
+import { onAuthStateChanged } from 'firebase/auth';
 
 const StartScreen = ({navigation}: {navigation: any}) => {
 
     const pressedStart = () => {
-        navigation.push("LogIn")
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            if (user) {
+                navigation.push("Index")
+            } else {
+                navigation.push("LogIn")
+            }
+        });
+        unsubscribe();
     };
     
 return (

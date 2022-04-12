@@ -4,7 +4,6 @@ import { Card } from 'react-native-elements';
 import React, {useState, useEffect} from 'react';
 import UserDetail from '../../types/userDetail.type';
 import { TextInput } from 'react-native-paper';
-import ImagePicker from 'react-native-image-picker';
 
 import { auth } from '../../../firebase'
 import { onAuthStateChanged, signOut } from 'firebase/auth';
@@ -13,16 +12,12 @@ const UserProfile = ({navigation}: {navigation: any}) => {
     const [user, setUser] = useState<UserDetail>();
     const a = auth.currentUser;
     const pressedLogout = () => {
-        signOut;
-        console.log("signed out");
-        navigation.push("LogIn")
+        auth.signOut()
+        .then(navigation.push("Start"))
     }
-
+    
     function handleChange() {
-
     }
-
-
 
     useEffect(() => {
         auth.currentUser.providerData.forEach((UserInfo) => {

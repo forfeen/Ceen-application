@@ -50,13 +50,15 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      initialRouteName='Start' ///the name of the initial screen
+      >
       <Stack.Screen 
       name="Start" 
       component={StartScreen} 
       options={{
-        headerShown: false,
         headerShadowVisible: false,
+        headerShown: false,
         headerStyle: {
           backgroundColor: 'white',
         },

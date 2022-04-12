@@ -26,6 +26,6 @@ if (getApps().length === 0) {
   app = getApp();
 }
 
-console.log(firebaseConfig)
+// console.log(firebaseConfig)
 
 export const auth = getAuth(app);
