@@ -1,39 +1,43 @@
-import { StyleSheet, TextInput, Alert, ActivityIndicator } from 'react-native';
-import { Text, View } from './Themed';
-import { Button, Card } from 'react-native-elements';
-import React, { useState, useEffect } from 'react';
+import { StyleSheet, TextInput, Alert, TouchableOpacity } from 'react-native';
 import vaccineService from '../services/vaccine.service';
 import SelectBox from 'react-native-multi-selectbox';
+import { useForm, Controller } from "react-hook-form";
+import { Card } from 'react-native-elements';
+import { Text, View } from './Themed';
+import React, { useState, useEffect } from 'react';
 import { xorBy } from 'lodash';
+import Question from '../../types/questions.type';
 
 const CreateQuestionScreen = ({route, navigation}) => {
  const { vaccineId } = route.params;
  const [vaccineName, setName] = useState('');
- const [title, onChangeText] = React.useState('');
- const [description, onChangeDes] = React.useState('');
  const [typeItems, setTypes] = useState([]);
 
+ const { control, handleSubmit, formState: { errors } } = useForm<Question>();
+ const pressedQuestion = handleSubmit( data => createQuestion(data));
+
  const TYPE_OPTIONS = [
-  {
-    item: 'Location',
-    id: 'Location'
-  },
-  {
-    item: 'Price', 
-    id: 'Price'
-  },
-  {
-    item: 'Effects', 
-    id: 'Effects'
-  },
-]
+    {
+      item: 'Location',
+      id: 'Location'
+    },
+    {
+      item: 'Price', 
+      id: 'Price'
+    },
+    {
+      item: 'Effects', 
+      id: 'Effects'
+    },
+  ]
 
-function onMultiChange() {
-  return (item) => setTypes(xorBy(typeItems, [item], 'id'));
-}
+  function onMultiChange() {
+    return (item) => setTypes(xorBy(typeItems, [item], 'id'));
+  }
 
- async function createQuestion() {
-
+ async function createQuestion(questionData) {
+  console.log(questionData);
+  
   var type = '';
    typeItems.map((x) => {
     type += x.id;
@@ -41,8 +45,8 @@ function onMultiChange() {
    });
 
   const question = {
-     title: title,
-     description: description,
+     title: questionData.title,
+     description: questionData.description,
      type: type,
      likes: 0,
      dislikes: 0,
@@ -51,8 +55,6 @@ function onMultiChange() {
 
   const data = await vaccineService.createQuestion(vaccineId, question)
       .then(response => {
-          onChangeText('');
-          onChangeDes('');
           Alert.alert(
             'Success',
             'The question was created',
@@ -93,15 +95,27 @@ function onMultiChange() {
     <View style={styles.container}>
       <Card containerStyle={styles.card_info}>
           <Text style={styles.vaccine_name}> {vaccineName} </Text>
-          <Text style={styles.title}> Title: </Text>       
-          <TextInput 
-            style={styles.input}
-            multiline
-            maxLength={70} 
-            onChangeText={onChangeText} 
-            value={title} 
-            placeholder="Type a title" />
-         <Text style={styles.des_title}> Type: </Text>       
+          <Text style={styles.title}> Title: </Text> 
+          <Controller
+            control={control}
+            rules={{ maxLength: 70, required: true }}
+            name="title"
+            render={({
+              field: { onChange, onBlur, value, ref  },
+            }) => (
+              <TextInput 
+                style={styles.input}  
+                onBlur={onBlur} // notify when input is touched
+                multiline
+                maxLength={70}
+                onChangeText={onChange} 
+                value={value} 
+                placeholder="Type a title"
+            />
+          )} 
+          />   
+          {errors.title && errors.title.type === "required" && <Text style={styles.error_msg}>Title is required</Text>}
+         <Text style={styles.des_title}> Type: </Text> 
          <SelectBox
                   label
                   options={TYPE_OPTIONS}
@@ -110,21 +124,32 @@ function onMultiChange() {
                   onTapClose={onMultiChange()}
                   isMulti
                   hideInputFilter
-                />
-          <Text style={styles.des_title}> Description: </Text>       
-         <TextInput 
-            multiline 
-            style={styles.description}  
-            onChangeText={onChangeDes} 
-            value={description}
-            maxLength={450}
-            placeholder="Type a description"
           />
+          <Text style={styles.des_title}> Description: </Text>       
+          <Controller
+            control={control}
+            rules={{ maxLength: 450, required: true }}
+            name="description"
+            render={({
+              field: { onChange, onBlur, value, ref  },
+            }) => (
+              <TextInput 
+                style={styles.description}  
+                onBlur={onBlur} // notify when input is touched
+                multiline
+                maxLength={450}
+                onChangeText={onChange} 
+                value={value} 
+                placeholder="Type a description"
+              />
+            )}
+            /> 
+          {errors.description && errors.description.type === "required" && <Text style={styles.error_msg}>Description is required</Text>}
+
       </Card>
-      <Button 
-        style={styles.submit} 
-        title="Post" 
-        onPress={() => createQuestion()} />
+      <TouchableOpacity onPress={pressedQuestion} style={styles.submit}>
+            <Text style={styles.textbutton}>Post</Text>
+        </TouchableOpacity>
     </View>
   );
 }
@@ -185,8 +210,23 @@ const styles = StyleSheet.create({
     lineHeight: 24
   },
   submit: {
+    height: 51,
     width: 250,
+    marginTop: 60,
+    backgroundColor: "#2D9CDB",
     borderRadius: 100,
-    margin: 25,
+    justifyContent: "center",
+  },
+  textbutton: {
+    textAlign: "center",
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: "white",
+  }, 
+  error_msg: {
+    color: 'red',
+    left: 100,
+    fontWeight: '400',
+    top: 2
   }
 });
