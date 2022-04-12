@@ -18,6 +18,7 @@ import SignUpScreen from '../screens/components/SignUpScreen';
 import LoginScreen from '../screens/components/LoginScreen';
 import MapScreen from '../screens/components/MapScreen';
 import UserProfile from '../screens/components/UserProfile';
+import StartScreen from '../screens/components/StartScreen';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import TabOneScreen from '../screens/TabOneScreen';
@@ -50,6 +51,21 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootNavigator() {
   return (
     <Stack.Navigator>
+      <Stack.Screen 
+      name="Start" 
+      component={StartScreen} 
+      options={{
+        headerShown: false,
+        headerShadowVisible: false,
+        headerStyle: {
+          backgroundColor: 'white',
+        },
+        headerTitleStyle: {
+          fontWeight: 'bold',
+          fontSize: 23,
+        },
+      }}
+      />
       <Stack.Screen 
         name="LogIn"
         component={LoginScreen}

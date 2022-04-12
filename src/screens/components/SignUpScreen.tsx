@@ -152,7 +152,6 @@ const styles = StyleSheet.create({
         top: 30,
 
     },
-
     textbutton: {
         textAlign: "center",
         fontSize: 16,

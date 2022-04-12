@@ -23,6 +23,7 @@ export type RootStackParamList = {
   Index: undefined;
   Map: undefined;
   Profile: undefined;
+  Start: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<
