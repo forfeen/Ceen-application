@@ -67,7 +67,7 @@ const MapScreen = ({route, navigation}) => {
   }, []);
 
   // console.log(location.latitude);
-  console.log(hospital)
+  // console.log(hospital)
 
 
 

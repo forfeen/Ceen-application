@@ -397,13 +397,13 @@ const VaccineInfoScreen = ({route, navigation}) => {
           </View>
         </Swiper>
        <ActionButton buttonColor="rgba(231,76,60,1)">
-          <ActionButton.Item buttonColor='#9b59b6' title="New Review" onPress={() => navigation.navigate('Create Review', {vaccineId: vaccineId})}>
+          <ActionButton.Item buttonColor='#9b59b6' title="New Review" onPress={() => navigation.push('Review', {vaccineId: vaccineId})}>
             <Icon name="md-create" style={styles.actionButtonIcon} />
           </ActionButton.Item>
-          <ActionButton.Item buttonColor='#3498db' title="New Question" onPress={() => navigation.navigate('Create Question', {vaccineId: vaccineId})}>
+          <ActionButton.Item buttonColor='#3498db' title="New Question" onPress={() => navigation.push('Question', {vaccineId: vaccineId})}>
             <Icon name="md-create" style={styles.actionButtonIcon} />
           </ActionButton.Item>
-          <ActionButton.Item buttonColor='#1abc9c' title="New Post" onPress={() => navigation.navigate('Create Post', {vaccineId: vaccineId})}>
+          <ActionButton.Item buttonColor='#1abc9c' title="New Post" onPress={() => navigation.push('Post', {vaccineId: vaccineId})}>
             <Icon name="md-create" style={styles.actionButtonIcon} />
           </ActionButton.Item>
         </ActionButton>

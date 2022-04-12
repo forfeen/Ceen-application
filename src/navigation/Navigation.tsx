@@ -17,6 +17,8 @@ import VaccineInfoScreen from '../screens/components/VaccineInfoScreen';
 import SignUpScreen from '../screens/components/SignUpScreen';
 import LoginScreen from '../screens/components/LoginScreen';
 import MapScreen from '../screens/components/MapScreen';
+import UserProfile from '../screens/components/UserProfile';
+import StartScreen from '../screens/components/StartScreen';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import TabOneScreen from '../screens/TabOneScreen';
@@ -48,7 +50,57 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      initialRouteName='Start' ///the name of the initial screen
+      >
+      <Stack.Screen 
+      name="Start" 
+      component={StartScreen} 
+      options={{
+        headerShadowVisible: false,
+        headerShown: false,
+        headerStyle: {
+          backgroundColor: 'white',
+        },
+        headerTitleStyle: {
+          fontWeight: 'bold',
+          fontSize: 23,
+        },
+      }}
+      />
+      <Stack.Screen 
+        name="LogIn"
+        component={LoginScreen}
+        options ={({ route, navigation }) => ({ 
+          title: 'Log In',
+          headerShadowVisible: false,
+          headerBackVisible: false,
+          headerStatusBarHeight: 50,
+          headerStyle: {
+            backgroundColor: 'white',
+          },
+          headerTintColor: '#000',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 25,
+          },
+          headerRight: () => (
+            <Pressable
+              onPress={() => {
+                navigation.push('SignUp');
+              }}
+              style={({ pressed }) => ({
+                opacity: pressed ? 0.5 : 1,
+              })}>
+                {({ pressed }) => (
+              <Text style={{color: "#2D9CDB", fontSize: 16}}>
+                {pressed ? 'Sign Up' : 'Sign Up'}
+              </Text>
+          )}
+            </Pressable>
+          ),
+        })}
+      />
       <Stack.Screen 
       name="SignUp" 
       component={SignUpScreen} 
@@ -64,10 +116,10 @@ function RootNavigator() {
           fontWeight: 'bold',
           fontSize: 25,
         },
-        headerRight: () => (
+        headerLeft: () => (
           <Pressable
             onPress={() => {
-              navigation.navigate('Login');
+              navigation.push('LogIn');
             }}
             style={({ pressed }) => ({
               opacity: pressed ? 0.5 : 1,
@@ -82,41 +134,9 @@ function RootNavigator() {
       })}
       />
       <Stack.Screen 
-        name="Login"
-        component={LoginScreen}
-        options ={({ route, navigation }) => ({ 
-          title: 'Log In',
-          headerShadowVisible: false,
-          headerStatusBarHeight: 50,
-          headerStyle: {
-            backgroundColor: 'white',
-          },
-          headerTintColor: '#000',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-            fontSize: 25,
-          },
-          headerLeft: () => (
-            <Pressable
-              onPress={() => {
-                navigation.navigate('SignUp');
-              }}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}>
-                {({ pressed }) => (
-              <Text style={{color: "#2D9CDB", fontSize: 16}}>
-                {pressed ? 'Sign Up' : 'Sign Up'}
-              </Text>
-          )}
-            </Pressable>
-          ),
-        })}
-      />
-      <Stack.Screen 
         name="Index" 
         component={IndexScreen} 
-        options={{
+        options ={({ route, navigation }) => ({ 
           title: '',
           headerShadowVisible: false,
           headerStyle: {
@@ -134,6 +154,7 @@ function RootNavigator() {
           headerRight: () => (
             <Pressable
               onPress={() => {
+                navigation.push('Profile');
               
               }}
               style={({ pressed }) => ({
@@ -147,7 +168,7 @@ function RootNavigator() {
               />
             </Pressable>
           ),
-        }}
+        })}
          />
       <Stack.Screen name="Map" 
         component={MapScreen}
@@ -178,7 +199,7 @@ function RootNavigator() {
           headerRight: () => (
             <Pressable
               onPress={() => {
-                navigation.navigate('Map', {vaccineId: 1});
+                navigation.push('Map', {vaccineId: 1});
               }}
               style={({ pressed }) => ({
                 opacity: pressed ? 0.5 : 1,
@@ -195,6 +216,7 @@ function RootNavigator() {
           ),
         })}
       />
+      <Stack.Screen name="Profile" component={UserProfile} />
       <Stack.Screen name="Question" 
         component={QuestionScreen}
         // options={{
@@ -213,7 +235,6 @@ function RootNavigator() {
       <Stack.Screen name="Create Post" component={CreatePostScreen} />
       <Stack.Screen name="Create Question" component={CreateQuestionScreen} />
       <Stack.Screen name="Create Answer" component={CreateAnswerScreen} />
-
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       {/* <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
