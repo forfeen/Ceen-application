@@ -1,19 +1,19 @@
-import * as WebBrowser from 'expo-web-browser';
-import { StyleSheet, TouchableOpacity, ScrollView , FlatList} from 'react-native';
-import Vaccine from '../../types/vaccine.type';
-import Review from '../../types/reviews.type';
-import Question from '../../types/questions.type';
-import Post from '../../types/posts.type';
-import { Text, View } from './Themed';
-import { Card } from 'react-native-elements';
 import React, { useState, useEffect } from 'react';
 import Swiper from 'react-native-swiper';
-import vaccineService from '../services/vaccine.service';
+import { StyleSheet, TouchableOpacity , FlatList} from 'react-native';
 import { AntDesign, FontAwesome} from '@expo/vector-icons'; 
 import Svg, { Rect, Circle} from 'react-native-svg';
 import ContentLoader from 'react-native-masked-loader';
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { Text, View } from './Themed';
+import { Card } from 'react-native-elements';
+import { Linking } from 'react-native';
+import Vaccine from '../../types/vaccine.type';
+import Review from '../../types/reviews.type';
+import Question from '../../types/questions.type';
+import Post from '../../types/posts.type';
+import vaccineService from '../services/vaccine.service';
 
 const VaccineInfoScreen = ({route, navigation}) => {
   const { vaccineId } = route.params;
@@ -21,6 +21,7 @@ const VaccineInfoScreen = ({route, navigation}) => {
   const [review, setReviews] = useState<Review>();
   const [question, setQuestions] = useState<Question>();
   const [post, setPosts] = useState<Post>();
+  const [vaccineLink, setLink] = useState<string>();
   const MaskedInfoElement = getMaskedInfoElement();
   const MaskedElement = getMaskedElement();
 
@@ -81,7 +82,7 @@ const VaccineInfoScreen = ({route, navigation}) => {
   
   function putLikeReview(putData) {
     const data = vaccineService.likeReview(vaccineId, putData)
-        .then(response => {          
+        .then(response => {
             return response.data;
         })
         .catch(e => {
@@ -189,21 +190,22 @@ const VaccineInfoScreen = ({route, navigation}) => {
     const fetchInfos = async () => {
       const vaccine = await getAllInfos();
       setVaccine(vaccine);
+      setLink(vaccine.link_info);
     }
     
     const fetchReviews = async () => {
-      const review = await getAllReviews();
-      setReviews(review);
+      const reviewData = await getAllReviews();
+      setReviews(reviewData);
     }
 
     const fetchQuestions = async () => {
-      const question = await getAllQuestions();
-      setQuestions(question);
+      const questionData = await getAllQuestions();
+      setQuestions(questionData);
     }
     
     const fetchPosts = async () => {
-      const post = await getAllPosts();
-      setPosts(post);
+      const postData = await getAllPosts();
+      setPosts(postData);
     }
  
    fetchInfos();
@@ -267,7 +269,7 @@ const VaccineInfoScreen = ({route, navigation}) => {
           </Card>
           <Text style={{marginVertical: 10, marginHorizontal: 10}}>
             {vaccine?.long_description || ''} </Text>
-            <Text style={styles.more_info}>more infomation...</Text>
+            <Text style={styles.more_info}  onPress={ () => {  Linking.openURL(vaccineLink)}}>more infomation...</Text>
           <View style={styles.vac_info}>
             <Text style={styles.info_text}>Name: {vaccine?.name || ''}</Text>
             <Text style={styles.info_text}>Type: {vaccine?.type || ''}</Text>
@@ -283,9 +285,9 @@ const VaccineInfoScreen = ({route, navigation}) => {
             bottom: 420,
             left: 240,
           }}
-          onMomentumScrollEnd={(e, state, context) =>
-            console.log('index:', state.index)
-          }
+          // onMomentumScrollEnd={(state) =>
+          //   console.log('index:', state.index)
+          // }
           dot={
             <View
               style={{
