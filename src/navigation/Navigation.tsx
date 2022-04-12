@@ -17,6 +17,7 @@ import VaccineInfoScreen from '../screens/components/VaccineInfoScreen';
 import SignUpScreen from '../screens/components/SignUpScreen';
 import LoginScreen from '../screens/components/LoginScreen';
 import MapScreen from '../screens/components/MapScreen';
+import UserProfile from '../screens/components/UserProfile';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import TabOneScreen from '../screens/TabOneScreen';
@@ -48,43 +49,12 @@ function RootNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen 
-      name="SignUp" 
-      component={SignUpScreen} 
-      options ={({ route, navigation }) => ({ 
-        title: 'Sign Up',
-        headerShadowVisible: false,
-        headerStatusBarHeight: 50,
-        headerStyle: {
-          backgroundColor: 'white',
-        },
-        headerTintColor: '#000',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-          fontSize: 25,
-        },
-        headerRight: () => (
-          <Pressable
-            onPress={() => {
-              navigation.navigate('Login');
-            }}
-            style={({ pressed }) => ({
-              opacity: pressed ? 0.5 : 1,
-            })}>
-              {({ pressed }) => (
-            <Text style={{color: "#2D9CDB", fontSize: 16}}>
-              {pressed ? 'Log in' : 'Log in'}
-            </Text>
-        )}
-          </Pressable>
-        ),
-      })}
-      />
-      <Stack.Screen 
-        name="Login"
+        name="LogIn"
         component={LoginScreen}
         options ={({ route, navigation }) => ({ 
           title: 'Log In',
           headerShadowVisible: false,
+          headerBackVisible: false,
           headerStatusBarHeight: 50,
           headerStyle: {
             backgroundColor: 'white',
@@ -94,10 +64,10 @@ function RootNavigator() {
             fontWeight: 'bold',
             fontSize: 25,
           },
-          headerLeft: () => (
+          headerRight: () => (
             <Pressable
               onPress={() => {
-                navigation.navigate('SignUp');
+                navigation.push('SignUp');
               }}
               style={({ pressed }) => ({
                 opacity: pressed ? 0.5 : 1,
@@ -112,9 +82,41 @@ function RootNavigator() {
         })}
       />
       <Stack.Screen 
+      name="SignUp" 
+      component={SignUpScreen} 
+      options ={({ route, navigation }) => ({ 
+        title: 'Sign Up',
+        headerShadowVisible: false,
+        headerStatusBarHeight: 50,
+        headerStyle: {
+          backgroundColor: 'white',
+        },
+        headerTintColor: '#000',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+          fontSize: 25,
+        },
+        headerLeft: () => (
+          <Pressable
+            onPress={() => {
+              navigation.push('LogIn');
+            }}
+            style={({ pressed }) => ({
+              opacity: pressed ? 0.5 : 1,
+            })}>
+              {({ pressed }) => (
+            <Text style={{color: "#2D9CDB", fontSize: 16}}>
+              {pressed ? 'Log in' : 'Log in'}
+            </Text>
+        )}
+          </Pressable>
+        ),
+      })}
+      />
+      <Stack.Screen 
         name="Index" 
         component={IndexScreen} 
-        options={{
+        options ={({ route, navigation }) => ({ 
           title: '',
           headerShadowVisible: false,
           headerStyle: {
@@ -132,6 +134,7 @@ function RootNavigator() {
           headerRight: () => (
             <Pressable
               onPress={() => {
+                navigation.push('Profile');
               
               }}
               style={({ pressed }) => ({
@@ -145,7 +148,7 @@ function RootNavigator() {
               />
             </Pressable>
           ),
-        }}
+        })}
          />
       <Stack.Screen name="Map" 
         component={MapScreen}
@@ -176,7 +179,7 @@ function RootNavigator() {
           headerRight: () => (
             <Pressable
               onPress={() => {
-                navigation.navigate('Map', {vaccineId: 1});
+                navigation.push('Map', {vaccineId: 1});
               }}
               style={({ pressed }) => ({
                 opacity: pressed ? 0.5 : 1,
@@ -193,6 +196,7 @@ function RootNavigator() {
           ),
         })}
       />
+      <Stack.Screen name="Profile" component={UserProfile} />
       <Stack.Screen name="Review" component={CreateReviewScreen} />
       <Stack.Screen name="Post" component={CreatePostScreen} />
       <Stack.Screen name="Question" component={CreateQuestionScreen} />

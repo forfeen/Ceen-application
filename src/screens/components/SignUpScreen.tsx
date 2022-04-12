@@ -1,18 +1,36 @@
 import * as WebBrowser from 'expo-web-browser';
 import { StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
-import User from '../../types/user.type'
+import User from '../../types/user.type';
 import { useForm, Controller } from "react-hook-form";
-import React, {useState} from 'react';
+import React, {useState} from 'react';;
+import { auth } from '../../../firebase'
+import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from 'firebase/auth';
 
 import Colors from '../../constants/Colors';
 import { MonoText } from './StyledText';
 import { Text, View } from './Themed';
 import Icon from '@expo/vector-icons/FontAwesome5';
 
-export default function SignUpScreen({ route, navigation }) {
+const SignUpScreen = () => {
     const { control, setValue, handleSubmit, formState: { errors } } = useForm<User>();
     const [hidePass, setHidePass] = useState(true);
-    const pressedSignUp = handleSubmit(data => console.log(data));
+    const pressedSignUp = handleSubmit(data => {
+        if (data.password !== data.c_password) {
+            alert("Passwords don't match");
+        } else {
+            createUserWithEmailAndPassword(auth, data.email, data.password)
+            .then(async userCredentials => {
+                const user = userCredentials.user;
+                await updateProfile(auth.currentUser, {
+                    displayName: data.name
+                })
+                sendEmailVerification(user);
+                // console.log(user);
+                alert("Signed up success\nCheck your email for verification")
+            })
+            .catch(error => alert(error.message))
+        }
+    });
     
     return (
         <View style={{backgroundColor: "white", flex: 1}}>
@@ -75,6 +93,25 @@ export default function SignUpScreen({ route, navigation }) {
                     )}
                 />
                 {errors.password && errors.password.type === "required" && <Text>Password is required</Text>}
+                <Controller
+                    control={control}
+                    rules={{ maxLength: 100, required: true}}
+                    name="c_password"
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <View style={{backgroundColor: "transparent"}}>
+                            <TextInput
+                                style={styles.input}
+                                onBlur={onBlur}
+                                onChangeText={onChange}
+                                value={value}
+                                secureTextEntry
+                                placeholder="Confirm your password"
+                            />
+                        </View>
+                        
+                    )}
+                />
+                {errors.c_password && errors.c_password.type === "required" && <Text>Confirm password is required</Text>}
 
                 <TouchableOpacity onPress={pressedSignUp} style={styles.button}>
                     <Text style={styles.textbutton}>Sign Up</Text>
@@ -86,6 +123,8 @@ export default function SignUpScreen({ route, navigation }) {
         </View>
     );
 }
+
+export default SignUpScreen;
 
 const styles = StyleSheet.create({
     input: {

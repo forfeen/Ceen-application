@@ -1,18 +1,48 @@
 import * as WebBrowser from 'expo-web-browser';
-import { StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { StyleSheet, TouchableOpacity, TextInput, Alert, Image } from 'react-native';
 import User from '../../types/user.type'
 import { useForm, Controller } from "react-hook-form";
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import { auth } from '../../../firebase'
+import { signInWithEmailAndPassword, 
+    sendEmailVerification, 
+    sendPasswordResetEmail
+} from 'firebase/auth';
 
 import Colors from '../../constants/Colors';
 import { MonoText } from './StyledText';
 import { Text, View } from './Themed';
 import Icon from '@expo/vector-icons/FontAwesome5';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 export default function LoginScreen({ route, navigation }) {
     const { control, setValue, handleSubmit, formState: { errors } } = useForm<User>();
     const [hidePass, setHidePass] = useState(true);
-    const pressedLogin = handleSubmit(data => console.log(data));
+
+    const pressedLogin = handleSubmit(data => {
+        signInWithEmailAndPassword(auth, data.email, data.password)
+        .then(userCredentials => {
+            const user = userCredentials.user;
+            console.log(user);
+            if (user && user.emailVerified) {
+                navigation.push("Index");
+            } else {
+                sendEmailVerification(user);
+                alert("Check your email for verification mail before logging in")
+            }
+        })
+        .catch(error => alert(error.message));
+    });
+
+    const pressedLoginGoogle = () => {
+
+    };
+
+    const forgetPasswordHandler = handleSubmit(data => {
+        sendPasswordResetEmail(auth, data.email)
+        .then(() => alert("Check your email for reset password"))
+        .then(auth.signOut)
+    });
     
     return (
         <View style={{backgroundColor: "white", flex: 1}}>
@@ -60,14 +90,32 @@ export default function LoginScreen({ route, navigation }) {
                 {errors.password && errors.password.type === "required" && <Text>Password is required</Text>}
 
                 <TouchableOpacity 
-                    // onPress={pressedLogin} 
-                    onPress={() =>  navigation.navigate('Index')}
+                    onPress={pressedLogin} 
                     style={styles.button}>
-                    <Text style={styles.textbutton}>Log In</Text>
+                    <Text style={styles.textLogin}>Log In</Text>
                 </TouchableOpacity>
-
-                <TouchableOpacity onPress={()=> console.log("forgot")}>
+                
+                <TouchableOpacity onPress={forgetPasswordHandler}>
                     <Text style={styles.forgot}>Forgot your password?</Text>
+                </TouchableOpacity>
+                <View style={{
+                    backgroundColor: "transparent", 
+                    flexDirection: 'row', 
+                    alignItems: 'center',
+                    marginTop: 50}}>
+                    <View style={{flex: 1, height: 1, backgroundColor: 'gray'}} />
+                        <Text style={{width: 50, textAlign: 'center'}}>or</Text>
+                    <View style={{flex: 1, height: 1, backgroundColor: 'gray'}} />
+                </View>
+                <TouchableOpacity onPress={pressedLoginGoogle} style={styles.withButton}>
+                <View style={{
+                    backgroundColor: "transparent", 
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent:'center'}}>
+                    <Image source={require('../../assets/images/icon-google.png')} style={styles.icon}/>
+                    <Text style={styles.textWithGoogle}>Log In with Google</Text>
+                </View>
                 </TouchableOpacity>
             
             </View>
@@ -90,8 +138,16 @@ const styles = StyleSheet.create({
     button: {
         height: 51,
         width: 343,
-        marginTop: 90,
+        marginTop: 50,
         backgroundColor: "#2D9CDB",
+        borderRadius: 100,
+        justifyContent: "center",
+    },
+    withButton: {
+        height: 51,
+        width: 343,
+        marginTop: 50,
+        backgroundColor: "#e8e8e8",
         borderRadius: 100,
         justifyContent: "center",
     },
@@ -101,11 +157,18 @@ const styles = StyleSheet.create({
         top: 30,
     },
 
-    textbutton: {
+    textLogin: {
         textAlign: "center",
         fontSize: 16,
         fontWeight: 'bold',
         color: "white",
+    },
+    textWithGoogle:{
+        textAlign: "center",
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: "black",
+        paddingLeft: 15
     },
     forgot: {
         textAlign: "center",
@@ -113,6 +176,13 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: "#2D9CDB",
         marginTop: 10,
+    },
+    icon: {
+        width: 35,
+        height: 35,
+        borderRadius: 100,
+        backgroundColor: 'transparent',
+        alignItems: 'center',
     }
 });
   

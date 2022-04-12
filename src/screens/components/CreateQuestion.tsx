@@ -30,7 +30,7 @@ const CreateQuestionScreen = ({route, navigation}) => {
             'The question was created',
             [   
                 {text: 'OK', 
-                onPress: () => navigation.navigate('Details', {vaccineId: vaccineId})},
+                onPress: () => navigation.push('Details', {vaccineId: vaccineId})},
             ]
           );
           return response.data;
