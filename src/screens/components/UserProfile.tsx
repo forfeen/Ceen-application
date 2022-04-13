@@ -1,22 +1,67 @@
-import { StyleSheet, TouchableOpacity, Image, Button } from 'react-native';
+import { StyleSheet, TouchableOpacity, Image, Modal } from 'react-native';
 import { Text, View } from '../components/Themed';
 import { Card } from 'react-native-elements';
 import React, {useState, useEffect} from 'react';
 import UserDetail from '../../types/userDetail.type';
 import { TextInput } from 'react-native-paper';
+import Dialog from "react-native-dialog";
 
 import { auth } from '../../../firebase'
-import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { signOut,  
+    updateEmail, 
+    updateProfile,
+    reauthenticateWithCredential,
+    EmailAuthProvider,
+ } from 'firebase/auth';
 
 const UserProfile = ({navigation}: {navigation: any}) => {
     const [user, setUser] = useState<UserDetail>();
-    const a = auth.currentUser;
+    const [currentPass, setPass] = useState(null);
+    const [newName, setName] = useState('');
+    const [newEmail, setEmail] = useState('');
+    const [dialogVisible, setDialog] = useState(false);
+
+    const emailUpdated = () => {
+        const credential = EmailAuthProvider.credential(
+            auth.currentUser.email,
+            currentPass
+        )
+        setDialog(!dialogVisible)
+        reauthenticateWithCredential(auth.currentUser, credential)
+        .then(() => {
+            updateEmail(auth.currentUser, newEmail)
+            alert("Profile updated")
+        })
+        .catch(error => alert(error.message))
+    }
+
     const pressedLogout = () => {
-        auth.signOut()
+        signOut(auth)
         .then(navigation.push("Start"))
     }
-    
-    function handleChange() {
+
+    const pressedDone = async () => {
+        try {
+            if (newName && newEmail) {
+                await updateProfile(auth.currentUser, {
+                    displayName: newName
+                })
+                setDialog(!dialogVisible)
+            }
+            else if (newName) {
+                await updateProfile(auth.currentUser, {
+                    displayName: newName
+                })
+                alert("Profile updated")
+            }
+            else if (newEmail) {
+                setDialog(!dialogVisible)
+            }
+        
+        } catch (error) {
+            alert(error.message)
+        }
+
     }
 
     useEffect(() => {
@@ -34,39 +79,53 @@ return (
                 <TouchableOpacity onPress={() => console.log("pressed")}>
                     <Text style={styles.change_photo}>Change profile photo</Text>
                 </TouchableOpacity>
-                </View>
+            </View>
             <TextInput
                 label='Name'
                 model="Flat"
                 theme={{ colors: { placeholder: 'grey', background: 'transparent', text: 'black', primary: 'black' }}}
-                value={user?.displayName || ''}
-                onChangeText={() => console.log("change name", user.displayName)}
+                value={user?.displayName}
+                onChangeText={(value) => setName(value)}
             />
             <TextInput
                 label='Email'
                 model="Flat"
                 theme={{ colors: { placeholder: 'grey', background: 'transparent', text: 'black', primary: 'black' }}}
                 value={user?.email || ''}
-                onChangeText={() => console.log("change email", user.email)}
+                onChangeText={(value) => setEmail(value)}
             />
              <TextInput
                 label='Change password'
                 model="Flat"
                 theme={{ colors: { placeholder: 'grey', background: 'transparent', text: 'black', primary: 'black' }}}
-                value={'********'}
-                onFocus={() => console.log("pressed")}
+                value={''}
+                placeholder="New password"
+                secureTextEntry
+                onFocus={(value) => console.log(value)}
             />
             {/* <TouchableOpacity onPress={() => console.log("pressed")}>
                 <Text style={styles.change_pass}>Change password</Text>
             </TouchableOpacity> */}
             <View style={{backgroundColor: "transparent", alignItems:'center'}}>
-                <TouchableOpacity onPress={() => console.log("log out")} style={styles.button}>
+                <TouchableOpacity onPress={pressedDone} style={styles.button}>
                     <Text style={styles.textbutton}>Done</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={pressedLogout} style={styles.logout_button}>
                 <Text style={styles.textbutton}>Log out</Text>
                 </TouchableOpacity>
             </View>
+            <Dialog.Container visible={dialogVisible}>
+                <Dialog.Title>Confirm Password</Dialog.Title>
+                <Dialog.Description>
+                    Please enter your password
+                </Dialog.Description>
+                <Dialog.Input
+                    secureTextEntry
+                    onChangeText={(value) => setPass(value)}
+                />
+                <Dialog.Button label="Submit" onPress={emailUpdated} />
+            </Dialog.Container>
+
         </Card>
     </View>
     );
