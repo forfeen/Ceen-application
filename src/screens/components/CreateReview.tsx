@@ -1,21 +1,25 @@
-import { StyleSheet, TextInput, ScrollView, Alert } from 'react-native';
-import { Text, View } from './Themed';
+import { StyleSheet, TextInput, ScrollView, Alert, TouchableOpacity } from 'react-native';
 import { Button, Card } from 'react-native-elements';
 import React, { useState, useEffect } from 'react';
 import SelectBox from 'react-native-multi-selectbox';
+import { useForm, Controller } from "react-hook-form";
 import { xorBy } from 'lodash';
+import { Text, View } from './Themed';
 
 import DOSE_OPTIONS from '../../types/numberDose';
 import EFFECTS_OPTIONS from '../../types/effects';
 import VACCINE_OPTIONS from '../../types/vaccineOptions';
 import vaccineService from '../services/vaccine.service';
+import Review from '../../types/reviews.type';
 
 const CreateReviewScreen = ({route, navigation}) => {
  const { vaccineId } = route.params;
+
+ const { control, handleSubmit, formState: { errors } } = useForm<Review>();
+ const pressedReview = handleSubmit( data => createReview(data));
+ var date = new Date();
+
  const [vaccineName, setName] = useState('');
- const [location, setLocation] = useState('');
- const [price, setPrice] = useState(null);
- const [description, onChangeDes] = React.useState('');
  const [numDose, setNumDose] = useState({});
  const [effectItems, setEffects] = useState([]);
  const [firstDose, setFirstDose] = useState({});
@@ -23,7 +27,7 @@ const CreateReviewScreen = ({route, navigation}) => {
  const [thirdDose, setThirdDose] = useState({});
 
 
- async function createReview() {
+ async function createReview(reviewData) {
    
   let numberDose = numDose.id;
   let stDose = '';
@@ -61,9 +65,9 @@ const CreateReviewScreen = ({route, navigation}) => {
   }
    
   const question = {
-     location: location,
-     price: price,
-     description: description,
+     location: reviewData.location,
+     price: reviewData.price,
+     description: reviewData.description,
      currentDose: numberDose,
      firstDose: stDose,
      secondDose: ndDose,
@@ -72,19 +76,17 @@ const CreateReviewScreen = ({route, navigation}) => {
      effects: effects,
      likes: 0,
      dislikes: 0,
-     date: 0
+     date: date
   };
-  
+
   const data = await vaccineService.createReview(vaccineId, question)
       .then(response => {
-          // onChangeText('');
-          // onChangeDes('');
           Alert.alert(
             'Success',
             'The question was created',
             [   
                 {text: 'OK', 
-                onPress: () => navigation.navigate('Details', {vaccineId: vaccineId})},
+                onPress: () => navigation.push('Details', {vaccineId: vaccineId})},
             ]
           );
           return response.data;
@@ -141,24 +143,54 @@ const CreateReviewScreen = ({route, navigation}) => {
         <Card containerStyle={styles.card_info}>
             <Text style={styles.vaccine_name}> {vaccineName} </Text>
             <Text style={styles.title}> Location: </Text>
-            <TextInput
+            <Controller
+              control={control}
+              rules={{ maxLength: 70, required: true }}
+              name="location"
+              render={({
+                field: { onChange, onBlur, value, ref  },
+              }) => (
+                <TextInput 
+                  style={styles.input}  
+                  onBlur={onBlur} // notify when input is touched
+                  multiline
+                  maxLength={70}
+                  onChangeText={onChange} 
+                  value={value} 
+                  placeholder="Type a location"
+              />
+              )} 
+            /> 
+            {errors.location && errors.location.type === "required" && <Text style={styles.error_msg}>Location is required</Text>}
+
+            {/* <TextInput
               multiline
               maxLength={70} 
               style={styles.input}
               onChangeText={setLocation}
               value={location}
               placeholder="Type a location"
-              />
-            <Text style={styles.title}> Price: </Text>       
-            <TextInput
-              multiline
-              style={styles.input}
-              onChangeText={setPrice}
-              keyboardType="numeric"
-              value={price}
-              maxLength={5}
-              placeholder="Type a number"
+              /> */}
+            <Text style={styles.title}> Price: </Text>
+            <Controller
+              control={control}
+              rules={{ maxLength: 5, required: true }}
+              name="price"
+              render={({
+                field: { onChange, onBlur, value, ref  },
+              }) => (
+                <TextInput 
+                  multiline
+                  style={styles.input}
+                  onChangeText={onChange}
+                  keyboardType="numeric"
+                  value={value}
+                  maxLength={5}
+                  placeholder="Type a number"
+                />
+              )}
             />
+            {/* {errors.price  === "required" && <Text style={styles.error_msg}>Price is required</Text>} */}
             <Text style={styles.currect_title}> Current Dose: </Text>       
             <View style={{backgroundColor: '#white', paddingTop: 20, paddingLeft: 5}}>
               <SelectBox
@@ -241,21 +273,37 @@ const CreateReviewScreen = ({route, navigation}) => {
                 />
             </View>
           <Text style={styles.currect_title}> Description: </Text> 
-          <TextInput 
+          {/* <TextInput 
             multiline 
             style={styles.description}  
             onChangeText={onChangeDes} 
             value={description}
             maxLength={450}
             placeholder="Type a description"
-          />
+          /> */}
+          <Controller
+              control={control}
+              rules={{ maxLength: 450, required: true }}
+              name="description"
+              render={({
+                field: { onChange, onBlur, value, ref  },
+              }) => (
+                <TextInput 
+                  style={styles.description}  
+                  onBlur={onBlur} // notify when input is touched
+                  multiline
+                  maxLength={450}
+                  onChangeText={onChange} 
+                  value={value} 
+                  placeholder="Type a description"
+              />
+              )} 
+            /> 
+            {errors.description && errors.description.type === "required" && <Text style={styles.error_msg}>Description is required</Text>}       
         </Card>
-        <Button 
-          style={styles.submit} 
-          title="Post"
-          onPress={() => createReview()
-          }
-        />
+        <TouchableOpacity onPress={pressedReview} style={styles.submit}>
+            <Text style={styles.textbutton}>Post</Text>
+        </TouchableOpacity>
       </ScrollView>
     </View>
   );
@@ -324,17 +372,33 @@ const styles = StyleSheet.create({
     padding: 15,
     top: 18,
     borderRadius: 20,
-    lineHeight: 18
+    lineHeight: 18,
+    // marginBottom: 10
   },
   submit: {
+    height: 51,
     width: 250,
+    marginTop: 25,
+    left: 70,
+    backgroundColor: "#2D9CDB",
     borderRadius: 100,
-    margin: 25,
-    left: 30
+    justifyContent: "center",
   },
   selectBox: {
     marginTop: 10, 
     backgroundColor: '#fff'
+  },
+  textbutton: {
+    textAlign: "center",
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: "white",
+  }, 
+  error_msg: {
+    color: 'red',
+    left: 100,
+    fontWeight: '400',
+    top: 7
   }
 });
 

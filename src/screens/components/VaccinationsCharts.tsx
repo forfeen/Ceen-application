@@ -11,17 +11,18 @@ export default function VaccinationCharts({ path }: { path: string }) {
 
   const [covid, setCovid] = useState<Covid>();
   const [vaccination, setVaccination] = useState<VaccinationData[]>([]);
-  const [vaccinationData, setVaccinationData] = useState<Number[]>([]);
+  const [vaccinationData, setVaccinationData] = useState<[]>([]);
   const [vaccinationDaily, setDaily] = useState<Number>(0);
-  const [vaccinationTotal, setTotal] = useState<Number>(0);
+  const [vaccinationTotal, setTotal] = useState<number>(0);
 
-  const [newCase, setNewCase] = useState<Number>();
-  const [recoveryCase, setNewRecover] = useState<Number>();
-  const [newDeath, setNewDeath] = useState<Number>();
+  const [newCase, setNewCase] = useState<number>();
+  const [recoveryCase, setNewRecover] = useState<number>();
+  const [newDeath, setNewDeath] = useState<number>();
 
-  const [day, setDay] = useState<Number>();
+  const [day, setDay] = useState<number>();
   const [month, setMonth] = useState<String>();
-  const [year, setYear] = useState<Number>();
+  const [year, setYear] = useState<number>();
+  const [date, setDate] = useState<string>('');
 
   async function getCovidCase() {
     const data = await vaccineService.getCovidCase()
@@ -35,9 +36,9 @@ export default function VaccinationCharts({ path }: { path: string }) {
   }
 
   async function getVaccinationData() {
-    const data = await vaccineService.getVaccinationFullData()
+    const data = await vaccineService.getVaccinationData()
     .then(response => {
-      return response.data.timeline;
+      return response.data.items;
       })
       .catch(e => {
           console.error(e);
@@ -61,26 +62,22 @@ export default function VaccinationCharts({ path }: { path: string }) {
       setDay(day);
       setMonth(month);
       setYear(year);
-      console.log(vaccinationData);
     }
 
     const fetchVaccinationData = async () => {
       const data = await getVaccinationData();      
       setVaccination(data);
-      vaccination.pop();
       
       let numData = [];
       for (const eachData of vaccination) {
         numData.push(eachData.daily)
       }
       setVaccinationData(numData);
-      const daily = vaccination[9].daily;
-      const total = vaccination[9].total;      
-      setDaily(daily);
-      setTotal(total);
-      console.log(vaccination);
+      setDaily(vaccination[vaccination.length - 1].daily);
+      setTotal(vaccination[vaccination.length - 1].total);
+      setDate(vaccination[vaccination.length - 1].date);
       console.log(vaccinationData);
-
+      
     };
 
     fetchCovidCase();
@@ -90,7 +87,16 @@ export default function VaccinationCharts({ path }: { path: string }) {
   const data = {
     datasets: [
       {
-        data: vaccinationData,
+        data: [
+          209479,
+          205933,
+          185425,
+          182682,
+          180883,
+          173801,
+          166555,
+          136078,
+          125633,],
       }
     ],
   };
@@ -140,10 +146,10 @@ export default function VaccinationCharts({ path }: { path: string }) {
             <View>
                 <View style={{ flexDirection: 'row', flex:1, margin: 10 }}>
                   <View style={{ width: 120, height: 245, backgroundColor: '#fff', borderRadius: 15}} >
-                      <Text style={styles.textVacHeader}> Last updated {'\n'} 1 day ago </Text>
+                      <Text style={styles.textVacHeader}> Last updated {'\n'} {date} </Text>
                       <Text style={styles.textVacBody}> {vaccinationDaily.toLocaleString() || '-'} </Text>
                       <Text style={styles.textVacHeader}> Total </Text>
-                      <Text style={styles.textVacBody}> {vaccinationTotal.toLocaleString()  || '-'} </Text>
+                      <Text style={styles.textVacBody}>{vaccinationTotal.toLocaleString()  || '-'} </Text>
 
                   </View>
                   <View style={{justifyContent: 'center' }} >
@@ -159,11 +165,10 @@ export default function VaccinationCharts({ path }: { path: string }) {
                           withVerticalLines={false}
                           withHorizontalLabels={false}
                           withDots={false}
-                        />
+                        /> 
                     </View>
                 </View>
             </View>
-            
           </View>
         </Swiper>
     </View>

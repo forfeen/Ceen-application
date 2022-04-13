@@ -40,7 +40,7 @@ import vaccineService from './services/vaccine.service';
                           <TouchableOpacity 
                               onPress={
                                   () => {
-                                    navigation.navigate('Details', {vaccineId: item.id});
+                                    navigation.push('Details', {vaccineId: item.id});
                                   }
                               }>
                               <View style={{alignItems: 'center'}}>

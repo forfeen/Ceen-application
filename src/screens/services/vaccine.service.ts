@@ -44,9 +44,13 @@ class VaccineDataService {
         return axios.get<Covid>(covidURl);
     }
 
-    getVaccinationFullData() {
-        return axios.get<VaccinationData>(vaccinationUrl);
+    getVaccinationData() {
+        return axios.get<VaccinationData>(baseURL + '/vaccination');
     }
+
+    // getVaccinationFullData() {
+    //     return axios.get<VaccinationData>(vaccinationUrl);
+    // }
 
     createQuestion(id, data) {
         return axios.post<Question>(baseURL + '/questions/'+ id, data);

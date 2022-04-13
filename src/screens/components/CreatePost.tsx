@@ -29,7 +29,7 @@ const CreatePostScreen = ({route, navigation}) => {
           'The post was created',
           [
               {text: 'OK', 
-              onPress: () => navigation.navigate('Details', {vaccineId: vaccineId})},
+              onPress: () => navigation.push('Details', {vaccineId: vaccineId})},
           ]
         );
           return response.data;
