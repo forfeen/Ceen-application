@@ -1,33 +1,33 @@
-import { StyleSheet, TextInput, Alert } from 'react-native';
+import { StyleSheet, TextInput, Alert, TouchableOpacity } from 'react-native';
+import { useForm, Controller } from "react-hook-form";
 import { Text, View } from './Themed';
-import { Button, Card } from 'react-native-elements';
+import { Card } from 'react-native-elements';
 import React, { useState, useEffect } from 'react';
 import vaccineService from '../services/vaccine.service';
-
+import Post from '../../types/posts.type';
 
 const CreatePostScreen = ({route, navigation}) => {
  const { vaccineId } = route.params;
  const [vaccineName, setName] = useState('');
- const [title, onChangeText] = React.useState('');
- const [des, onChangeDes] = React.useState('');
+ const { control, handleSubmit, formState: { errors } } = useForm<Post>();
+ const pressedPost = handleSubmit( data => createPost(data));
+ var date = new Date();
 
- async function createPost() {
+ async function createPost(postData) {
   const post = {
      //id: 0, // make it unique
-     title: title,
-     description: des,
+     title: postData.title,
+     description: postData.description,
      likes: 0,
      dislikes: 0,
-     date: 0
+     date: date
   };
   const data = await vaccineService.createPost(vaccineId, post)
       .then(response => {
-        onChangeText('');
-        onChangeDes('');
         Alert.alert(
           'Success',
           'The post was created',
-          [   
+          [
               {text: 'OK', 
               onPress: () => navigation.navigate('Details', {vaccineId: vaccineId})},
           ]
@@ -38,7 +38,7 @@ const CreatePostScreen = ({route, navigation}) => {
           console.error(e);
       })
       return data;
-}
+  }
 
  useEffect(() => {
     const getNameVaccine = () => {
@@ -64,35 +64,56 @@ const CreatePostScreen = ({route, navigation}) => {
     <View style={styles.container}>
       <Card containerStyle={styles.card_info}>
           <Text style={styles.vaccine_name}> {vaccineName} </Text>
-          <Text style={styles.title}> Title: </Text>       
-          <TextInput 
-            style={styles.input}  
-            multiline
-            maxLength={70}
-            onChangeText={onChangeText} 
-            value={title} 
-            placeholder="Type a title"
+          <Text style={styles.title}> Title: </Text>
+          <Controller
+            control={control}
+            rules={{ maxLength: 70, required: true }}
+            name="title"
+            render={({
+              field: { onChange, onBlur, value, ref  },
+            }) => (
+              <TextInput 
+                style={styles.input}  
+                onBlur={onBlur} // notify when input is touched
+                multiline
+                maxLength={70}
+                onChangeText={onChange} 
+                value={value} 
+                placeholder="Type a title"
             />
+          )} 
+          /> 
+          {errors.title && errors.title.type === "required" && <Text style={styles.error_msg}>Title is required</Text>}
           <Text style={styles.des_title}> Description: </Text>       
-          <TextInput 
-            multiline 
-            style={styles.description}  
-            onChangeText={onChangeDes}
-            maxLength={450}
-            value={des} 
-            placeholder="Type a description"
-          />
+          <Controller
+            control={control}
+            rules={{ maxLength: 450, required: true }}
+            name="description"
+            render={({
+              field: { onChange, onBlur, value, ref  },
+            }) => (
+              <TextInput 
+                style={styles.description}  
+                onBlur={onBlur} // notify when input is touched
+                multiline
+                maxLength={450}
+                onChangeText={onChange} 
+                value={value} 
+                placeholder="Type a description"
+            />
+          )} 
+          /> 
+          {errors.description && errors.description.type === "required" && <Text style={styles.error_msg}>Description is required</Text>}
+
       </Card>
-      <Button 
-        style={styles.submit} 
-        title="Post"
-        onPress={() => createPost()} />
+      <TouchableOpacity onPress={pressedPost} style={styles.submit}>
+        <Text style={styles.textbutton}>Post</Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
 export default CreatePostScreen;
-
 
 const styles = StyleSheet.create({
   container: {
@@ -102,11 +123,8 @@ const styles = StyleSheet.create({
   },
   card_info: {
     backgroundColor: 'white',
-    // padding: 20,
     marginVertical: 20,
-    // borderRadius: 10,
     width: 343,
-    // height: 300,
     borderRadius: 20,
     elevation:0,
     borderWidth: 0
@@ -114,7 +132,6 @@ const styles = StyleSheet.create({
   vaccine_name: {
     top: 10.73,
     left: 5,
-    // width: 105,
     height: 30.36,
     fontWeight: '500',
     fontSize: 24
@@ -130,7 +147,6 @@ const styles = StyleSheet.create({
     left: 5
   },
   input: {
-    // height: 34,
     width: 230,
     margin: 12,
     borderWidth: 1,
@@ -150,9 +166,15 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     lineHeight: 24
   },
-  submit: {
-    width: 250,
-    borderRadius: 100,
-    margin: 25,
+  textbutton: {
+    textAlign: "center",
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: "white",
+  }, 
+  error_msg: {
+    color: 'red',
+    left: 100,
+    fontWeight: '400'
   }
 });
