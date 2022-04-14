@@ -5,6 +5,7 @@ import React, {useState, useEffect} from 'react';
 import UserDetail from '../../types/userDetail.type';
 import { TextInput } from 'react-native-paper';
 import Dialog from "react-native-dialog";
+import * as ImagePicker from 'expo-image-picker';
 
 import { auth } from '../../../firebase'
 import { signOut,  
@@ -96,6 +97,18 @@ const UserProfile = ({navigation}: {navigation: any}) => {
 
     }
 
+    const openImagePickerAsync = async () => {
+        const permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
+    
+        if (permissionResult.granted === false) {
+          alert('Permission to access camera roll is required!');
+          return;
+        }
+    
+        const pickerResult = await ImagePicker.launchImageLibraryAsync();
+        console.log(pickerResult);
+    };
+
     useEffect(() => {
         auth.currentUser.providerData.forEach((UserInfo) => {
             const user = UserInfo;
@@ -108,7 +121,7 @@ return (
         <Card containerStyle={styles.profile}>
             <View style={{backgroundColor: "transparent", alignItems:'center'}}>
                 <Image source={{uri:"https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"}} style={styles.pic_circle}></Image>
-                <TouchableOpacity onPress={() => console.log("pressed")}>
+                <TouchableOpacity onPress={openImagePickerAsync}>
                     <Text style={styles.change_photo}>Change profile photo</Text>
                 </TouchableOpacity>
             </View>
