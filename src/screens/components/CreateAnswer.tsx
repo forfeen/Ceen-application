@@ -5,6 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 import { Text, View } from './Themed';
 
 import vaccineService from '../services/vaccine.service';
+import { auth } from '../../../firebase';
 
 const CreateAnswerScreen = ({route, navigation}) => {
     const vaccineId  = route.params.vaccineId;
@@ -16,7 +17,8 @@ const CreateAnswerScreen = ({route, navigation}) => {
 
     async function createAnswer(answerData) {
         const answer = {
-            //id: 0, // make it unique
+            ownerId: auth.currentUser.email,
+            ownerName: auth.currentUser.displayName,
             answer_id: question['#'],
             description: answerData.description,
             likes: 0,

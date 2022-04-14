@@ -1,7 +1,8 @@
 export default interface Question {
   items?: any;
   "#"?: string;
-  id?: string;
+  ownerName: string;
+  ownerId: string;
   title?: string;
   type?: string;
   description?: string;

@@ -1,12 +1,14 @@
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, TextInput, Alert, TouchableOpacity } from 'react-native';
-import vaccineService from '../services/vaccine.service';
 import SelectBox from 'react-native-multi-selectbox';
 import { useForm, Controller } from "react-hook-form";
 import { Card } from 'react-native-elements';
 import { Text, View } from './Themed';
-import React, { useState, useEffect } from 'react';
 import { xorBy } from 'lodash';
+
+import vaccineService from '../services/vaccine.service';
 import Question from '../../types/questions.type';
+import { auth } from '../../../firebase'
 
 const CreateQuestionScreen = ({route, navigation}) => {
  const { vaccineId } = route.params;
@@ -45,6 +47,8 @@ const CreateQuestionScreen = ({route, navigation}) => {
    });
 
   const question = {
+     ownerId: auth.currentUser.email,
+     ownerName: auth.currentUser.displayName,
      title: questionData.title,
      description: questionData.description,
      type: type,

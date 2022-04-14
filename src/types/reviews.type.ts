@@ -1,7 +1,8 @@
 export default interface Review {
   items?: any;
   "#"?: string;
-  id: string;
+  ownerName: string;
+  ownerId: string;
   description: string;
   price: number;
   location: string;
