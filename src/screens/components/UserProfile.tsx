@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, Image, Modal } from 'react-native';
+import { StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Text, View } from '../components/Themed';
 import { Card } from 'react-native-elements';
 import React, {useState, useEffect} from 'react';
@@ -12,6 +12,9 @@ import { signOut,
     updateProfile,
     reauthenticateWithCredential,
     EmailAuthProvider,
+    sendEmailVerification,
+    updatePassword,
+    sendPasswordResetEmail
  } from 'firebase/auth';
 
 const UserProfile = ({navigation}: {navigation: any}) => {
@@ -19,20 +22,50 @@ const UserProfile = ({navigation}: {navigation: any}) => {
     const [currentPass, setPass] = useState(null);
     const [newName, setName] = useState('');
     const [newEmail, setEmail] = useState('');
-    const [dialogVisible, setDialog] = useState(false);
+    const [newPass, setNewPass] = useState('');
+    const [confirmPass, setCFPass] = useState('');
+    const [dialogEMVisible, setDialogEM] = useState(false);
+    const [dialogPWVisible, setDialogPW] = useState(false);
+
+    const credential = EmailAuthProvider.credential(
+        auth.currentUser.email,
+        currentPass
+    )
+
+    const forgetPasswordHandler = () => {
+        sendPasswordResetEmail(auth, auth.currentUser.email)
+        .then(() => alert("Check your email for reset password"))
+        setDialogPW(!dialogPWVisible)
+    }
 
     const emailUpdated = () => {
-        const credential = EmailAuthProvider.credential(
-            auth.currentUser.email,
-            currentPass
-        )
-        setDialog(!dialogVisible)
+        setDialogEM(!dialogEMVisible)
         reauthenticateWithCredential(auth.currentUser, credential)
         .then(() => {
             updateEmail(auth.currentUser, newEmail)
-            alert("Profile updated")
+            .catch(error => alert(error.message))
+
+            setDialogEM(!dialogEMVisible)
+            sendEmailVerification(auth.currentUser)
+            alert("Check your email for verification")
         })
         .catch(error => alert(error.message))
+    }
+
+    const passUpdated = () => {
+        if (newPass !== confirmPass) {
+            alert("Password does not match");
+        }else {
+            reauthenticateWithCredential(auth.currentUser, credential)
+            .then(() => {
+                updatePassword(auth.currentUser, newPass)
+                .catch(error => alert(error.message))
+
+                setDialogPW(!dialogPWVisible)
+
+            })
+            .catch(error => alert(error.message))
+        }
     }
 
     const pressedLogout = () => {
@@ -46,18 +79,17 @@ const UserProfile = ({navigation}: {navigation: any}) => {
                 await updateProfile(auth.currentUser, {
                     displayName: newName
                 })
-                setDialog(!dialogVisible)
-            }
-            else if (newName) {
+                setDialogEM(!dialogEMVisible)
+            }else if (newName) {
                 await updateProfile(auth.currentUser, {
                     displayName: newName
                 })
                 alert("Profile updated")
+            }else if (newEmail) {
+                setDialogEM(!dialogEMVisible)
+            }else if (passUpdated) {
+                alert("Profile updated")
             }
-            else if (newEmail) {
-                setDialog(!dialogVisible)
-            }
-        
         } catch (error) {
             alert(error.message)
         }
@@ -94,18 +126,12 @@ return (
                 value={user?.email || ''}
                 onChangeText={(value) => setEmail(value)}
             />
-             <TextInput
-                label='Change password'
-                model="Flat"
-                theme={{ colors: { placeholder: 'grey', background: 'transparent', text: 'black', primary: 'black' }}}
-                value={''}
-                placeholder="New password"
-                secureTextEntry
-                onFocus={(value) => console.log(value)}
-            />
-            {/* <TouchableOpacity onPress={() => console.log("pressed")}>
+            <TouchableOpacity onPress={() => setDialogPW(!dialogPWVisible)}>
                 <Text style={styles.change_pass}>Change password</Text>
-            </TouchableOpacity> */}
+                <View style={{ backgroundColor: "transparent", flexDirection: 'row', marginTop: 20}}>
+                    <View style={{flex: 1, height: 1, backgroundColor: '#C3C3C3'}} />
+                </View>
+            </TouchableOpacity>
             <View style={{backgroundColor: "transparent", alignItems:'center'}}>
                 <TouchableOpacity onPress={pressedDone} style={styles.button}>
                     <Text style={styles.textbutton}>Done</Text>
@@ -114,7 +140,9 @@ return (
                 <Text style={styles.textbutton}>Log out</Text>
                 </TouchableOpacity>
             </View>
-            <Dialog.Container visible={dialogVisible}>
+
+            {/* Confirm password for changing email */}
+            <Dialog.Container visible={dialogEMVisible}>
                 <Dialog.Title>Confirm Password</Dialog.Title>
                 <Dialog.Description>
                     Please enter your password
@@ -124,6 +152,35 @@ return (
                     onChangeText={(value) => setPass(value)}
                 />
                 <Dialog.Button label="Submit" onPress={emailUpdated} />
+                <Dialog.Button label="Cancel" style={{color: "red"}} onPress={() => setDialogEM(!dialogEMVisible)} />
+            </Dialog.Container>
+
+            {/* Change password */}
+            <Dialog.Container visible={dialogPWVisible}>
+                <Dialog.Title>Update password</Dialog.Title>
+                <Dialog.Input
+                    placeholder='Current password'
+                    secureTextEntry
+                    onChangeText={(value) => setPass(value)}
+                />
+                <TouchableOpacity onPress={forgetPasswordHandler}>
+                    <Text style={styles.forgot}>Forgot your password?</Text>
+                </TouchableOpacity>
+                <View style={{ backgroundColor: "transparent", flexDirection: 'row', marginBottom: 20}}>
+                    <View style={{flex: 1, height: 1, backgroundColor: '#DADADF'}} />
+                </View>
+                <Dialog.Input
+                    placeholder='New password'
+                    secureTextEntry
+                    onChangeText={(value) => setNewPass(value)}
+                />
+                <Dialog.Input
+                    placeholder='Confirm password'
+                    secureTextEntry
+                    onChangeText={(value) => setCFPass(value)}
+                />
+                <Dialog.Button label="Submit" onPress={passUpdated} />
+                <Dialog.Button label="Cancel" style={{color: "red"}} onPress={() => setDialogPW(!dialogPWVisible)} />
             </Dialog.Container>
 
         </Card>
@@ -187,9 +244,16 @@ const styles = StyleSheet.create({
     },
     change_pass: {
         textAlign: "left",
-        fontSize: 12,
+        fontSize: 16,
         color: "grey",
-        paddingTop: 11,
-        paddingLeft: 11
+        paddingTop: 25,
+        paddingLeft: 12
+    },
+    forgot: {
+        fontSize: 12,
+        fontWeight: 'bold',
+        color: "#2D9CDB",
+        marginLeft: 20,
+        marginBottom: 5,
     },
 });
