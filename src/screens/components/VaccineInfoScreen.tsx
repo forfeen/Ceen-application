@@ -6,9 +6,12 @@ import Svg, { Rect, Circle} from 'react-native-svg';
 import ContentLoader from 'react-native-masked-loader';
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/Ionicons';
+import IconFont from 'react-native-vector-icons/FontAwesome5';
 import { Text, View } from './Themed';
 import { Card } from 'react-native-elements';
 import { Linking } from 'react-native';
+import Moment from 'moment';
+
 import Vaccine from '../../types/vaccine.type';
 import Review from '../../types/reviews.type';
 import Question from '../../types/questions.type';
@@ -275,7 +278,8 @@ const VaccineInfoScreen = ({route, navigation}) => {
             <Text style={styles.info_text}>Type: {vaccine?.type || ''}</Text>
             <Text style={styles.info_text}>Developer: {vaccine?.manufacturer || ''}</Text>
             <Text style={styles.info_text}>Performance: {vaccine?.performance || ''}%</Text>
-            <Text style={styles.info_text}>Average price per dose: {vaccine?.average_per_dose || '0'} Baht</Text>
+            <Text style={styles.info_text}>Side effects: {vaccine?.effects || ''}</Text>
+            <Text style={styles.info_text}>Average price per dose: {vaccine?.average_per_dose || '0'} Baht.</Text>
           </View>
       </Card>
       <Swiper
@@ -317,24 +321,67 @@ const VaccineInfoScreen = ({route, navigation}) => {
             />
           }
         >
-          <View style={{backgroundColor: 'transparent'}}>
+          <View style={{backgroundColor: 'transparent', marginBottom: 100}}>
             <Text style={styles.title_section}>Reviews</Text>
             <FlatList 
               data={review}
               renderItem={( {item} ) => {
-                // item.'#'
                   return (
                     <View style={styles.card_section}>
+                      <Text style={styles.date}> {Moment.utc(item.date).local().startOf('seconds').fromNow()} </Text>
                       <View style={styles.list}>
                         <View style={styles.circle}>
-                        <Text>{item.id}</Text>
+                          <Text>{item.ownerName.charAt(0)}</Text>
                         </View> 
                         <Text style={{marginStart: 20, marginTop: 5, marginHorizontal: 60}}>
-                        {item.description}</Text>
-                    </View>
+                          {item.description}
+                        </Text>
+                     </View>
+                     <View style={{backgroundColor: 'transparent', flexDirection: 'row', width: 100}}>
+                       <Text style={{fontSize: 13, left: 82, top: 10, bottom: 5, width: 250, lineHeight: 24, }}>
+                         Side effects: {item.effects}
+                       </Text>
+                      </View>
+                      <View style={{backgroundColor: 'transparent'}}>
+                        {
+                          item.firstDose ?
+                          <View style={styles.vaccineDose}>
+                            <Text style={{fontSize: 13, lineHeight: 25}}>
+                              <IconFont name="syringe" size={10}/> {item.firstDose} (1st)
+                            </Text>
+                          </View>
+                          : false
+                        }
+                        {
+                          item.secondDose ?  
+                          <View style={styles.vaccineDose}>
+                            <Text style={{fontSize: 13, lineHeight: 25}}>
+                              <IconFont name="syringe" size={10}/><IconFont name="syringe" size={10}/> {item.secondDose} (2nd)
+                            </Text>
+                          </View>
+                          : false
+                        }
+                        {
+                          item.thirdDose ?  
+                          <View style={styles.vaccineDose}>
+                            <Text style={{fontSize: 13, lineHeight: 25}}>
+                              <IconFont name="syringe" size={10}/><IconFont name="syringe" size={10}/><IconFont name="syringe" size={10}/> {item.thirdDose} (3rd)
+                            </Text>
+                          </View>
+                          : false
+                        }
+                        {
+                          item.fourthDose ?  
+                          <View style={styles.vaccineDose}>
+                            <Text style={{fontSize: 13, lineHeight: 25}}>
+                              <IconFont name="syringe" size={10}/><IconFont name="syringe" size={10}/><IconFont name="syringe" size={10}/><IconFont name="syringe" size={10}/> {item.fourthDose} (4th)
+                            </Text>
+                          </View>
+                          : false
+                        }
+                     </View>
                       <View style={styles.like}>
                         <Text>
-                          {/* { item.isLike ? <AntDesign name="like1"  size={16} color="green" onPress={ () => {  LikeReview(item);}} /> : <AntDesign name="like2" size={16} color="green" onPress={ () => {  LikeReview(item);}} />  } {item.likes} { item.isDislike ? <AntDesign name="dislike1"  size={16} color="red"/> : <AntDesign name="dislike2" size={16} color="red"/> } {item.dislikes}  */}
                           <AntDesign name="like2" size={16} color="green"  onPress={ () => {  likeReview(item)}} /> {item.likes}   <AntDesign name="dislike2" size={16} color="red" onPress={ () => {  dislikeReview(item)}} /> {item.dislikes}
                         </Text>
                       </View>
@@ -343,7 +390,7 @@ const VaccineInfoScreen = ({route, navigation}) => {
               }}/>
           </View>
 
-          <View style={{backgroundColor: 'transparent'}}>
+          <View style={{backgroundColor: 'transparent', marginBottom: 100}}>
             <Text style={styles.title_section}>Questions/Answers</Text>
             <FlatList 
               data={question}
@@ -356,16 +403,45 @@ const VaccineInfoScreen = ({route, navigation}) => {
                         }
                     }>
                       <View style={styles.card_section} >
-                        <View style={styles.list}>
-                          <View style={styles.circle}>
-                          <Text>{item.id}</Text>
-                          </View> 
-                          <Text style={{marginStart: 20, marginTop: 5, marginHorizontal: 60}}>
-                          {item.description}</Text>
-                      </View>
+                          <Text style={styles.date}> {Moment.utc(item.date).local().startOf('seconds').fromNow()} </Text>
+                          <View style={{backgroundColor: 'white', flexDirection: 'row', top: 14}}>
+                            <View style={styles.circle_question}>
+                              <Text>{item.ownerName.charAt(0)}</Text>
+                            </View>
+                            {
+                              item?.typeLocation ? 
+                                <Card containerStyle={styles.title_type}>
+                                  <Text style={styles.info_type}> Location </Text>
+                                </Card> 
+                              :
+                                false
+                            } 
+                            {
+                              item?.typePrice ? 
+                                <Card containerStyle={styles.title_type}>
+                                  <Text style={styles.info_type}> Price </Text>
+                                </Card> 
+                              :
+                                false
+                            }
+                            {
+                              item?.typeEffect? 
+                                <Card containerStyle={styles.title_type}>
+                                  <Text style={styles.info_type}> Effects </Text>
+                                </Card> 
+                              :
+                                false
+                            }
+                        </View>
+                          {/* <View style={styles.list}> */}
+                            <Text style={{marginStart: 75, marginTop: 15, marginHorizontal: 60, left: 10, lineHeight: 25}}>
+                              {item.description}
+                            </Text>
+                        {/* </View> */}
+
                         <View style={styles.like}>
                           <Text>
-                          <AntDesign name="like2" size={16} color="green" onPress={ () => {  likeQuestion(item)}} /> {item.likes}   <AntDesign name="dislike2" size={16} color="red" onPress={ () => {  dislikeQuestion(item)}} /> {item.dislikes}  <FontAwesome name="comment-o" size={16} color="black" /> 
+                            <AntDesign name="like2" size={16} color="green" onPress={ () => {  likeQuestion(item)}} /> {item.likes}   <AntDesign name="dislike2" size={16} color="red" onPress={ () => {  dislikeQuestion(item)}} /> {item.dislikes}  <FontAwesome name="comment-o" size={16} color="black" /> 
                           </Text>
                         </View>
                       </View>
@@ -374,23 +450,24 @@ const VaccineInfoScreen = ({route, navigation}) => {
               }}/>
           </View>
           
-          <View style={{backgroundColor: 'transparent'}}>
+          <View style={{backgroundColor: 'transparent', marginBottom: 100}}>
             <Text style={styles.title_section}>Timelines</Text>
             <FlatList 
               data={post}
               renderItem={( {item} ) => {
                   return (
                     <View style={styles.card_section}>
+                      <Text style={styles.date}> {Moment.utc(item.date).local().startOf('seconds').fromNow()} </Text>
                       <View style={styles.list}>
                         <View style={styles.circle}>
-                        <Text>{item.id}</Text>
+                          <Text>{item.ownerName.charAt(0)}</Text>
                         </View> 
-                        <Text style={{marginStart: 20, marginTop: 5, marginHorizontal: 60}}>
+                        <Text style={{marginStart: 40, marginTop: 5, marginHorizontal: 60}}>
                         {item.description}</Text>
                     </View>
                       <View style={styles.like}>
                         <Text>
-                        <AntDesign name="like2" size={16} color="green" onPress={ () => {  likePost(item)}} /> {item.likes}   <AntDesign name="dislike2" size={16} color="red" onPress={ () => {  dislikePost(item)}} /> {item.dislikes}
+                          <AntDesign name="like2" size={16} color="green" onPress={ () => {  likePost(item)}} /> {item.likes}   <AntDesign name="dislike2" size={16} color="red" onPress={ () => {  dislikePost(item)}} /> {item.dislikes}
                         </Text>
                       </View>
                     </View>
@@ -399,13 +476,13 @@ const VaccineInfoScreen = ({route, navigation}) => {
           </View>
         </Swiper>
        <ActionButton buttonColor="rgba(231,76,60,1)">
-          <ActionButton.Item buttonColor='#9b59b6' title="New Review" onPress={() => navigation.push('Review', {vaccineId: vaccineId})}>
+          <ActionButton.Item buttonColor='#9b59b6' title="New Review" onPress={() => navigation.push('Create Review', {vaccineId: vaccineId})}>
             <Icon name="md-create" style={styles.actionButtonIcon} />
           </ActionButton.Item>
-          <ActionButton.Item buttonColor='#3498db' title="New Question" onPress={() => navigation.push('Question', {vaccineId: vaccineId})}>
+          <ActionButton.Item buttonColor='#3498db' title="New Question" onPress={() => navigation.push('Create Question', {vaccineId: vaccineId})}>
             <Icon name="md-create" style={styles.actionButtonIcon} />
           </ActionButton.Item>
-          <ActionButton.Item buttonColor='#1abc9c' title="New Post" onPress={() => navigation.push('Post', {vaccineId: vaccineId})}>
+          <ActionButton.Item buttonColor='#1abc9c' title="New Post" onPress={() => navigation.push('Create Post', {vaccineId: vaccineId})}>
             <Icon name="md-create" style={styles.actionButtonIcon} />
           </ActionButton.Item>
         </ActionButton>
@@ -445,6 +522,13 @@ const styles = StyleSheet.create({
     bottom: 5,
     right: 15,
   },
+  date: {
+    backgroundColor: 'transparent',
+    top: 10,
+    left: 245,
+    fontWeight: '300',
+    fontSize: 11
+  },
   title_info: {
     backgroundColor: '#E2FFE9',
     width: 129,
@@ -469,15 +553,16 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginVertical: 5,
     backgroundColor: 'transparent',
+    lineHeight: 40
   },
   info_text:{
     fontSize: 14, 
-    lineHeight: 22
+    lineHeight: 28
   },
   title_section: {
     fontSize: 22,
     marginHorizontal: 50,
-    color: '#112A38'
+    color: '#112A38',
   },
   wrapper: {
     marginVertical: 20,
@@ -486,11 +571,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     marginVertical: 7,
     width: 343,
-    height: 160,
+    // height: 160,
     borderRadius: 20,
     elevation:0,
     borderWidth: 0,
     marginHorizontal: 25,
+    paddingBottom: 40,
   },
   text: {
     color: '#fff',
@@ -513,8 +599,42 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     backgroundColor: '#2F80ED',
     alignItems: 'center',
-    justifyContent: 'center'
- },
+    justifyContent: 'center',
+  },
+  circle_question: {
+    width: 44,
+    height: 44,
+    borderRadius: 100,
+    backgroundColor: '#2F80ED',
+    alignItems: 'center',
+    justifyContent: 'center',
+    left: 20,
+  },
+  vaccineDose: {
+    backgroundColor: 'transparent', 
+    flexDirection: 'row',
+    top: 10,
+    left: 80,
+    fontWeight: '100',
+    flexWrap: 'wrap',
+  },
+    title_type: {
+    backgroundColor: '#E2FFE9',
+    width: 75,
+    borderRadius: 12,
+    borderWidth: 0,
+    paddingVertical: 10,
+    marginHorizontal: 4,
+    marginTop: 9,
+    paddingTop: 6,
+    height: 26,
+    left: 33
+  },
+  info_type: {
+    fontSize: 10,
+    textAlign: 'center',
+    color: '#2E8653'
+  },
 
 //  masked_element
   masked_container: {

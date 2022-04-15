@@ -32,6 +32,7 @@
     "expo-web-browser": "~10.1.0",
     "firebase": "^9.6.10",
     "install": "^0.13.0",
+    "moment": "^2.29.2",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-hook-form": "^7.28.0",
@@ -59,6 +60,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
+    "@iconify/react": "^3.2.1",
     "@types/react": "~17.0.21",
     "@types/react-native": "~0.64.12",
     "jest": "^26.6.3",

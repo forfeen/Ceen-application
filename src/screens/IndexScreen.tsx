@@ -49,7 +49,7 @@ import vaccineService from './services/vaccine.service';
                                         <Text style={styles.name}>{item.name}</Text>
                                         <Text style={styles.review_title}>{item.review} reviews</Text>
                                       </View>
-                                      <Text>{item.short_description}</Text>
+                                      {/* <Text>{item.short_description}</Text> */}
                                     </Card>
                                   </View>
                           </TouchableOpacity>

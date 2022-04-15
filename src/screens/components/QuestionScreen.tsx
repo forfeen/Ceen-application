@@ -60,20 +60,29 @@ const QuestionScreen = ({route, navigation}) => {
           <Card containerStyle={styles.card_info}>
             <Text style={styles.title}>{question?.title || ''}  </Text>
             <Text style={styles.description}>{question?.description || ' '} </Text>
-            {
-                question?.type ? 
-                <View style={{backgroundColor: 'white', flexDirection: 'row'}}> 
-                  {
-                    question.type.split(',').map((type?) => 
-                      <Card containerStyle={styles.title_info}>
-                          <Text style={styles.info}> {type} </Text>
-                      </Card>
-                      )
-                  }
-                </View>
-                :
-                  <Text></Text>
-            }    
+            <View style={{backgroundColor: 'white', flexDirection: 'row'}}>
+              {
+                  question?.typeEffect ? 
+                    <Card containerStyle={styles.title_info}>
+                      <Text style={styles.info}> Effects </Text>
+                    </Card>
+                  : false
+              }
+              {
+                  question?.typeLocation ? 
+                    <Card containerStyle={styles.title_info}>
+                      <Text style={styles.info}> Location </Text>
+                    </Card>
+                  : false
+              }
+              {
+                  question?.typePrice ? 
+                    <Card containerStyle={styles.title_info}>
+                      <Text style={styles.info}> Price </Text>
+                    </Card>
+                  : false
+              }
+            </View>
           </Card>
           <View style={{backgroundColor: 'transparent'}}>
             <Text style={styles.title_section}>Answers</Text>

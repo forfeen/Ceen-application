@@ -5,6 +5,7 @@ import { Card } from 'react-native-elements';
 import React, { useState, useEffect } from 'react';
 import vaccineService from '../services/vaccine.service';
 import Post from '../../types/posts.type';
+import { auth } from '../../../firebase';
 
 const CreatePostScreen = ({route, navigation}) => {
  const { vaccineId } = route.params;
@@ -14,7 +15,8 @@ const CreatePostScreen = ({route, navigation}) => {
 
  async function createPost(postData) {
   const post = {
-     //id: 0, // make it unique
+     ownerId: auth.currentUser.email,
+     ownerName: auth.currentUser.displayName,
      title: postData.title,
      description: postData.description,
      likes: 0,

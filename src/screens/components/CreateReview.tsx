@@ -11,6 +11,7 @@ import EFFECTS_OPTIONS from '../../types/effects';
 import VACCINE_OPTIONS from '../../types/vaccineOptions';
 import vaccineService from '../services/vaccine.service';
 import Review from '../../types/reviews.type';
+import { auth } from '../../../firebase';
 
 const CreateReviewScreen = ({route, navigation}) => {
  const { vaccineId } = route.params;
@@ -25,7 +26,6 @@ const CreateReviewScreen = ({route, navigation}) => {
  const [firstDose, setFirstDose] = useState({});
  const [secondDose, setSecondDose] = useState({});
  const [thirdDose, setThirdDose] = useState({});
-
 
  async function createReview(reviewData) {
    
@@ -65,6 +65,8 @@ const CreateReviewScreen = ({route, navigation}) => {
   }
    
   const question = {
+     ownerId: auth.currentUser.email,
+     ownerName: auth.currentUser.displayName,
      location: reviewData.location,
      price: reviewData.price,
      description: reviewData.description,
@@ -174,8 +176,9 @@ const CreateReviewScreen = ({route, navigation}) => {
             <Text style={styles.title}> Price: </Text>
             <Controller
               control={control}
-              rules={{ maxLength: 5, required: true }}
+              rules={{ maxLength: 5, required: true}}
               name="price"
+              
               render={({
                 field: { onChange, onBlur, value, ref  },
               }) => (
