@@ -4,7 +4,9 @@ export default interface Question {
   ownerName: string;
   ownerId: string;
   title?: string;
-  type?: string;
+  typePrice: boolean;
+  typeLocation: boolean;
+  typeEffect: boolean;
   description?: string;
   likes?: number;
   dislikes?: number;
