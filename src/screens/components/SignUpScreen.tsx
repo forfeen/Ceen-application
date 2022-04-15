@@ -16,7 +16,7 @@ const SignUpScreen = () => {
     const [hidePass, setHidePass] = useState(true);
     const pressedSignUp = handleSubmit(data => {
         if (data.password !== data.c_password) {
-            alert("Passwords don't match");
+            alert("Password does not match");
         } else {
             createUserWithEmailAndPassword(auth, data.email, data.password)
             .then(async userCredentials => {

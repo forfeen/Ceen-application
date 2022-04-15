@@ -23,7 +23,6 @@ export default function LoginScreen({ route, navigation }) {
         signInWithEmailAndPassword(auth, data.email, data.password)
         .then(userCredentials => {
             const user = userCredentials.user;
-            console.log(user);
             if (user && user.emailVerified) {
                 navigation.push("Index");
             } else {
