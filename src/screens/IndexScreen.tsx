@@ -7,16 +7,17 @@ import { Card } from 'react-native-elements';
 import React, {useState, useEffect} from 'react';
 import {AxiosResponse} from 'axios';
 import vaccineService from './services/vaccine.service';
+import { FontAwesome } from '@expo/vector-icons';
 
     const IndexScreen = ({navigation}: {navigation: any}) => {
 
         const [vaccine, setVaccine] = useState<Vaccine[]>([]);
 
         useEffect(() => {
-            vaccineService
-             .getAllVaccine()
+            vaccineService.getAllVaccine()
              .then((responese: AxiosResponse) => {
-                setVaccine(responese.data.items);                
+                setVaccine(responese.data.items);       
+                // console.log(responese)         
             });
         }, []);
 
@@ -31,7 +32,17 @@ import vaccineService from './services/vaccine.service';
             <View>
 
             </View>
-              <Text style={styles.title}>Vaccines</Text>
+              <View style={styles.list}>
+                <Text style={styles.title}>Vaccines</Text>
+                <TouchableOpacity onPress={() => navigation.push("Map")} style={styles.map}>
+                  <FontAwesome
+                  name="map-marker"
+                  size={25}
+                  color="#b34646"
+                  style={{ marginLeft:13, marginTop: 7}}/>
+                </TouchableOpacity>
+
+              </View>
                 <FlatList 
                       data={vaccine}
                       keyExtractor={(vaccine) => vaccine.id}
@@ -113,4 +124,17 @@ const styles = StyleSheet.create({
     color: "#2F80ED",
     marginTop: 5.5
   },
+  map: {
+    height: 40,
+    width: 40,
+    backgroundColor: "#e8e8e8",
+    borderRadius: 100,
+    marginRight: 15,
+    marginTop: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,  
+    elevation: 3
+  }
 });

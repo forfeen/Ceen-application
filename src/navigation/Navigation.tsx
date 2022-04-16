@@ -196,24 +196,6 @@ function RootNavigator() {
             fontWeight: 'bold',
             fontSize: 23,
           },
-          headerRight: () => (
-            <Pressable
-              onPress={() => {
-                navigation.push('Map', {vaccineId: 1});
-              }}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}>
-                {({ pressed }) => (
-              <FontAwesome
-              name="map-marker"
-              size={28}
-              color="#b34646"
-              style={{ marginRight: 5 }}/>
-              
-          )}
-            </Pressable>
-          ),
         })}
       />
       <Stack.Screen name="Profile" component={UserProfile} />
