@@ -72,7 +72,7 @@ const CreatePostScreen = ({route, navigation}) => {
             rules={{ maxLength: 70, required: true }}
             name="title"
             render={({
-              field: { onChange, onBlur, value, ref  },
+              field: { onChange, onBlur, value },
             }) => (
               <TextInput 
                 style={styles.input}  
@@ -92,7 +92,7 @@ const CreatePostScreen = ({route, navigation}) => {
             rules={{ maxLength: 450, required: true }}
             name="description"
             render={({
-              field: { onChange, onBlur, value, ref  },
+              field: { onChange, onBlur, value },
             }) => (
               <TextInput 
                 style={styles.description}  

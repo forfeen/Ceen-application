@@ -1,10 +1,9 @@
 import baseURL from '../../api/http-common';
 import covidURl from '../../api/covid-http';
-import vaccinationUrl from '../../api/vaccination-http';
 import Vaccine from '../../types/vaccine.type';
 import VaccinationData from '../../types/vaccination.type';
 import Covid from '../../types/covid.type';
-import axios, {AxiosResponse} from 'axios';
+import axios from 'axios';
 import Question from '../../types/questions.type';
 import Post from '../../types/posts.type';
 import Review from '../../types/reviews.type';

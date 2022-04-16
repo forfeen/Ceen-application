@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, TextInput, Alert, TouchableOpacity } from 'react-native';
-import SelectBox from 'react-native-multi-selectbox';
 import { useForm, Controller } from "react-hook-form";
-import { Card, CheckBox, Icon } from 'react-native-elements';
+import { Card, CheckBox } from 'react-native-elements';
 import { Text, View } from './Themed';
-import { xorBy } from 'lodash';
 
 import vaccineService from '../services/vaccine.service';
 import Question from '../../types/questions.type';
@@ -53,7 +51,7 @@ const CreateQuestionScreen = ({route, navigation}) => {
           console.error(e);
       })
       return data;
-  };
+  }
 
  useEffect(() => {
     const getNameVaccine = () => {
@@ -85,7 +83,7 @@ const CreateQuestionScreen = ({route, navigation}) => {
             rules={{ maxLength: 70, required: true }}
             name="title"
             render={({
-              field: { onChange, onBlur, value, ref  },
+              field: { onChange, onBlur, value },
             }) => (
               <TextInput 
                 style={styles.input}  
@@ -139,7 +137,7 @@ const CreateQuestionScreen = ({route, navigation}) => {
             rules={{ maxLength: 450, required: true }}
             name="description"
             render={({
-              field: { onChange, onBlur, value, ref  },
+              field: { onChange, onBlur, value },
             }) => (
               <TextInput 
                 style={styles.description}  

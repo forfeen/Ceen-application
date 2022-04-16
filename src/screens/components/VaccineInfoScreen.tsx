@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Swiper from 'react-native-swiper';
-import { StyleSheet, TouchableOpacity , FlatList} from 'react-native';
+import { StyleSheet, TouchableOpacity , FlatList, Linking} from 'react-native';
 import { AntDesign, FontAwesome} from '@expo/vector-icons'; 
 import Svg, { Rect, Circle} from 'react-native-svg';
 import ContentLoader from 'react-native-masked-loader';
@@ -9,7 +9,6 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import IconFont from 'react-native-vector-icons/FontAwesome5';
 import { Text, View } from './Themed';
 import { Card } from 'react-native-elements';
-import { Linking } from 'react-native';
 import Moment from 'moment';
 
 import { auth } from '../../../firebase';
@@ -127,8 +126,8 @@ const VaccineInfoScreen = ({route, navigation}) => {
     return userString;
   }
 
-  async function dislikeQuestion(question) {
-    var likeList = getUserList(question['isLike']);
+  async function dislikeQuestion(questionData) {
+    var likeList = getUserList(questionData['isLike']);
 
     if (likeList.includes(userMail)) {
       var index = likeList.indexOf(userMail);
@@ -137,25 +136,25 @@ const VaccineInfoScreen = ({route, navigation}) => {
 
     var dislikeString = getUserString(likeList);
     const dislikeData = {
-      '#': question['#'],
-      ownerId: question.ownerId,
-      ownerName: question.ownerName,
-      description: question.description,
-      title: question.title,
-      typePrice:	question.typePrice,
-      typeLocation: 	question.typeLocation,
-      typeEffect: question.typeLocation,
-      likes: question.likes - 1,
-      date: question.date,
-      answers: question.answers,
+      '#': questionData['#'],
+      ownerId: questionData.ownerId,
+      ownerName: questionData.ownerName,
+      description: questionData.description,
+      title: questionData.title,
+      typePrice:	questionData.typePrice,
+      typeLocation: 	questionData.typeLocation,
+      typeEffect: questionData.typeLocation,
+      likes: questionData.likes - 1,
+      date: questionData.date,
+      answers: questionData.answers,
       isLike: dislikeString
     };
     await putLikeQuestion(dislikeData);
   }
 
-  async function likeQuestion(question) {
+  async function likeQuestion(questionData) {
 
-    var likeList = getUserList(question['isLike']);
+    var likeList = getUserList(questionData['isLike']);
 
     if (!likeList.includes(userMail)) {
       likeList.push(userMail);
@@ -163,24 +162,24 @@ const VaccineInfoScreen = ({route, navigation}) => {
     var likeString = getUserString(likeList);
 
     const likeData = {
-       '#': question['#'],
-       ownerId: question.ownerId,
-       ownerName: question.ownerName,
-       description: question.description,
-       title: question.title,
-       typePrice:	question.typePrice,
-       typeLocation: 	question.typeLocation,
-       typeEffect: question.typeLocation,
-       likes: question.likes + 1,
-       date: question.date,
-       answers: question.answers,
+       '#': questionData['#'],
+       ownerId: questionData.ownerId,
+       ownerName: questionData.ownerName,
+       description: questionData.description,
+       title: questionData.title,
+       typePrice:	questionData.typePrice,
+       typeLocation: 	questionData.typeLocation,
+       typeEffect: questionData.typeLocation,
+       likes: questionData.likes + 1,
+       date: questionData.date,
+       answers: questionData.answers,
        isLike: likeString
     };
     await putLikeQuestion(likeData);
   }
 
-  async function dislikePost(post) {
-    var likeList = getUserList(question['isLike']);
+  async function dislikePost(postData) {
+    var likeList = getUserList(postData['isLike']);
 
     if (likeList.includes(userMail)) {
       var index = likeList.indexOf(userMail);
@@ -189,21 +188,21 @@ const VaccineInfoScreen = ({route, navigation}) => {
 
     var dislikeString = getUserString(likeList);
     const dislikeData = {
-      '#': post['#'],
-      ownerId: post.ownerId,
-      ownerName: post.ownerName,
-      description: post.description,
-      title: post.title,
-      likes: post.likes - 1,
-      date: post.date,
+      '#': postData['#'],
+      ownerId: postData.ownerId,
+      ownerName: postData.ownerName,
+      description: postData.description,
+      title: postData.title,
+      likes: postData.likes - 1,
+      date: postData.date,
       isLike: dislikeString,
     };
     await putLikePost(dislikeData);
   }
 
-  async function likePost(post) {
+  async function likePost(postData) {
 
-    var likeList = getUserList(question['isLike']);
+    var likeList = getUserList(postData['isLike']);
 
     if (!likeList.includes(userMail)) {
       likeList.push(userMail);
@@ -211,20 +210,20 @@ const VaccineInfoScreen = ({route, navigation}) => {
     var likeString = getUserString(likeList);
 
     const likeData = {
-       '#': post['#'],
-       ownerId: post.ownerId,
-       ownerName: post.ownerName,
-       description: post.description,
-       title: post.title,
-       likes: post.likes + 1,
-       date: post.date,
+       '#': postData['#'],
+       ownerId: postData.ownerId,
+       ownerName: postData.ownerName,
+       description: postData.description,
+       title: postData.title,
+       likes: postData.likes + 1,
+       date: postData.date,
        isLike: likeString,
     };
     await putLikePost(likeData);
   }
 
-  async function dislikeReview(review) {
-    var likeList = getUserList(question['isLike']);
+  async function dislikeReview(reviewData) {
+    var likeList = getUserList(reviewData['isLike']);
 
     if (likeList.includes(userMail)) {
       var index = likeList.indexOf(userMail);
@@ -234,28 +233,28 @@ const VaccineInfoScreen = ({route, navigation}) => {
     var dislikeString = getUserString(likeList);
 
     const dislikeData = {
-      '#': review['#'],
-      ownerId: review.ownerId,
-      ownerName: review.ownerName,
-      description: review.description,
-      price: review.price,
-      location: review.location,
-      effects: review.effects,
-      currentDose: review.currentDose,
-      firstDose: review.firstDose,
-      secondDose: review.secondDose,
-      thirdDose: review.thirdDose,
-      fourthDose: review.fourthDose,
+      '#': reviewData['#'],
+      ownerId: reviewData.ownerId,
+      ownerName: reviewData.ownerName,
+      description: reviewData.description,
+      price: reviewData.price,
+      location: reviewData.location,
+      effects: reviewData.effects,
+      currentDose: reviewData.currentDose,
+      firstDose: reviewData.firstDose,
+      secondDose: reviewData.secondDose,
+      thirdDose: reviewData.thirdDose,
+      fourthDose: reviewData.fourthDose,
       isLike: dislikeString,
-      likes: review.likes - 1,
-      date: review.date
+      likes: reviewData.likes - 1,
+      date: reviewData.date
     };
     await putLikeReview(dislikeData);
   }
 
-  async function likeReview(review) {
+  async function likeReview(reviewData) {
 
-    var likeList = getUserList(question['isLike']);
+    var likeList = getUserList(reviewData['isLike']);
 
     if (!likeList.includes(userMail)) {
       likeList.push(userMail);
@@ -263,30 +262,30 @@ const VaccineInfoScreen = ({route, navigation}) => {
     var likeString = getUserString(likeList);
 
     const likeData = {
-       '#': review['#'],
-       ownerId: review.ownerId,
-       ownerName: review.ownerName,
-       description: review.description,
-       price: review.price,
-       location: review.location,
-       effects: review.effects,
-       currentDose: review.currentDose,
-       firstDose: review.firstDose,
-       secondDose: review.secondDose,
-       thirdDose: review.thirdDose,
-       fourthDose: review.fourthDose,
+       '#': reviewData['#'],
+       ownerId: reviewData.ownerId,
+       ownerName: reviewData.ownerName,
+       description: reviewData.description,
+       price: reviewData.price,
+       location: reviewData.location,
+       effects: reviewData.effects,
+       currentDose: reviewData.currentDose,
+       firstDose: reviewData.firstDose,
+       secondDose: reviewData.secondDose,
+       thirdDose: reviewData.thirdDose,
+       fourthDose: reviewData.fourthDose,
        isLike: likeString,
-       likes: review.likes + 1,
-       date: review.date
+       likes: reviewData.likes + 1,
+       date: reviewData.date
     };
     await putLikeReview(likeData);
   }
   
   useEffect(() => {
     const fetchInfos = async () => {
-      const vaccine = await getAllInfos();
-      setVaccine(vaccine);
-      setLink(vaccine['link_info']);
+      const vaccineData = await getAllInfos();
+      setVaccine(vaccineData);
+      setLink(vaccineData['link_info']);
     }
     
     const fetchReviews = async () => {

@@ -6,12 +6,13 @@ import { Text, View } from './Themed';
 
 import vaccineService from '../services/vaccine.service';
 import { auth } from '../../../firebase';
+import Answer from '../../types/answer.type';
 
 const CreateAnswerScreen = ({route, navigation}) => {
     const vaccineId  = route.params.vaccineId;
     const question = route.params.question;
     
-    const { control, handleSubmit, formState: { errors } } = useForm<Post>();
+    const { control, handleSubmit, formState: { errors } } = useForm<Answer>();
     const pressedPost = handleSubmit( data => createAnswer(data));
     var date = new Date();
 
@@ -82,7 +83,7 @@ const CreateAnswerScreen = ({route, navigation}) => {
               rules={{ maxLength: 450, required: true }}
               name="description"
               render={({
-                field: { onChange, onBlur, value, ref  },
+                field: { onChange, onBlur, value},
               }) => (
                 <TextInput 
                   style={styles.description_input}  
