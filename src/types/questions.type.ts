@@ -9,6 +9,7 @@ export default interface Question {
   typeEffect: boolean;
   description?: string;
   likes?: number;
-  dislikes?: number;
   date?: string;
+  answers?: number;
+  isLike?: string;
 }

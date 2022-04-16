@@ -7,6 +7,6 @@ export default interface Post {
   title: string;
   description: string;
   like: number;
-  dislike: number;
   date: string;
+  isLike: string;
 }

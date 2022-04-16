@@ -12,6 +12,7 @@ import { Card } from 'react-native-elements';
 import { Linking } from 'react-native';
 import Moment from 'moment';
 
+import { auth } from '../../../firebase';
 import Vaccine from '../../types/vaccine.type';
 import Review from '../../types/reviews.type';
 import Question from '../../types/questions.type';
@@ -25,6 +26,8 @@ const VaccineInfoScreen = ({route, navigation}) => {
   const [question, setQuestions] = useState<Question>();
   const [post, setPosts] = useState<Post>();
   const [vaccineLink, setLink] = useState<string>();
+  const userMail = auth.currentUser.email;
+
   const MaskedInfoElement = getMaskedInfoElement();
   const MaskedElement = getMaskedElement();
 
@@ -74,7 +77,7 @@ const VaccineInfoScreen = ({route, navigation}) => {
 
   function putLikeQuestion(putData) {
     const data = vaccineService.likeQuestion(vaccineId, putData)
-        .then(response => {          
+        .then(response => {
             return response.data;
         })
         .catch(e => {
@@ -96,7 +99,7 @@ const VaccineInfoScreen = ({route, navigation}) => {
 
   function putLikePost(putData) {
     const data = vaccineService.likePost(vaccineId, putData)
-        .then(response => {          
+        .then(response => {
             return response.data;
         })
         .catch(e => {
@@ -105,85 +108,175 @@ const VaccineInfoScreen = ({route, navigation}) => {
         return data;
   }
 
+  function getUserList(user) {
+    var userList = [];
+    if (user) {
+      user.split(',').map((mail?) => 
+      userList.push(mail)
+      )
+    }
+    return userList;
+  }
+
+  function getUserString(user) {
+    var userString = '';
+    user.map((x) => {
+      userString += x;
+      userString += ',';
+    });
+    return userString;
+  }
+
   async function dislikeQuestion(question) {
+    var likeList = getUserList(question['isLike']);
+
+    if (likeList.includes(userMail)) {
+      var index = likeList.indexOf(userMail);
+      likeList.splice(index, 1)
+    }
+
+    var dislikeString = getUserString(likeList);
     const dislikeData = {
-       '#': question['#'],
-       id: question.id,
-       description: question.description,
-       title: question.title,
-       type: question.type,
-       likes: question.likes,
-       dislikes: question.dislikes + 1,
-       date: question.date
+      '#': question['#'],
+      ownerId: question.ownerId,
+      ownerName: question.ownerName,
+      description: question.description,
+      title: question.title,
+      typePrice:	question.typePrice,
+      typeLocation: 	question.typeLocation,
+      typeEffect: question.typeLocation,
+      likes: question.likes - 1,
+      date: question.date,
+      answers: question.answers,
+      isLike: dislikeString
     };
     await putLikeQuestion(dislikeData);
   }
 
   async function likeQuestion(question) {
+
+    var likeList = getUserList(question['isLike']);
+
+    if (!likeList.includes(userMail)) {
+      likeList.push(userMail);
+    }
+    var likeString = getUserString(likeList);
+
     const likeData = {
        '#': question['#'],
-       id: question.id,
+       ownerId: question.ownerId,
+       ownerName: question.ownerName,
        description: question.description,
        title: question.title,
-       type: question.type,
+       typePrice:	question.typePrice,
+       typeLocation: 	question.typeLocation,
+       typeEffect: question.typeLocation,
        likes: question.likes + 1,
-       dislikes: question.dislikes,
-       date: question.date
+       date: question.date,
+       answers: question.answers,
+       isLike: likeString
     };
     await putLikeQuestion(likeData);
   }
 
   async function dislikePost(post) {
+    var likeList = getUserList(question['isLike']);
+
+    if (likeList.includes(userMail)) {
+      var index = likeList.indexOf(userMail);
+      likeList.splice(index, 1)
+    }
+
+    var dislikeString = getUserString(likeList);
     const dislikeData = {
-       '#': post['#'],
-       id: post.id,
-       description: post.description,
-       title: post.title,
-       likes: post.likes,
-       dislikes: post.dislikes + 1,
-       date: post.date
+      '#': post['#'],
+      ownerId: post.ownerId,
+      ownerName: post.ownerName,
+      description: post.description,
+      title: post.title,
+      likes: post.likes - 1,
+      date: post.date,
+      isLike: dislikeString,
     };
     await putLikePost(dislikeData);
   }
 
   async function likePost(post) {
+
+    var likeList = getUserList(question['isLike']);
+
+    if (!likeList.includes(userMail)) {
+      likeList.push(userMail);
+    }
+    var likeString = getUserString(likeList);
+
     const likeData = {
        '#': post['#'],
-       id: post.id,
+       ownerId: post.ownerId,
+       ownerName: post.ownerName,
        description: post.description,
        title: post.title,
        likes: post.likes + 1,
-       dislikes: post.dislikes,
-       date: post.date
+       date: post.date,
+       isLike: likeString,
     };
     await putLikePost(likeData);
   }
 
   async function dislikeReview(review) {
+    var likeList = getUserList(question['isLike']);
+
+    if (likeList.includes(userMail)) {
+      var index = likeList.indexOf(userMail);
+      likeList.splice(index, 1)
+    }
+
+    var dislikeString = getUserString(likeList);
+
     const dislikeData = {
-       '#': review['#'],
-       id: review.id,
-       description: review.description,
-       price: review.price,
-       location: review.location,
-       effects: review.effects,
-       likes: review.likes,
-       dislikes: review.dislikes + 1,
-       date: review.date
+      '#': review['#'],
+      ownerId: review.ownerId,
+      ownerName: review.ownerName,
+      description: review.description,
+      price: review.price,
+      location: review.location,
+      effects: review.effects,
+      currentDose: review.currentDose,
+      firstDose: review.firstDose,
+      secondDose: review.secondDose,
+      thirdDose: review.thirdDose,
+      fourthDose: review.fourthDose,
+      isLike: dislikeString,
+      likes: review.likes - 1,
+      date: review.date
     };
     await putLikeReview(dislikeData);
   }
 
   async function likeReview(review) {
+
+    var likeList = getUserList(question['isLike']);
+
+    if (!likeList.includes(userMail)) {
+      likeList.push(userMail);
+    }
+    var likeString = getUserString(likeList);
+
     const likeData = {
        '#': review['#'],
-       id: review.id,
+       ownerId: review.ownerId,
+       ownerName: review.ownerName,
        description: review.description,
        price: review.price,
        location: review.location,
        effects: review.effects,
+       currentDose: review.currentDose,
+       firstDose: review.firstDose,
+       secondDose: review.secondDose,
+       thirdDose: review.thirdDose,
+       fourthDose: review.fourthDose,
+       isLike: likeString,
        likes: review.likes + 1,
-       dislikes: review.dislikes,
        date: review.date
     };
     await putLikeReview(likeData);
@@ -193,7 +286,7 @@ const VaccineInfoScreen = ({route, navigation}) => {
     const fetchInfos = async () => {
       const vaccine = await getAllInfos();
       setVaccine(vaccine);
-      setLink(vaccine.link_info);
+      setLink(vaccine['link_info']);
     }
     
     const fetchReviews = async () => {
@@ -216,6 +309,19 @@ const VaccineInfoScreen = ({route, navigation}) => {
    fetchQuestions();
    fetchPosts();
   }, []);
+
+  function checkLike(id): boolean{
+    var userLike = false;
+    if (id) {
+      id.split(',').map((mail) =>
+        {
+          if (mail === userMail) {
+            userLike = !userLike
+          }
+        })
+    }
+    return userLike;
+  }
 
   function getMaskedInfoElement() {
     return (
@@ -382,7 +488,20 @@ const VaccineInfoScreen = ({route, navigation}) => {
                      </View>
                       <View style={styles.like}>
                         <Text>
-                          <AntDesign name="like2" size={16} color="green"  onPress={ () => {  likeReview(item)}} /> {item.likes}   <AntDesign name="dislike2" size={16} color="red" onPress={ () => {  dislikeReview(item)}} /> {item.dislikes}
+                          {
+                              checkLike(item.isLike) ? 
+                                <View style={{backgroundColor: 'transparent'}}>
+                                  <Text>
+                                    <AntDesign name="like1" size={16} color="green" onPress={ () => {  dislikeReview(item)}} /> {item.likes}
+                                  </Text>
+                                </View>
+                              :
+                                <View style={{backgroundColor: 'transparent'}}>
+                                  <Text>
+                                    <AntDesign name="like2" size={16} color="green" onPress={ () => {  likeReview(item)}} /> {item.likes}
+                                  </Text>
+                              </View>
+                            }
                         </Text>
                       </View>
                     </View>
@@ -441,7 +560,20 @@ const VaccineInfoScreen = ({route, navigation}) => {
 
                         <View style={styles.like}>
                           <Text>
-                            <AntDesign name="like2" size={16} color="green" onPress={ () => {  likeQuestion(item)}} /> {item.likes}   <AntDesign name="dislike2" size={16} color="red" onPress={ () => {  dislikeQuestion(item)}} /> {item.dislikes}  <FontAwesome name="comment-o" size={16} color="black" /> 
+                          {
+                              checkLike(item.isLike) ? 
+                                <View style={{backgroundColor: 'transparent'}}>
+                                  <Text>
+                                    <AntDesign name="like1" size={16} color="green" onPress={ () => {  dislikeQuestion(item)}} /> {item.likes} <FontAwesome name="comment-o" size={16} color="black" /> {item.answers}
+                                  </Text>
+                                </View>
+                              :
+                                <View style={{backgroundColor: 'transparent'}}>
+                                  <Text>
+                                    <AntDesign name="like2" size={16} color="green" onPress={ () => {  likeQuestion(item)}} /> {item.likes} <FontAwesome name="comment-o" size={16} color="black" /> {item.answers}
+                                  </Text>
+                              </View>
+                            }
                           </Text>
                         </View>
                       </View>
@@ -467,7 +599,20 @@ const VaccineInfoScreen = ({route, navigation}) => {
                     </View>
                       <View style={styles.like}>
                         <Text>
-                          <AntDesign name="like2" size={16} color="green" onPress={ () => {  likePost(item)}} /> {item.likes}   <AntDesign name="dislike2" size={16} color="red" onPress={ () => {  dislikePost(item)}} /> {item.dislikes}
+                        {
+                              checkLike(item.isLike) ? 
+                                <View style={{backgroundColor: 'transparent'}}>
+                                  <Text>
+                                    <AntDesign name="like1" size={16} color="green" onPress={ () => {  dislikePost(item)}} /> {item.likes}
+                                  </Text>
+                                </View>
+                              :
+                                <View style={{backgroundColor: 'transparent'}}>
+                                  <Text>
+                                    <AntDesign name="like2" size={16} color="green" onPress={ () => {  likePost(item)}} /> {item.likes}
+                                  </Text>
+                              </View>
+                            }
                         </Text>
                       </View>
                     </View>
@@ -609,6 +754,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     left: 20,
+    top: 5
   },
   vaccineDose: {
     backgroundColor: 'transparent', 

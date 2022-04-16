@@ -13,8 +13,6 @@ export default interface Review {
   thirdDose: string;
   fourthDose: string;
   likes: number;
-  dislikes: number;
   date: string;
-  isLike: boolean;
-  isDislike: boolean;
+  isLike: string;
 }

@@ -8,6 +8,7 @@ import Post from '../../types/posts.type';
 import { auth } from '../../../firebase';
 
 const CreatePostScreen = ({route, navigation}) => {
+ var date = new Date();
  const { vaccineId } = route.params;
  const [vaccineName, setName] = useState('');
  const { control, handleSubmit, formState: { errors } } = useForm<Post>();
@@ -21,7 +22,7 @@ const CreatePostScreen = ({route, navigation}) => {
      description: postData.description,
      likes: 0,
      dislikes: 0,
-     date: 0
+     date: date
   };
   const data = await vaccineService.createPost(vaccineId, post)
       .then(response => {
