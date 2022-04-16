@@ -114,12 +114,39 @@ export default function VaccinationCharts({ path }: { path: string }) {
           paginationStyle={{
             top: 340,
           }}
+          dot={
+            <View
+              style={{
+                backgroundColor: '#a4c7db',
+                width: 8,
+                height: 8,
+                borderRadius: 4,
+                marginLeft: 3,
+                marginRight: 3,
+                marginTop: 3,
+                marginBottom: 3
+              }}
+            />
+          }
+          activeDot={
+            <View
+              style={{
+                backgroundColor: '#5fb0de',
+                width: 8,
+                height: 8,
+                borderRadius: 4,
+                marginLeft: 3,
+                marginRight: 3,
+                marginTop: 3,
+                marginBottom: 3
+              }}
+            />
+          }
         >
-          <View>
+          <View style={{backgroundColor: 'transparent'}}>
             <Text style={styles.title}>COVID-19 : {day} {month} {year}</Text>
             <View style={styles.card}>
-
-              <View style={{ padding: 10, flex: 1 }}>
+              <View style={{ padding: 10, flex: 1 , backgroundColor: 'transparent'}}>
                 <View style={styles.topSection}>
                   <Text style={styles.textHeader}>New Case</Text>
                   <Text style={styles.textBody}> {newCase} </Text>
@@ -128,6 +155,7 @@ export default function VaccinationCharts({ path }: { path: string }) {
                   style={{
                     height: 120,
                     flexDirection: 'row',
+                    backgroundColor: 'transparent'
                   }}>
                   <View style={styles.subLeft}>
                     <Text style={styles.textHeader}>Recovered Case</Text>
@@ -141,10 +169,10 @@ export default function VaccinationCharts({ path }: { path: string }) {
               </View>
             </View>
          </View>
-          <View>
+          <View style={{backgroundColor: 'transparent'}}>
             <Text style={styles.title}>Vaccinations Overview</Text>
-            <View>
-                <View style={{ flexDirection: 'row', flex:1, margin: 10 }}>
+            <View style={{backgroundColor: 'transparent'}}>
+                <View style={{ flexDirection: 'row', flex:1, margin: 10}}>
                   <View style={{ width: 120, height: 245, backgroundColor: '#fff', borderRadius: 15}} >
                       <Text style={styles.textVacHeader}> Last updated {'\n'} {date} </Text>
                       <Text style={styles.textVacBody}> {vaccinationDaily.toLocaleString() || '-'} </Text>
@@ -181,13 +209,15 @@ const styles = StyleSheet.create({
     height: 330,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: 'transparent'
   },
   title: {
     fontSize: 20,
     fontWeight: '600',
     textAlign: 'left',
     color: '#000',
-    margin: 25
+    margin: 25,
+    backgroundColor: 'transparent'
   },
   chart: {
     marginTop: 2,
@@ -202,6 +232,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     backgroundColor: 'black',
+    
   },
   topSection: {
     height: 120,

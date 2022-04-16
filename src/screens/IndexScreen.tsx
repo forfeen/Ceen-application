@@ -23,7 +23,7 @@ import { FontAwesome } from '@expo/vector-icons';
         return (
             <View style={styles.container}>
               {/* <Text style={styles.title}>Vaccinations Overview</Text> */}
-              <View style={{alignItems: 'center'}}>
+              <View style={{ backgroundColor: 'transparent', alignItems: 'center'}}>
               <VaccinationCharts path="/screens/ModalScreen.tsx" />
              </View>
         
@@ -53,7 +53,7 @@ import { FontAwesome } from '@expo/vector-icons';
                                     navigation.push('Details', {vaccineId: item.id});
                                   }
                               }>
-                              <View style={{alignItems: 'center'}}>
+                              <View style={{alignItems: 'center',  backgroundColor: 'transparent'}}>
                                     <Card containerStyle={styles.card_vaccine}>
                                       <View style={styles.list}>
                                         <Text style={styles.name}>{item.name}</Text>
@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
   name: {
       fontSize: 18,
       letterSpacing: 0.75,
+      color: "black"
   },
   review_title: {
     textAlign: 'right',

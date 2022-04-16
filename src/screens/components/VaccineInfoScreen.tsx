@@ -375,7 +375,7 @@ const VaccineInfoScreen = ({route, navigation}) => {
           <Card containerStyle={styles.title_info}>
                 <Text style={styles.info}>Information </Text>
           </Card>
-          <Text style={{marginVertical: 10, marginHorizontal: 10}}>
+          <Text style={{marginVertical: 10, marginHorizontal: 10, color: "black"}}>
             {vaccine?.long_description || ''} </Text>
             <Text style={styles.more_info}  onPress={ () => {  Linking.openURL(vaccineLink)}}>more infomation...</Text>
           <View style={styles.vac_info}>
@@ -391,8 +391,8 @@ const VaccineInfoScreen = ({route, navigation}) => {
           style={styles.wrapper}
           paginationStyle={{
             position: 'absolute',
-            bottom: 420,
-            left: 240,
+            bottom: '89%',
+            left: '70%',
           }}
           // onMomentumScrollEnd={(state) =>
           //   console.log('index:', state.index)
@@ -438,12 +438,12 @@ const VaccineInfoScreen = ({route, navigation}) => {
                         <View style={styles.circle}>
                           <Text>{item.ownerName.charAt(0)}</Text>
                         </View> 
-                        <Text style={{marginStart: 20, marginTop: 5, marginHorizontal: 60}}>
+                        <Text style={{marginStart: 20, marginTop: 5, marginHorizontal: 60, color: "black"}}>
                           {item.description}
                         </Text>
                      </View>
                      <View style={{backgroundColor: 'transparent', flexDirection: 'row', width: 100}}>
-                       <Text style={{fontSize: 13, left: 82, top: 10, bottom: 5, width: 250, lineHeight: 24, }}>
+                       <Text style={{fontSize: 13, left: 82, top: 10, bottom: 5, width: 250, lineHeight: 24, color: "black"}}>
                          Side effects: {item.effects}
                        </Text>
                       </View>
@@ -451,7 +451,7 @@ const VaccineInfoScreen = ({route, navigation}) => {
                         {
                           item.firstDose ?
                           <View style={styles.vaccineDose}>
-                            <Text style={{fontSize: 13, lineHeight: 25}}>
+                            <Text style={{fontSize: 13, lineHeight: 25, color: "black"}}>
                               <IconFont name="syringe" size={10}/> {item.firstDose} (1st)
                             </Text>
                           </View>
@@ -490,13 +490,13 @@ const VaccineInfoScreen = ({route, navigation}) => {
                           {
                               checkLike(item.isLike) ? 
                                 <View style={{backgroundColor: 'transparent'}}>
-                                  <Text>
+                                  <Text style={{color: "black"}}>
                                     <AntDesign name="like1" size={16} color="green" onPress={ () => {  dislikeReview(item)}} /> {item.likes}
                                   </Text>
                                 </View>
                               :
                                 <View style={{backgroundColor: 'transparent'}}>
-                                  <Text>
+                                  <Text style={{color: "black"}}>
                                     <AntDesign name="like2" size={16} color="green" onPress={ () => {  likeReview(item)}} /> {item.likes}
                                   </Text>
                               </View>
@@ -524,7 +524,7 @@ const VaccineInfoScreen = ({route, navigation}) => {
                           <Text style={styles.date}> {Moment.utc(item.date).local().startOf('seconds').fromNow()} </Text>
                           <View style={{backgroundColor: 'white', flexDirection: 'row', top: 14}}>
                             <View style={styles.circle_question}>
-                              <Text>{item.ownerName.charAt(0)}</Text>
+                              <Text style={{color: "black"}}>{item.ownerName.charAt(0)}</Text>
                             </View>
                             {
                               item?.typeLocation ? 
@@ -552,7 +552,7 @@ const VaccineInfoScreen = ({route, navigation}) => {
                             }
                         </View>
                           {/* <View style={styles.list}> */}
-                            <Text style={{marginStart: 75, marginTop: 15, marginHorizontal: 60, left: 10, lineHeight: 25}}>
+                            <Text style={{marginStart: 75, marginTop: 15, marginHorizontal: 60, left: 10, lineHeight: 25, color: "black"}}>
                               {item.description}
                             </Text>
                         {/* </View> */}
@@ -562,14 +562,16 @@ const VaccineInfoScreen = ({route, navigation}) => {
                           {
                               checkLike(item.isLike) ? 
                                 <View style={{backgroundColor: 'transparent'}}>
-                                  <Text>
-                                    <AntDesign name="like1" size={16} color="green" onPress={ () => {  dislikeQuestion(item)}} /> {item.likes} <FontAwesome name="comment-o" size={16} color="black" /> {item.answers}
+                                  <Text style={{color: "black"}}>
+                                    <AntDesign name="like1" size={16} color="green" onPress={ () => {  dislikeQuestion(item)}} /> {item.likes} 
+                                    <FontAwesome name="comment-o" size={16} color="black" /> {item.answers}
                                   </Text>
                                 </View>
                               :
                                 <View style={{backgroundColor: 'transparent'}}>
-                                  <Text>
-                                    <AntDesign name="like2" size={16} color="green" onPress={ () => {  likeQuestion(item)}} /> {item.likes} <FontAwesome name="comment-o" size={16} color="black" /> {item.answers}
+                                  <Text style={{color: "black"}}>
+                                    <AntDesign name="like2" size={16} color="green" onPress={ () => {  likeQuestion(item)}} /> {item.likes} 
+                                    <FontAwesome name="comment-o" size={16} color="black" /> {item.answers}
                                   </Text>
                               </View>
                             }
@@ -591,9 +593,9 @@ const VaccineInfoScreen = ({route, navigation}) => {
                       <Text style={styles.date}> {Moment.utc(item.date).local().startOf('seconds').fromNow()} </Text>
                       <View style={styles.list}>
                         <View style={styles.circle}>
-                          <Text>{item.ownerName.charAt(0)}</Text>
+                          <Text style={{color: "black"}}>{item.ownerName.charAt(0)}</Text>
                         </View> 
-                        <Text style={{marginStart: 40, marginTop: 5, marginHorizontal: 60}}>
+                        <Text style={{marginStart: 40, marginTop: 5, marginHorizontal: 60, color: "black"}}>
                         {item.description}</Text>
                     </View>
                       <View style={styles.like}>
@@ -671,7 +673,8 @@ const styles = StyleSheet.create({
     top: 10,
     left: 245,
     fontWeight: '300',
-    fontSize: 11
+    fontSize: 11,
+    color: "black"
   },
   title_info: {
     backgroundColor: '#E2FFE9',
@@ -697,11 +700,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginVertical: 5,
     backgroundColor: 'transparent',
-    lineHeight: 40
+    lineHeight: 40,
   },
   info_text:{
     fontSize: 14, 
-    lineHeight: 28
+    lineHeight: 28,
+    color: "black"
   },
   title_section: {
     fontSize: 22,

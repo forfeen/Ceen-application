@@ -57,10 +57,11 @@ export default function LoginScreen({ route, navigation }) {
                             onChangeText={onChange}
                             value={value}
                             placeholder="Email"
+                            placeholderTextColor="gray" 
                         />
                     )}
                 />
-                {errors.email && errors.email.type === "required" && <Text>Email is required</Text>}
+                {errors.email && errors.email.type === "required" && <Text style={{color: "red"}} >Email is required</Text>}
                 <Controller
                     control={control}
                     rules={{ maxLength: 100, required: true}}
@@ -74,6 +75,7 @@ export default function LoginScreen({ route, navigation }) {
                                 value={value}
                                 secureTextEntry={hidePass ? true : false}
                                 placeholder="Password"
+                                placeholderTextColor="gray" 
                             />
                             <Icon
                                 style={styles.hide}
@@ -86,7 +88,8 @@ export default function LoginScreen({ route, navigation }) {
                         
                     )}
                 />
-                {errors.password && errors.password.type === "required" && <Text>Password is required</Text>}
+    
+                {errors.password && errors.password.type === "required" && <Text style={{color: "red"}}>Password is required</Text>}
 
                 <TouchableOpacity 
                     onPress={pressedLogin} 
@@ -102,9 +105,9 @@ export default function LoginScreen({ route, navigation }) {
                     flexDirection: 'row', 
                     alignItems: 'center',
                     marginTop: 50}}>
-                    <View style={{flex: 1, height: 1, backgroundColor: 'gray'}} />
-                        <Text style={{width: 50, textAlign: 'center'}}>or</Text>
-                    <View style={{flex: 1, height: 1, backgroundColor: 'gray'}} />
+                    <View style={{flex: 1, height: 1, backgroundColor: '#808080'}} />
+                        <Text style={{width: 50, textAlign: 'center', color: "#808080"}}>or</Text>
+                    <View style={{flex: 1, height: 1, backgroundColor: '#808080'}} />
                 </View>
                 <TouchableOpacity onPress={pressedLoginGoogle} style={styles.withButton}>
                 <View style={{
@@ -184,4 +187,3 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     }
 });
-  
