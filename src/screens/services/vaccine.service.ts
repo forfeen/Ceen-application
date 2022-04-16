@@ -2,12 +2,14 @@ import baseURL from '../../api/http-common';
 import covidURl from '../../api/covid-http';
 import Vaccine from '../../types/vaccine.type';
 import VaccinationData from '../../types/vaccination.type';
+import vacLocationsURL from '../../api/vac-locations';
 import Covid from '../../types/covid.type';
 import axios from 'axios';
 import Question from '../../types/questions.type';
 import Post from '../../types/posts.type';
 import Review from '../../types/reviews.type';
 import Answer from '../../types/answer.type';
+import Locations from '../../types/locations.type';
 
 class VaccineDataService {
 
@@ -31,10 +33,6 @@ class VaccineDataService {
         return axios.get<Post>(baseURL + '/timelines/'+ id);
     }
 
-    getHospital(id) {
-        return axios.get<Vaccine>(baseURL + '/hospitals/'+id);
-    }
-
     getAnswer(id) {
         return axios.get<Vaccine>(baseURL + '/answers/'+id);
     }
@@ -47,6 +45,20 @@ class VaccineDataService {
         return axios.get<VaccinationData>(baseURL + '/vaccination');
     }
 
+    getLocations() {
+        return axios.get<Locations>(vacLocationsURL
+            , {
+            headers: { 
+                "Content-Type": "application/json",
+                "X-CLIENT-ID": process.env.X_CLIENT_ID,
+                "X-CLIENT-SECRET": process.env.X_CLIENT_SECRET
+            }
+        });
+    }
+
+    // getVaccinationFullData() {
+    //     return axios.get<VaccinationData>(vaccinationUrl);
+    // }
     createQuestion(id, data) {
         return axios.post<Question>(baseURL + '/questions/'+ id, data);
     }
