@@ -1,5 +1,5 @@
 import { StyleSheet, TextInput, ScrollView, Alert, TouchableOpacity } from 'react-native';
-import { Button, Card } from 'react-native-elements';
+import { Card } from 'react-native-elements';
 import React, { useState, useEffect } from 'react';
 import SelectBox from 'react-native-multi-selectbox';
 import { useForm, Controller } from "react-hook-form";
@@ -29,7 +29,7 @@ const CreateReviewScreen = ({route, navigation}) => {
 
  async function createReview(reviewData) {
    
-  let numberDose = numDose.id;
+  let numberDose = numDose['id'];
   let stDose = '';
   let ndDose = '';
   let rdDose = '';
@@ -37,7 +37,7 @@ const CreateReviewScreen = ({route, navigation}) => {
   
    // return effect into string type
    var effects = '';
-   effectItems.map((x) => {
+   effectItems.forEach((x) => {
     effects += x.id;
     effects += ', ';
    });
@@ -47,20 +47,20 @@ const CreateReviewScreen = ({route, navigation}) => {
    }
 
    if (numberDose === '2') {
-     stDose = firstDose.id;
+     stDose = firstDose['id'];
      ndDose = vaccineName;
    }
 
    if (numberDose === '3') {
-    stDose = firstDose.id;
-    ndDose = secondDose.id;
+    stDose = firstDose['id'];
+    ndDose = secondDose['id'];
     rdDose = vaccineName;
   }
 
   if (numberDose === '4') {
-    stDose = firstDose.id;
-    ndDose = secondDose.id;
-    rdDose = thirdDose.id;
+    stDose = firstDose['id'];
+    ndDose = secondDose['id'];
+    rdDose = thirdDose['id'];
     thDose = vaccineName;
   }
    
@@ -85,7 +85,7 @@ const CreateReviewScreen = ({route, navigation}) => {
       .then(response => {
           Alert.alert(
             'Success',
-            'The question was created',
+            'The review was created',
             [   
                 {text: 'OK', 
                 onPress: () => navigation.push('Details', {vaccineId: vaccineId})},
@@ -97,7 +97,7 @@ const CreateReviewScreen = ({route, navigation}) => {
           console.error(e);
       })
       return data;
-  };
+  }
 
  useEffect(() => {
     const getNameVaccine = () => {
@@ -150,7 +150,7 @@ const CreateReviewScreen = ({route, navigation}) => {
               rules={{ maxLength: 70, required: true }}
               name="location"
               render={({
-                field: { onChange, onBlur, value, ref  },
+                field: { onChange, onBlur, value },
               }) => (
                 <TextInput 
                   style={styles.input}  
@@ -178,9 +178,8 @@ const CreateReviewScreen = ({route, navigation}) => {
               control={control}
               rules={{ maxLength: 5, required: true}}
               name="price"
-              
               render={({
-                field: { onChange, onBlur, value, ref  },
+                field: { onChange, value },
               }) => (
                 <TextInput 
                   multiline
@@ -193,7 +192,6 @@ const CreateReviewScreen = ({route, navigation}) => {
                 />
               )}
             />
-            {/* {errors.price  === "required" && <Text style={styles.error_msg}>Price is required</Text>} */}
             <Text style={styles.currect_title}> Current Dose: </Text>       
             <View style={{backgroundColor: '#white', paddingTop: 20, paddingLeft: 5}}>
               <SelectBox
@@ -204,7 +202,7 @@ const CreateReviewScreen = ({route, navigation}) => {
                   hideInputFilter
                 />
                 <View style={styles.selectBox}>
-                  {numDose.id == 2 ?  
+                  {numDose['id'] == 2 ?  
                     <SelectBox
                       label = "Please select first dose"
                       options={VACCINE_OPTIONS}
@@ -215,7 +213,7 @@ const CreateReviewScreen = ({route, navigation}) => {
                   }
               </View>
               <View style={{ backgroundColor: '#fff'}}>
-                  {numDose.id == 3 ?  
+                  {numDose['id'] == 3 ?  
                     <View style={styles.selectBox}>
                       <SelectBox
                       label = "Please select first dose"
@@ -234,7 +232,7 @@ const CreateReviewScreen = ({route, navigation}) => {
                     </View>  
                     : false
                   }
-                  {numDose.id == 4 ?  
+                  {numDose['id'] == 4 ?  
                     <View style={styles.selectBox}>
                       <SelectBox
                       style={{margin: 2}}
@@ -289,7 +287,7 @@ const CreateReviewScreen = ({route, navigation}) => {
               rules={{ maxLength: 450, required: true }}
               name="description"
               render={({
-                field: { onChange, onBlur, value, ref  },
+                field: { onChange, onBlur, value },
               }) => (
                 <TextInput 
                   style={styles.description}  

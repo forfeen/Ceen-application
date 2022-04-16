@@ -5,14 +5,18 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { Card } from 'react-native-elements';
 import { AntDesign } from '@expo/vector-icons'; 
 import { Text, View } from './Themed';
+import Moment from 'moment';
+
 import vaccineService from '../services/vaccine.service';
 import Question from '../../types/questions.type';
 import Answer from '../../types/answer.type';
+import { auth } from '../../../firebase';
 
 const QuestionScreen = ({route, navigation}) => {
 
     const vaccineId  = route.params.vaccineId;
     const questionId = route.params.questionId;
+    const userMail = auth.currentUser.email;
 
     const [ question, setQuestion ] = useState<Question>();
     const [ answer, setAnswer] = useState<Answer>();
@@ -37,23 +41,110 @@ const QuestionScreen = ({route, navigation}) => {
               console.error(e);
           })
           return data;
-  }
+    }
 
+    function getUserList(user) {
+      var userList = [];
+      
+      if (user) {
+        user.split(',').map((mail?) => 
+        userList.push(mail)
+        )
+      }
+
+      return userList;
+    }
+  
+    function getUserString(user) {
+      var userString = '';
+      user.map((x) => {
+        userString += x;
+        userString += ',';
+      });
+      return userString;
+    }
+
+    function putLikeAnswer(putData) {
+      const data = vaccineService.likeAnswer(vaccineId, putData)
+          .then(response => {
+              return response.data;
+          })
+          .catch(e => {
+              console.error(e);
+          })
+          return data;
+    }
+
+    async function dislikeAnswer(answer) {
+      var likeList = getUserList(answer['isLike']);
+    
+      if (likeList.includes(userMail)) {
+        var index = likeList.indexOf(userMail);
+        likeList.splice(index, 1)
+      }
+    
+      var dislikeString = getUserString(likeList);
+    
+      const dislikeData = {
+        '#': answer['#'],
+        ownerId: answer.ownerId,
+        ownerName: answer.ownerName,
+        answer_id: answer.answer_id,
+        description: answer.description,
+        likes: answer.likes - 1,
+        date: answer.date,
+        isLike: dislikeString,
+      };
+      await putLikeAnswer(dislikeData);
+    }
+    
+    async function likeAnswer(answer) {
+    
+      var likeList = getUserList(answer['isLike']);
+      if (!likeList.includes(userMail)) {
+        likeList.push(userMail);
+      }
+      var likeString = getUserString(likeList);      
+      const likeData = {
+        '#': answer['#'],
+        ownerId: answer.ownerId,
+        ownerName: answer.ownerName,
+        answer_id: answer.answer_id,
+        description: answer.description,
+        likes: answer.likes + 1,
+        date: answer.date,
+        isLike: likeString,
+      };
+      await putLikeAnswer(likeData);
+    }
+
+    function checkLike(id): boolean{
+      var userLike = false;
+      if (id) {
+        id.split(',').map((mail) =>
+          {
+            if (mail === userMail) {
+              userLike = !userLike
+            }
+          })
+      }
+      return userLike;
+    }
     useEffect(() => {
-        const fetchQuestion = async () => {
-          const question = await getQuestion();
-          setQuestion(question);
-        }
+      const fetchQuestion = async () => {
+        const question = await getQuestion();
+        setQuestion(question);
+      }
 
-        const fetchAnswer = async () => {
-          const answers = await getAnswer();
-          const answerSameId = answers.filter((a) => a.answer_id === questionId);
-          setAnswer(answerSameId);
-        }
+      const fetchAnswer = async () => {
+        const answers = await getAnswer();
+        const answerSameId = answers.filter((a) => a.answer_id === questionId);
+        setAnswer(answerSameId);
+      }
 
-        fetchQuestion();
-        fetchAnswer();
-      }, []);
+      fetchQuestion();
+      fetchAnswer();
+    }, []);
 
     return (
         <View style={styles.container}>
@@ -92,26 +183,36 @@ const QuestionScreen = ({route, navigation}) => {
               renderItem={( {item} ) => {
                   return (
                     <View style={styles.card_section}>
+                      <Text style={styles.date}> {Moment.utc(item.date).local().startOf('seconds').fromNow()} </Text>
                       <View style={styles.list}>
                         <View style={styles.circle}>
-                        <Text>{item.id}</Text>
+                          <Text>{item.ownerName.charAt(0)}</Text>
                         </View> 
                         <Text style={{marginStart: 20, marginTop: 5, marginHorizontal: 60}}>
                         {item.description}</Text>
                     </View>
                       <View style={styles.like}>
                         <Text>
-                        <AntDesign name="like2" size={16} color="green" onPress={ () => {  }} /> {item.likes}   <AntDesign name="dislike2" size={16} color="red" onPress={ () => {  }} /> {item.dislikes}
+                          {
+                                checkLike(item.isLike) ? 
+                                  <View style={{backgroundColor: 'transparent'}}>
+                                    <Text>
+                                      <AntDesign name="like1" size={16} color="green" onPress={ () => {  dislikeAnswer(item)}} /> {item.likes}
+                                    </Text>
+                                  </View>
+                                :
+                                  <View style={{backgroundColor: 'transparent'}}>
+                                    <Text>
+                                      <AntDesign name="like2" size={16} color="green" onPress={ () => {  likeAnswer(item)}} /> {item.likes}
+                                    </Text>
+                                </View>
+                            }                        
                         </Text>
                       </View>
                     </View>
                   );
               }}/>
-              <ActionButton buttonColor="rgba(231,76,60,1)" onPress={() => navigation.navigate('Create Answer', {vaccineId: vaccineId, question: question})}>
-                {/* <ActionButton.Item buttonColor='#1abc9c' title="Create Answer" onPress={() => navigation.navigate('Create Answer', {vaccineId: vaccineId, questionId: question['#'], question: question.title})}>
-                < Icon name="md-create" style={styles.actionButtonIcon} />
-                </ActionButton.Item> */}
-              </ActionButton>
+              <ActionButton buttonColor="rgba(231,76,60,1)" onPress={() => navigation.navigate('Create Answer', {vaccineId: vaccineId, question: question})} />
         </View>
         
   );
@@ -134,6 +235,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     elevation:0,
     borderWidth: 0,
+  },
+  date: {
+    backgroundColor: 'transparent',
+    top: 10,
+    left: 245,
+    fontWeight: '300',
+    fontSize: 11
   },
   title_info: {
     backgroundColor: '#E2FFE9',
