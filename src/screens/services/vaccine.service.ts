@@ -80,6 +80,10 @@ class VaccineDataService {
         return axios.post<Question>(baseURL + '/questions/'+ id + '&method=PUT' , data);
     }
 
+    likeAnswer(id, data) {
+        return axios.post<Answer>(baseURL + '/answers/'+ id + '&method=PUT' , data);
+    }
+
     getEachQuestion(vaccineId, questionId) {
         return axios.get<Question>(baseURL + '/questions/'+ vaccineId + '/' + questionId);
     }

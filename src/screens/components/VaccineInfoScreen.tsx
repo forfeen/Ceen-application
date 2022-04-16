@@ -599,7 +599,7 @@ const VaccineInfoScreen = ({route, navigation}) => {
                     </View>
                       <View style={styles.like}>
                         <Text>
-                        {
+                          {
                               checkLike(item.isLike) ? 
                                 <View style={{backgroundColor: 'transparent'}}>
                                   <Text>
@@ -612,7 +612,7 @@ const VaccineInfoScreen = ({route, navigation}) => {
                                     <AntDesign name="like2" size={16} color="green" onPress={ () => {  likePost(item)}} /> {item.likes}
                                   </Text>
                               </View>
-                            }
+                          }
                         </Text>
                       </View>
                     </View>
