@@ -1,7 +1,6 @@
 import { StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import Vaccine from '../types/vaccine.type';
 import VaccinationCharts from './components/VaccinationsCharts';
-import EditScreenInfo from './components/EditScreenInfo';
 import { Text, View } from './components/Themed';
 import { Card } from 'react-native-elements';
 import React, {useState, useEffect} from 'react';
@@ -60,7 +59,7 @@ import { FontAwesome } from '@expo/vector-icons';
                                         <Text style={styles.name}>{item.name}</Text>
                                         <Text style={styles.review_title}>{item.review} reviews</Text>
                                       </View>
-                                      <Text>{item.short_description}</Text>
+                                      {/* <Text>{item.short_description}</Text> */}
                                     </Card>
                                   </View>
                           </TouchableOpacity>

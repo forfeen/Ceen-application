@@ -1,11 +1,10 @@
 import baseURL from '../../api/http-common';
 import covidURl from '../../api/covid-http';
-import vaccinationUrl from '../../api/vaccination-http';
 import Vaccine from '../../types/vaccine.type';
 import VaccinationData from '../../types/vaccination.type';
 import vacLocationsURL from '../../api/vac-locations';
 import Covid from '../../types/covid.type';
-import axios, {AxiosResponse} from 'axios';
+import axios from 'axios';
 import Question from '../../types/questions.type';
 import Post from '../../types/posts.type';
 import Review from '../../types/reviews.type';
@@ -60,7 +59,6 @@ class VaccineDataService {
     // getVaccinationFullData() {
     //     return axios.get<VaccinationData>(vaccinationUrl);
     // }
-
     createQuestion(id, data) {
         return axios.post<Question>(baseURL + '/questions/'+ id, data);
     }
@@ -87,6 +85,10 @@ class VaccineDataService {
 
     likeQuestion(id, data) {
         return axios.post<Question>(baseURL + '/questions/'+ id + '&method=PUT' , data);
+    }
+
+    likeAnswer(id, data) {
+        return axios.post<Answer>(baseURL + '/answers/'+ id + '&method=PUT' , data);
     }
 
     getEachQuestion(vaccineId, questionId) {

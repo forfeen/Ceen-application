@@ -1,11 +1,15 @@
 export default interface Question {
   items?: any;
   "#"?: string;
-  id?: string;
+  ownerName: string;
+  ownerId: string;
   title?: string;
-  type?: string;
+  typePrice: boolean;
+  typeLocation: boolean;
+  typeEffect: boolean;
   description?: string;
   likes?: number;
-  dislikes?: number;
   date?: string;
+  answers?: number;
+  isLike?: string;
 }

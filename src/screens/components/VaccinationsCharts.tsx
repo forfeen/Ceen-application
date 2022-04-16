@@ -12,7 +12,7 @@ export default function VaccinationCharts({ path }: { path: string }) {
   const [covid, setCovid] = useState<Covid>();
   const [vaccination, setVaccination] = useState<VaccinationData[]>([]);
   const [vaccinationData, setVaccinationData] = useState<[]>([]);
-  const [vaccinationDaily, setDaily] = useState<Number>(0);
+  const [vaccinationDaily, setDaily] = useState<number>(0);
   const [vaccinationTotal, setTotal] = useState<number>(0);
 
   const [newCase, setNewCase] = useState<number>();
@@ -20,7 +20,7 @@ export default function VaccinationCharts({ path }: { path: string }) {
   const [newDeath, setNewDeath] = useState<number>();
 
   const [day, setDay] = useState<number>();
-  const [month, setMonth] = useState<String>();
+  const [month, setMonth] = useState<string>();
   const [year, setYear] = useState<number>();
   const [date, setDate] = useState<string>('');
 

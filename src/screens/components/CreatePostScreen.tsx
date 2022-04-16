@@ -5,8 +5,10 @@ import { Card } from 'react-native-elements';
 import React, { useState, useEffect } from 'react';
 import vaccineService from '../services/vaccine.service';
 import Post from '../../types/posts.type';
+import { auth } from '../../../firebase';
 
 const CreatePostScreen = ({route, navigation}) => {
+ var date = new Date();
  const { vaccineId } = route.params;
  const [vaccineName, setName] = useState('');
  const { control, handleSubmit, formState: { errors } } = useForm<Post>();
@@ -14,12 +16,13 @@ const CreatePostScreen = ({route, navigation}) => {
 
  async function createPost(postData) {
   const post = {
-     //id: 0, // make it unique
+     ownerId: auth.currentUser.email,
+     ownerName: auth.currentUser.displayName,
      title: postData.title,
      description: postData.description,
      likes: 0,
      dislikes: 0,
-     date: 0
+     date: date
   };
   const data = await vaccineService.createPost(vaccineId, post)
       .then(response => {
@@ -69,7 +72,7 @@ const CreatePostScreen = ({route, navigation}) => {
             rules={{ maxLength: 70, required: true }}
             name="title"
             render={({
-              field: { onChange, onBlur, value, ref  },
+              field: { onChange, onBlur, value },
             }) => (
               <TextInput 
                 style={styles.input}  
@@ -89,7 +92,7 @@ const CreatePostScreen = ({route, navigation}) => {
             rules={{ maxLength: 450, required: true }}
             name="description"
             render={({
-              field: { onChange, onBlur, value, ref  },
+              field: { onChange, onBlur, value },
             }) => (
               <TextInput 
                 style={styles.description}  

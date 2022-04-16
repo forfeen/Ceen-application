@@ -1,7 +1,8 @@
 export default interface Review {
   items?: any;
   "#"?: string;
-  id: string;
+  ownerName: string;
+  ownerId: string;
   description: string;
   price: number;
   location: string;
@@ -12,8 +13,6 @@ export default interface Review {
   thirdDose: string;
   fourthDose: string;
   likes: number;
-  dislikes: number;
   date: string;
-  isLike: boolean;
-  isDislike: boolean;
+  isLike: string;
 }

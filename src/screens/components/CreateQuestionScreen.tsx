@@ -1,56 +1,38 @@
-import { StyleSheet, TextInput, Alert, TouchableOpacity } from 'react-native';
-import vaccineService from '../services/vaccine.service';
-import SelectBox from 'react-native-multi-selectbox';
-import { useForm, Controller } from "react-hook-form";
-import { Card } from 'react-native-elements';
-import { Text, View } from './Themed';
 import React, { useState, useEffect } from 'react';
-import { xorBy } from 'lodash';
+import { StyleSheet, TextInput, Alert, TouchableOpacity } from 'react-native';
+import { useForm, Controller } from "react-hook-form";
+import { Card, CheckBox } from 'react-native-elements';
+import { Text, View } from './Themed';
+
+import vaccineService from '../services/vaccine.service';
 import Question from '../../types/questions.type';
+import { auth } from '../../../firebase'
 
 const CreateQuestionScreen = ({route, navigation}) => {
  const { vaccineId } = route.params;
  const [vaccineName, setName] = useState('');
- const [typeItems, setTypes] = useState([]);
+ const [price, setPrice] = useState(false);
+ const [location, setLocation] = useState(false);
+ const [effect, setEffect] = useState(false);
 
  const { control, handleSubmit, formState: { errors } } = useForm<Question>();
  const pressedQuestion = handleSubmit( data => createQuestion(data));
+ var date = new Date();
 
- const TYPE_OPTIONS = [
-    {
-      item: 'Location',
-      id: 'Location'
-    },
-    {
-      item: 'Price', 
-      id: 'Price'
-    },
-    {
-      item: 'Effects', 
-      id: 'Effects'
-    },
-  ]
-
-  function onMultiChange() {
-    return (item) => setTypes(xorBy(typeItems, [item], 'id'));
-  }
 
  async function createQuestion(questionData) {
-  console.log(questionData);
-  
-  var type = '';
-   typeItems.map((x) => {
-    type += x.id;
-    type += ', ';
-   });
 
   const question = {
+     ownerId: auth.currentUser.email,
+     ownerName: auth.currentUser.displayName,
      title: questionData.title,
      description: questionData.description,
-     type: type,
+     typePrice: price,
+     typeLocation: location,
+     typeEffect: effect,
      likes: 0,
      dislikes: 0,
-     date: 0
+     date: date
   };
 
   const data = await vaccineService.createQuestion(vaccineId, question)
@@ -69,7 +51,7 @@ const CreateQuestionScreen = ({route, navigation}) => {
           console.error(e);
       })
       return data;
-  };
+  }
 
  useEffect(() => {
     const getNameVaccine = () => {
@@ -101,7 +83,7 @@ const CreateQuestionScreen = ({route, navigation}) => {
             rules={{ maxLength: 70, required: true }}
             name="title"
             render={({
-              field: { onChange, onBlur, value, ref  },
+              field: { onChange, onBlur, value },
             }) => (
               <TextInput 
                 style={styles.input}  
@@ -116,22 +98,46 @@ const CreateQuestionScreen = ({route, navigation}) => {
           />   
           {errors.title && errors.title.type === "required" && <Text style={styles.error_msg}>Title is required</Text>}
          <Text style={styles.des_title}> Type: </Text> 
-         <SelectBox
-                  label
-                  options={TYPE_OPTIONS}
-                  selectedValues={typeItems}
-                  onMultiSelect={onMultiChange()}
-                  onTapClose={onMultiChange()}
-                  isMulti
-                  hideInputFilter
-          />
+         <View style={{flexDirection: 'row', backgroundColor: 'white', padding: 0}}>
+          <CheckBox
+              // center
+              containerStyle={{backgroundColor: 'white', width: 90, height: 50 ,top: 10, borderRadius: 20, marginEnd: 0, marginStart: 1}}
+              textStyle={{fontWeight: '400', fontSize: 13}}
+              title="Price"
+              checkedIcon="dot-circle-o"
+              uncheckedIcon="circle-o"
+              checked={price}
+              onPress={() => setPrice(!price)}
+            />
+            <CheckBox
+              // center
+              containerStyle={{backgroundColor: 'white', width: 110, top: 10, borderRadius: 20, marginEnd: 0, height: 50, marginStart: 10}}
+              textStyle={{fontWeight: '400', fontSize: 13}}
+              title="Location"
+              checkedIcon="dot-circle-o"
+              uncheckedIcon="circle-o"
+              checked={location}
+              onPress={() => setLocation(!location)}
+            />
+            <CheckBox
+              // center
+              containerStyle={{backgroundColor: 'white', width: 100, top: 10, borderRadius: 20,marginEnd: 0, marginStart: 10}}
+              textStyle={{fontWeight: '400', fontSize: 13}}
+              title="Side Effects"
+              checkedIcon="dot-circle-o"
+              uncheckedIcon="circle-o"
+              checked={effect}
+              onPress={() => setEffect(!effect)}
+            />
+         </View>
+
           <Text style={styles.des_title}> Description: </Text>       
           <Controller
             control={control}
             rules={{ maxLength: 450, required: true }}
             name="description"
             render={({
-              field: { onChange, onBlur, value, ref  },
+              field: { onChange, onBlur, value },
             }) => (
               <TextInput 
                 style={styles.description}  

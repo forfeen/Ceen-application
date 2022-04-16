@@ -5,18 +5,21 @@ import { useForm, Controller } from "react-hook-form";
 import { Text, View } from './Themed';
 
 import vaccineService from '../services/vaccine.service';
+import { auth } from '../../../firebase';
+import Answer from '../../types/answer.type';
 
 const CreateAnswerScreen = ({route, navigation}) => {
     const vaccineId  = route.params.vaccineId;
     const question = route.params.question;
     
-    const { control, handleSubmit, formState: { errors } } = useForm<Post>();
+    const { control, handleSubmit, formState: { errors } } = useForm<Answer>();
     const pressedPost = handleSubmit( data => createAnswer(data));
     var date = new Date();
 
     async function createAnswer(answerData) {
         const answer = {
-            //id: 0, // make it unique
+            ownerId: auth.currentUser.email,
+            ownerName: auth.currentUser.displayName,
             answer_id: question['#'],
             description: answerData.description,
             likes: 0,
@@ -45,22 +48,31 @@ const CreateAnswerScreen = ({route, navigation}) => {
     return (
         <View style={styles.container}>
         <Card containerStyle={styles.card_info}>
-            <Text style={styles.title}>{question?.title || ''}  </Text>
-                <Text style={styles.description}>{question?.description || ' '} </Text>
-                {
-                    question?.type ? 
-                    <View style={{backgroundColor: 'white', flexDirection: 'row'}}> 
-                    {
-                        question.type.split(',').map((type?) => 
-                        <Card containerStyle={styles.title_info}>
-                            <Text style={styles.info}> {type} </Text>
-                        </Card>
-                        )
-                    }
-                    </View>
-                    :
-                    <Text></Text>
-                }    
+          <Text style={styles.title}>{question?.title || ''}  </Text>
+          <Text style={styles.description}>{question?.description || ' '} </Text>
+          <View style={{backgroundColor: 'white', flexDirection: 'row'}}>
+              {
+                  question?.typeEffect ? 
+                    <Card containerStyle={styles.title_info}>
+                      <Text style={styles.info}> Effects </Text>
+                    </Card>
+                  : false
+              }
+              {
+                  question?.typeLocation ? 
+                    <Card containerStyle={styles.title_info}>
+                      <Text style={styles.info}> Location </Text>
+                    </Card>
+                  : false
+              }
+              {
+                  question?.typePrice ? 
+                    <Card containerStyle={styles.title_info}>
+                      <Text style={styles.info}> Price </Text>
+                    </Card>
+                  : false
+              }
+            </View>
         </Card>
         <View style={{backgroundColor: 'transparent'}}>
             <Text style={styles.title_section}>Answers</Text>
@@ -71,7 +83,7 @@ const CreateAnswerScreen = ({route, navigation}) => {
               rules={{ maxLength: 450, required: true }}
               name="description"
               render={({
-                field: { onChange, onBlur, value, ref  },
+                field: { onChange, onBlur, value},
               }) => (
                 <TextInput 
                   style={styles.description_input}  
