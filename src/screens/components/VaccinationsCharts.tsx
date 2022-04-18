@@ -12,8 +12,8 @@ export default function VaccinationCharts({ path }: { path: string }) {
   const [covid, setCovid] = useState<Covid>();
   const [vaccination, setVaccination] = useState<VaccinationData[]>([]);
   const [vaccinationData, setVaccinationData] = useState<[]>([]);
-  const [vaccinationDaily, setDaily] = useState<number>(0);
-  const [vaccinationTotal, setTotal] = useState<number>(0);
+  const [vaccinationDaily, setDaily] = useState<number>(97746);
+  const [vaccinationTotal, setTotal] = useState<number>(131200892);
 
   const [newCase, setNewCase] = useState<number>();
   const [recoveryCase, setNewRecover] = useState<number>();
@@ -22,7 +22,7 @@ export default function VaccinationCharts({ path }: { path: string }) {
   const [day, setDay] = useState<number>();
   const [month, setMonth] = useState<string>();
   const [year, setYear] = useState<number>();
-  const [date, setDate] = useState<string>('');
+  const [date, setDate] = useState<string>('4/14/22');
 
   async function getCovidCase() {
     const data = await vaccineService.getCovidCase()
@@ -65,7 +65,9 @@ export default function VaccinationCharts({ path }: { path: string }) {
     }
 
     const fetchVaccinationData = async () => {
-      const data = await getVaccinationData();      
+      const data = await getVaccinationData();
+      console.log(data);
+       
       setVaccination(data);
       
       let numData = [];
@@ -73,10 +75,12 @@ export default function VaccinationCharts({ path }: { path: string }) {
         numData.push(eachData.daily)
       }
       setVaccinationData(numData);
+      console.log(vaccinationData);
+      
       setDaily(vaccination[vaccination.length - 1].daily);
       setTotal(vaccination[vaccination.length - 1].total);
       setDate(vaccination[vaccination.length - 1].date);
-      console.log(vaccinationData);
+      // console.log(vaccinationData);
       
     };
 
@@ -96,10 +100,26 @@ export default function VaccinationCharts({ path }: { path: string }) {
           173801,
           166555,
           136078,
-          125633,],
+          125633,
+          147198,
+          146485,
+          145683,
+          146026,
+          136324,
+          130479,
+          97746,
+        ]
       }
     ],
   };
+
+  // const data = {
+  //   datasets: [
+  //     {
+  //       data: vaccinationData,
+  //     }
+  //   ],
+  // };
 
   const chartConfig = {
     backgroundGradientFrom: "#FFF",

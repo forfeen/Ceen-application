@@ -16,10 +16,12 @@ const QuestionScreen = ({route, navigation}) => {
 
     const vaccineId  = route.params.vaccineId;
     const questionId = route.params.questionId;
+    const answerNumber = route.params.answerNumber;
+    
     const userMail = auth.currentUser.email;
 
     const [ question, setQuestion ] = useState<Question>();
-    const [ answer, setAnswer] = useState<Answer>();
+    const [ answer, setAnswer] = useState<Answer[]>();
 
     async function getQuestion() {
         const data = await vaccineService.getEachQuestion(vaccineId, questionId)
@@ -139,7 +141,7 @@ const QuestionScreen = ({route, navigation}) => {
       const fetchAnswer = async () => {
         const answers = await getAnswer();
         const answerSameId = answers.filter((a) => a.answer_id === questionId);
-        setAnswer(answerSameId);
+        setAnswer(answerSameId);        
       }
 
       fetchQuestion();
@@ -178,7 +180,9 @@ const QuestionScreen = ({route, navigation}) => {
           <View style={{backgroundColor: 'transparent'}}>
             <Text style={styles.title_section}>Answers</Text>
           </View>
-          <FlatList 
+          {
+            answerNumber > 0 ?
+            <FlatList 
               data={answer}
               renderItem={( {item} ) => {
                   return (
@@ -212,6 +216,9 @@ const QuestionScreen = ({route, navigation}) => {
                     </View>
                   );
               }}/>
+              :               
+               <Text style={{top: 100, fontSize: 20}}> No Answer </Text>
+            } 
               <ActionButton buttonColor="rgba(231,76,60,1)" onPress={() => navigation.navigate('Create Answer', {vaccineId: vaccineId, question: question})} />
         </View>
         

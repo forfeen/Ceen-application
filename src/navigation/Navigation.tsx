@@ -4,7 +4,6 @@
  *
  */
 import { Feather, FontAwesome } from '@expo/vector-icons';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
@@ -196,22 +195,44 @@ function RootNavigator() {
             fontWeight: 'bold',
             fontSize: 23,
           },
+          headerLeft: () => (
+            <Pressable
+              onPress={() => {
+                navigation.push('Index');
+              }}
+              style={({ pressed }) => ({
+                opacity: pressed ? 0.5 : 1,
+              })}>
+                {({ pressed }) => (
+              <Text style={{color: "#2D9CDB", fontSize: 25, fontWeight: '500',}}>
+                {pressed ? '' : '<'}
+              </Text>
+          )}
+            </Pressable>
+          ),
+          
         })}
       />
       <Stack.Screen name="Profile" component={UserProfile} />
       <Stack.Screen name="Question" 
         component={QuestionScreen}
-        // options={{
-        //   title: 'Location',
-        //   headerShadowVisible: false,
-        //   headerStyle: {
-        //     backgroundColor: 'white',
-        //   },
-        //   headerTitleStyle: {
-        //     fontWeight: 'bold',
-        //     fontSize: 23,
-        //   },
-        // }}
+        options ={({ route, navigation }) => ({ 
+          headerLeft: () => (
+            <Pressable
+              onPress={() => {
+                navigation.goBack();
+              }}
+              style={({ pressed }) => ({
+                opacity: pressed ? 0.5 : 1,
+              })}>
+                {({ pressed }) => (
+              <Text style={{color: "#2D9CDB", fontSize: 25, fontWeight: '500',}}>
+                {pressed ? '' : '<'}
+              </Text>
+          )}
+            </Pressable>
+          ), 
+        })}
       />
       <Stack.Screen name="Create Review" component={CreateReviewScreen} />
       <Stack.Screen name="Create Post" component={CreatePostScreen} />
@@ -222,12 +243,12 @@ function RootNavigator() {
   );
 }
 
-/**
- * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
- */
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
-}
+// /**
+//  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
+//  */
+// function TabBarIcon(props: {
+//   name: React.ComponentProps<typeof FontAwesome>['name'];
+//   color: string;
+// }) {
+//   return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
+// }

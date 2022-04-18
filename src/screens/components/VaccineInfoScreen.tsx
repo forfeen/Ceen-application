@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Swiper from 'react-native-swiper';
-import { StyleSheet, TouchableOpacity , FlatList, Linking} from 'react-native';
+import { StyleSheet, TouchableOpacity , FlatList, Linking, ScrollView} from 'react-native';
 import { AntDesign, FontAwesome} from '@expo/vector-icons'; 
 import Svg, { Rect, Circle} from 'react-native-svg';
 import ContentLoader from 'react-native-masked-loader';
@@ -31,80 +31,76 @@ const VaccineInfoScreen = ({route, navigation}) => {
   const MaskedElement = getMaskedElement();
 
   async function getAllInfos() {
-    const data = await vaccineService.getVaccine(vaccineId)
+    return await vaccineService.getVaccine(vaccineId)
         .then(response => {
             return response.data;
         })
         .catch(e => {
             console.error(e);
-        })
-        return data;
+        });
   }
 
   async function getAllReviews() {
-    const data = await vaccineService.getReview(vaccineId)
+    return await vaccineService.getReview(vaccineId)
         .then(response => {
             return response.data.items;
         })
         .catch(e => {
             console.error(e);
-        })
-        return data;
+        });
   }
 
   async function getAllQuestions() {
-    const data = await vaccineService.getQuestion(vaccineId)
+    return await vaccineService.getQuestion(vaccineId)
         .then(response => {
             return response.data.items;
         })
         .catch(e => {
             console.error(e);
-        })
-        return data;
+        });
   }
 
   async function getAllPosts() {
-    const data = await vaccineService.getPost(vaccineId)
+    return await vaccineService.getPost(vaccineId)
         .then(response => {
             return response.data.items;
         })
         .catch(e => {
             console.error(e);
-        })
-        return data;
+        });
   }
 
   function putLikeQuestion(putData) {
-    const data = vaccineService.likeQuestion(vaccineId, putData)
+    return vaccineService.likeQuestion(vaccineId, putData)
         .then(response => {
+            navigation.push('Details', {vaccineId: vaccineId})
             return response.data;
         })
         .catch(e => {
             console.error(e);
-        })
-        return data;
+        });
   }
   
   function putLikeReview(putData) {
-    const data = vaccineService.likeReview(vaccineId, putData)
+    return vaccineService.likeReview(vaccineId, putData)
         .then(response => {
+            navigation.push('Details', {vaccineId: vaccineId})
             return response.data;
         })
         .catch(e => {
             console.error(e);
-        })
-        return data;
+        });
   }
 
   function putLikePost(putData) {
-    const data = vaccineService.likePost(vaccineId, putData)
+    return vaccineService.likePost(vaccineId, putData)
         .then(response => {
+            navigation.push('Details', {vaccineId: vaccineId})
             return response.data;
         })
         .catch(e => {
             console.error(e);
-        })
-        return data;
+        });
   }
 
   function getUserList(user) {
@@ -371,265 +367,266 @@ const VaccineInfoScreen = ({route, navigation}) => {
   return (
     <View style={styles.container}>
       {/* <ScrollView> */}
-      <Card containerStyle={styles.card_info}>
-          <Card containerStyle={styles.title_info}>
-                <Text style={styles.info}>Information </Text>
-          </Card>
-          <Text style={{marginVertical: 10, marginHorizontal: 10}}>
-            {vaccine?.long_description || ''} </Text>
-            <Text style={styles.more_info}  onPress={ () => {  Linking.openURL(vaccineLink)}}>more infomation...</Text>
-          <View style={styles.vac_info}>
-            <Text style={styles.info_text}>Name: {vaccine?.name || ''}</Text>
-            <Text style={styles.info_text}>Type: {vaccine?.type || ''}</Text>
-            <Text style={styles.info_text}>Developer: {vaccine?.manufacturer || ''}</Text>
-            <Text style={styles.info_text}>Performance: {vaccine?.performance || ''}%</Text>
-            <Text style={styles.info_text}>Side effects: {vaccine?.effects || ''}</Text>
-            <Text style={styles.info_text}>Average price per dose: {vaccine?.average_per_dose || '0'} Baht.</Text>
-          </View>
-      </Card>
-      <Swiper
-          style={styles.wrapper}
-          paginationStyle={{
-            position: 'absolute',
-            bottom: 420,
-            left: 240,
-          }}
-          // onMomentumScrollEnd={(state) =>
-          //   console.log('index:', state.index)
-          // }
-          dot={
-            <View
-              style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.5)',
-                width: 8,
-                height: 8,
-                borderRadius: 4,
-                marginLeft: 3,
-                marginRight: 3,
-                marginTop: 3,
-                marginBottom: 3
-              }}
-            />
-          }
-          activeDot={
-            <View
-              style={{
-                backgroundColor: 'white',
-                width: 8,
-                height: 8,
-                borderRadius: 4,
-                marginLeft: 3,
-                marginRight: 3,
-                marginTop: 3,
-                marginBottom: 3
-              }}
-            />
-          }
-        >
-          <View style={{backgroundColor: 'transparent', marginBottom: 100}}>
-            <Text style={styles.title_section}>Reviews</Text>
-            <FlatList 
-              data={review}
-              renderItem={( {item} ) => {
-                  return (
-                    <View style={styles.card_section}>
-                      <Text style={styles.date}> {Moment.utc(item.date).local().startOf('seconds').fromNow()} </Text>
-                      <View style={styles.list}>
-                        <View style={styles.circle}>
-                          <Text>{item.ownerName.charAt(0)}</Text>
-                        </View> 
-                        <Text style={{marginStart: 20, marginTop: 5, marginHorizontal: 60}}>
-                          {item.description}
-                        </Text>
-                     </View>
-                     <View style={{backgroundColor: 'transparent', flexDirection: 'row', width: 100}}>
-                       <Text style={{fontSize: 13, left: 82, top: 10, bottom: 5, width: 250, lineHeight: 24, }}>
-                         Side effects: {item.effects}
-                       </Text>
+        <Card containerStyle={styles.card_info}>
+            <Card containerStyle={styles.title_info}>
+                  <Text style={styles.info}>Information </Text>
+            </Card>
+            <Text style={{marginVertical: 10, marginHorizontal: 10, lineHeight: 20, flexWrap:'wrap'}}>
+              {vaccine?.long_description || ''} </Text>
+              <Text style={styles.more_info}  onPress={ () => {  Linking.openURL(vaccineLink)}}>more infomation...</Text>
+            <View style={styles.vac_info}>
+              <Text style={styles.info_text}>Name: {vaccine?.name || ''}</Text>
+              <Text style={styles.info_text}>Type: {vaccine?.type || ''}</Text>
+              <Text style={styles.info_text}>Developer: {vaccine?.manufacturer || ''}</Text>
+              <Text style={styles.info_text}>Performance: {vaccine?.performance || ''}%</Text>
+              <Text style={styles.info_text}>Average price per dose: {vaccine?.average_per_dose || '0'} Baht.</Text>
+              <Text style={styles.info_text}>Side effects: {vaccine?.effects || ''}</Text>
+            </View>
+        </Card>
+        <Swiper
+            style={styles.wrapper}
+            paginationStyle={{
+              position: 'absolute',
+              bottom: 420,
+              left: 240,
+            }}
+            // onMomentumScrollEnd={(state) =>
+            //   console.log('index:', state.index)
+            // }
+            dot={
+              <View
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                  width: 8,
+                  height: 8,
+                  borderRadius: 4,
+                  marginLeft: 3,
+                  marginRight: 3,
+                  marginTop: 3,
+                  marginBottom: 3
+                }}
+              />
+            }
+            activeDot={
+              <View
+                style={{
+                  backgroundColor: 'white',
+                  width: 8,
+                  height: 8,
+                  borderRadius: 4,
+                  marginLeft: 3,
+                  marginRight: 3,
+                  marginTop: 3,
+                  marginBottom: 3
+                }}
+              />
+            }
+          >
+            <View style={{backgroundColor: 'transparent'}}>
+              <Text style={styles.title_section}>Reviews</Text>
+              <FlatList 
+                data={review}
+                renderItem={( {item} ) => {
+                    return (
+                      <View style={styles.card_section}>
+                        <Text style={styles.date}> {Moment.utc(item.date).local().startOf('seconds').fromNow()} </Text>
+                        <View style={styles.list}>
+                          <View style={styles.circle}>
+                            <Text>{item.ownerName.charAt(0)}</Text>
+                          </View> 
+                          <Text style={{marginStart: 20, marginTop: 5, marginHorizontal: 60}}>
+                            {item.description}
+                          </Text>
                       </View>
-                      <View style={{backgroundColor: 'transparent'}}>
-                        {
-                          item.firstDose ?
-                          <View style={styles.vaccineDose}>
-                            <Text style={{fontSize: 13, lineHeight: 25}}>
-                              <IconFont name="syringe" size={10}/> {item.firstDose} (1st)
-                            </Text>
-                          </View>
-                          : false
-                        }
-                        {
-                          item.secondDose ?  
-                          <View style={styles.vaccineDose}>
-                            <Text style={{fontSize: 13, lineHeight: 25}}>
-                              <IconFont name="syringe" size={10}/><IconFont name="syringe" size={10}/> {item.secondDose} (2nd)
-                            </Text>
-                          </View>
-                          : false
-                        }
-                        {
-                          item.thirdDose ?  
-                          <View style={styles.vaccineDose}>
-                            <Text style={{fontSize: 13, lineHeight: 25}}>
-                              <IconFont name="syringe" size={10}/><IconFont name="syringe" size={10}/><IconFont name="syringe" size={10}/> {item.thirdDose} (3rd)
-                            </Text>
-                          </View>
-                          : false
-                        }
-                        {
-                          item.fourthDose ?  
-                          <View style={styles.vaccineDose}>
-                            <Text style={{fontSize: 13, lineHeight: 25}}>
-                              <IconFont name="syringe" size={10}/><IconFont name="syringe" size={10}/><IconFont name="syringe" size={10}/><IconFont name="syringe" size={10}/> {item.fourthDose} (4th)
-                            </Text>
-                          </View>
-                          : false
-                        }
-                     </View>
-                      <View style={styles.like}>
-                        <Text>
-                          {
-                              checkLike(item.isLike) ? 
-                                <View style={{backgroundColor: 'transparent'}}>
-                                  <Text>
-                                    <AntDesign name="like1" size={16} color="green" onPress={ () => {  dislikeReview(item)}} /> {item.likes}
-                                  </Text>
-                                </View>
-                              :
-                                <View style={{backgroundColor: 'transparent'}}>
-                                  <Text>
-                                    <AntDesign name="like2" size={16} color="green" onPress={ () => {  likeReview(item)}} /> {item.likes}
-                                  </Text>
-                              </View>
-                            }
+                      <View style={{backgroundColor: 'transparent', flexDirection: 'row', width: 100}}>
+                        <Text style={{fontSize: 13, left: 82, top: 10, bottom: 5, width: 250, lineHeight: 24, }}>
+                          Side effects: {item.effects}
                         </Text>
-                      </View>
-                    </View>
-                  );
-              }}/>
-          </View>
-
-          <View style={{backgroundColor: 'transparent', marginBottom: 100}}>
-            <Text style={styles.title_section}>Questions/Answers</Text>
-            <FlatList 
-              data={question}
-              renderItem={( {item} ) => {
-                  return (
-                    <TouchableOpacity
-                      onPress={
-                        () => {
-                          navigation.navigate('Question', {vaccineId: vaccineId, questionId: item['#']});
-                        }
-                    }>
-                      <View style={styles.card_section} >
-                          <Text style={styles.date}> {Moment.utc(item.date).local().startOf('seconds').fromNow()} </Text>
-                          <View style={{backgroundColor: 'white', flexDirection: 'row', top: 14}}>
-                            <View style={styles.circle_question}>
-                              <Text>{item.ownerName.charAt(0)}</Text>
-                            </View>
-                            {
-                              item?.typeLocation ? 
-                                <Card containerStyle={styles.title_type}>
-                                  <Text style={styles.info_type}> Location </Text>
-                                </Card> 
-                              :
-                                false
-                            } 
-                            {
-                              item?.typePrice ? 
-                                <Card containerStyle={styles.title_type}>
-                                  <Text style={styles.info_type}> Price </Text>
-                                </Card> 
-                              :
-                                false
-                            }
-                            {
-                              item?.typeEffect? 
-                                <Card containerStyle={styles.title_type}>
-                                  <Text style={styles.info_type}> Effects </Text>
-                                </Card> 
-                              :
-                                false
-                            }
                         </View>
-                          {/* <View style={styles.list}> */}
-                            <Text style={{marginStart: 75, marginTop: 15, marginHorizontal: 60, left: 10, lineHeight: 25}}>
-                              {item.description}
-                            </Text>
-                        {/* </View> */}
-
+                        <View style={{backgroundColor: 'transparent'}}>
+                          {
+                            item.firstDose ?
+                            <View style={styles.vaccineDose}>
+                              <Text style={{fontSize: 13, lineHeight: 25}}>
+                                <IconFont name="syringe" size={10}/> {item.firstDose} (1st)
+                              </Text>
+                            </View>
+                            : false
+                          }
+                          {
+                            item.secondDose ?  
+                            <View style={styles.vaccineDose}>
+                              <Text style={{fontSize: 13, lineHeight: 25}}>
+                                <IconFont name="syringe" size={10}/><IconFont name="syringe" size={10}/> {item.secondDose} (2nd)
+                              </Text>
+                            </View>
+                            : false
+                          }
+                          {
+                            item.thirdDose ?  
+                            <View style={styles.vaccineDose}>
+                              <Text style={{fontSize: 13, lineHeight: 25}}>
+                                <IconFont name="syringe" size={10}/><IconFont name="syringe" size={10}/><IconFont name="syringe" size={10}/> {item.thirdDose} (3rd)
+                              </Text>
+                            </View>
+                            : false
+                          }
+                          {
+                            item.fourthDose ?  
+                            <View style={styles.vaccineDose}>
+                              <Text style={{fontSize: 13, lineHeight: 25}}>
+                                <IconFont name="syringe" size={10}/><IconFont name="syringe" size={10}/><IconFont name="syringe" size={10}/><IconFont name="syringe" size={10}/> {item.fourthDose} (4th)
+                              </Text>
+                            </View>
+                            : false
+                          }
+                      </View>
                         <View style={styles.like}>
                           <Text>
-                          {
-                              checkLike(item.isLike) ? 
-                                <View style={{backgroundColor: 'transparent'}}>
-                                  <Text>
-                                    <AntDesign name="like1" size={16} color="green" onPress={ () => {  dislikeQuestion(item)}} /> {item.likes} <FontAwesome name="comment-o" size={16} color="black" /> {item.answers}
-                                  </Text>
+                            {
+                                checkLike(item.isLike) ? 
+                                  <View style={{backgroundColor: 'transparent'}}>
+                                    <Text>
+                                      <AntDesign name="like1" size={16} color="green" onPress={ () => {  dislikeReview(item)}} /> {item.likes}
+                                    </Text>
+                                  </View>
+                                :
+                                  <View style={{backgroundColor: 'transparent'}}>
+                                    <Text>
+                                      <AntDesign name="like2" size={16} color="green" onPress={ () => {  likeReview(item)}} /> {item.likes}
+                                    </Text>
                                 </View>
-                              :
-                                <View style={{backgroundColor: 'transparent'}}>
-                                  <Text>
-                                    <AntDesign name="like2" size={16} color="green" onPress={ () => {  likeQuestion(item)}} /> {item.likes} <FontAwesome name="comment-o" size={16} color="black" /> {item.answers}
-                                  </Text>
+                              }
+                          </Text>
+                        </View>
+                      </View>
+                    );
+                }}/>
+            </View>
+
+            <View style={{backgroundColor: 'transparent'}}>
+              <Text style={styles.title_section}>Questions/Answers</Text>
+              <FlatList 
+                data={question}
+                renderItem={( {item} ) => {
+                    return (
+                      <TouchableOpacity
+                        onPress={
+                          () => {
+                            navigation.navigate('Question', {vaccineId: vaccineId, questionId: item['#'], answerNumber: item.answers});
+                          }
+                      }>
+                        <View style={styles.card_section} >
+                            <Text style={styles.date}> {Moment.utc(item.date).local().startOf('seconds').fromNow()} </Text>
+                            <View style={{backgroundColor: 'white', flexDirection: 'row', top: 14}}>
+                              <View style={styles.circle_question}>
+                                <Text>{item.ownerName.charAt(0)}</Text>
                               </View>
+                              {
+                                item?.typeLocation ? 
+                                  <Card containerStyle={styles.title_type}>
+                                    <Text style={styles.info_type}> Location </Text>
+                                  </Card> 
+                                :
+                                  false
+                              } 
+                              {
+                                item?.typePrice ? 
+                                  <Card containerStyle={styles.title_type}>
+                                    <Text style={styles.info_type}> Price </Text>
+                                  </Card> 
+                                :
+                                  false
+                              }
+                              {
+                                item?.typeEffect? 
+                                  <Card containerStyle={styles.title_type}>
+                                    <Text style={styles.info_type}> Effects </Text>
+                                  </Card> 
+                                :
+                                  false
+                              }
+                          </View>
+                            {/* <View style={styles.list}> */}
+                              <Text style={{marginStart: 75, marginTop: 15, marginHorizontal: 60, left: 10, lineHeight: 25}}>
+                                {item.description}
+                              </Text>
+                          {/* </View> */}
+
+                          <View style={styles.like}>
+                            <Text>
+                            {
+                                checkLike(item.isLike) ? 
+                                  <View style={{backgroundColor: 'transparent'}}>
+                                    <Text>
+                                      <AntDesign name="like1" size={16} color="green" onPress={ () => {  dislikeQuestion(item)}} /> {item.likes} <FontAwesome name="comment-o" size={16} color="black" /> {item.answers}
+                                    </Text>
+                                  </View>
+                                :
+                                  <View style={{backgroundColor: 'transparent'}}>
+                                    <Text>
+                                      <AntDesign name="like2" size={16} color="green" onPress={ () => {  likeQuestion(item)}} /> {item.likes} <FontAwesome name="comment-o" size={16} color="black" /> {item.answers}
+                                    </Text>
+                                </View>
+                              }
+                            </Text>
+                          </View>
+                        </View>
+                      </TouchableOpacity>
+                    );
+                }}/>
+            </View>
+            
+            <View style={{backgroundColor: 'transparent'}}>
+              <Text style={styles.title_section}>Timelines</Text>
+              <FlatList 
+                data={post}
+                renderItem={( {item} ) => {
+                    return (
+                      <View style={styles.card_section}>
+                        <Text style={styles.date}> {Moment.utc(item.date).local().startOf('seconds').fromNow()} </Text>
+                        <View style={styles.list}>
+                          <View style={styles.circle}>
+                            <Text>{item.ownerName.charAt(0)}</Text>
+                          </View> 
+                          <Text style={{marginStart: 40, marginTop: 5, marginHorizontal: 60}}>
+                          {item.description}</Text>
+                      </View>
+                        <View style={styles.like}>
+                          <Text>
+                            {
+                                checkLike(item.isLike) ? 
+                                  <View style={{backgroundColor: 'transparent'}}>
+                                    <Text>
+                                      <AntDesign name="like1" size={16} color="green" onPress={ () => {  dislikePost(item)}} /> {item.likes}
+                                    </Text>
+                                  </View>
+                                :
+                                  <View style={{backgroundColor: 'transparent'}}>
+                                    <Text>
+                                      <AntDesign name="like2" size={16} color="green" onPress={ () => {  likePost(item)}} /> {item.likes}
+                                    </Text>
+                                </View>
                             }
                           </Text>
                         </View>
                       </View>
-                    </TouchableOpacity>
-                  );
-              }}/>
-          </View>
-          
-          <View style={{backgroundColor: 'transparent', marginBottom: 100}}>
-            <Text style={styles.title_section}>Timelines</Text>
-            <FlatList 
-              data={post}
-              renderItem={( {item} ) => {
-                  return (
-                    <View style={styles.card_section}>
-                      <Text style={styles.date}> {Moment.utc(item.date).local().startOf('seconds').fromNow()} </Text>
-                      <View style={styles.list}>
-                        <View style={styles.circle}>
-                          <Text>{item.ownerName.charAt(0)}</Text>
-                        </View> 
-                        <Text style={{marginStart: 40, marginTop: 5, marginHorizontal: 60}}>
-                        {item.description}</Text>
-                    </View>
-                      <View style={styles.like}>
-                        <Text>
-                          {
-                              checkLike(item.isLike) ? 
-                                <View style={{backgroundColor: 'transparent'}}>
-                                  <Text>
-                                    <AntDesign name="like1" size={16} color="green" onPress={ () => {  dislikePost(item)}} /> {item.likes}
-                                  </Text>
-                                </View>
-                              :
-                                <View style={{backgroundColor: 'transparent'}}>
-                                  <Text>
-                                    <AntDesign name="like2" size={16} color="green" onPress={ () => {  likePost(item)}} /> {item.likes}
-                                  </Text>
-                              </View>
-                          }
-                        </Text>
-                      </View>
-                    </View>
-                  );
-              }}/>
-          </View>
-        </Swiper>
-       <ActionButton buttonColor="rgba(231,76,60,1)">
-          <ActionButton.Item buttonColor='#9b59b6' title="New Review" onPress={() => navigation.push('Create Review', {vaccineId: vaccineId})}>
-            <Icon name="md-create" style={styles.actionButtonIcon} />
-          </ActionButton.Item>
-          <ActionButton.Item buttonColor='#3498db' title="New Question" onPress={() => navigation.push('Create Question', {vaccineId: vaccineId})}>
-            <Icon name="md-create" style={styles.actionButtonIcon} />
-          </ActionButton.Item>
-          <ActionButton.Item buttonColor='#1abc9c' title="New Post" onPress={() => navigation.push('Create Post', {vaccineId: vaccineId})}>
-            <Icon name="md-create" style={styles.actionButtonIcon} />
-          </ActionButton.Item>
-        </ActionButton>
+                    );
+                }}/>
+            </View>
+          </Swiper>
+        <ActionButton buttonColor="rgba(231,76,60,1)">
+            <ActionButton.Item buttonColor='#9b59b6' title="New Review" onPress={() => navigation.push('Create Review', {vaccineId: vaccineId})}>
+              <Icon name="md-create" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+            <ActionButton.Item buttonColor='#3498db' title="New Question" onPress={() => navigation.push('Create Question', {vaccineId: vaccineId})}>
+              <Icon name="md-create" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+            <ActionButton.Item buttonColor='#1abc9c' title="New Post" onPress={() => navigation.push('Create Post', {vaccineId: vaccineId})}>
+              <Icon name="md-create" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+          </ActionButton>
+        {/* </ScrollView> */}
     </View>
   );
 }
@@ -697,7 +694,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginVertical: 5,
     backgroundColor: 'transparent',
-    lineHeight: 40
+    lineHeight: 20
   },
   info_text:{
     fontSize: 14, 
