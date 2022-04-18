@@ -27,7 +27,7 @@ const CreateAnswerScreen = ({route, navigation}) => {
             date: date
         };
 
-        const data = await vaccineService.createAnswer(vaccineId, answer)
+        return await vaccineService.createAnswer(vaccineId, answer)
             .then(response => {
                 Alert.alert(
                     'Success',
@@ -41,8 +41,7 @@ const CreateAnswerScreen = ({route, navigation}) => {
             })
             .catch(e => {
                 console.error(e);
-            })
-            return data;
+            });
     }
    
     return (

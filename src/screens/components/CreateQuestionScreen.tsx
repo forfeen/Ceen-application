@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, TextInput, Alert, TouchableOpacity } from 'react-native';
+import { StyleSheet, TextInput, Alert, TouchableOpacity, ScrollView } from 'react-native';
 import { useForm, Controller } from "react-hook-form";
 import { Card, CheckBox } from 'react-native-elements';
 import { Text, View } from './Themed';
@@ -35,7 +35,7 @@ const CreateQuestionScreen = ({route, navigation}) => {
      date: date
   };
 
-  const data = await vaccineService.createQuestion(vaccineId, question)
+  return await vaccineService.createQuestion(vaccineId, question)
       .then(response => {
           Alert.alert(
             'Success',
@@ -49,8 +49,7 @@ const CreateQuestionScreen = ({route, navigation}) => {
       })
       .catch(e => {
           console.error(e);
-      })
-      return data;
+      });
   }
 
  useEffect(() => {
@@ -75,87 +74,90 @@ const CreateQuestionScreen = ({route, navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Card containerStyle={styles.card_info}>
-          <Text style={styles.vaccine_name}> {vaccineName} </Text>
-          <Text style={styles.title}> Title: </Text> 
-          <Controller
-            control={control}
-            rules={{ maxLength: 70, required: true }}
-            name="title"
-            render={({
-              field: { onChange, onBlur, value },
-            }) => (
-              <TextInput 
-                style={styles.input}  
-                onBlur={onBlur} // notify when input is touched
-                multiline
-                maxLength={70}
-                onChangeText={onChange} 
-                value={value} 
-                placeholder="Type a title"
-            />
-          )} 
-          />   
-          {errors.title && errors.title.type === "required" && <Text style={styles.error_msg}>Title is required</Text>}
-         <Text style={styles.des_title}> Type: </Text> 
-         <View style={{flexDirection: 'row', backgroundColor: 'white', padding: 0}}>
-          <CheckBox
-              // center
-              containerStyle={{backgroundColor: 'white', width: 90, height: 50 ,top: 10, borderRadius: 20, marginEnd: 0, marginStart: 1}}
-              textStyle={{fontWeight: '400', fontSize: 13}}
-              title="Price"
-              checkedIcon="dot-circle-o"
-              uncheckedIcon="circle-o"
-              checked={price}
-              onPress={() => setPrice(!price)}
-            />
-            <CheckBox
-              // center
-              containerStyle={{backgroundColor: 'white', width: 110, top: 10, borderRadius: 20, marginEnd: 0, height: 50, marginStart: 10}}
-              textStyle={{fontWeight: '400', fontSize: 13}}
-              title="Location"
-              checkedIcon="dot-circle-o"
-              uncheckedIcon="circle-o"
-              checked={location}
-              onPress={() => setLocation(!location)}
-            />
-            <CheckBox
-              // center
-              containerStyle={{backgroundColor: 'white', width: 100, top: 10, borderRadius: 20,marginEnd: 0, marginStart: 10}}
-              textStyle={{fontWeight: '400', fontSize: 13}}
-              title="Side Effects"
-              checkedIcon="dot-circle-o"
-              uncheckedIcon="circle-o"
-              checked={effect}
-              onPress={() => setEffect(!effect)}
-            />
-         </View>
+      <ScrollView>
 
-          <Text style={styles.des_title}> Description: </Text>       
-          <Controller
-            control={control}
-            rules={{ maxLength: 450, required: true }}
-            name="description"
-            render={({
-              field: { onChange, onBlur, value },
-            }) => (
-              <TextInput 
-                style={styles.description}  
-                onBlur={onBlur} // notify when input is touched
-                multiline
-                maxLength={450}
-                onChangeText={onChange} 
-                value={value} 
-                placeholder="Type a description"
+        <Card containerStyle={styles.card_info}>
+            <Text style={styles.vaccine_name}> {vaccineName} </Text>
+            <Text style={styles.title}> Title: </Text> 
+            <Controller
+              control={control}
+              rules={{ maxLength: 70, required: true }}
+              name="title"
+              render={({
+                field: { onChange, onBlur, value },
+              }) => (
+                <TextInput 
+                  style={styles.input}  
+                  onBlur={onBlur} // notify when input is touched
+                  multiline
+                  maxLength={70}
+                  onChangeText={onChange} 
+                  value={value} 
+                  placeholder="Type a title"
               />
-            )}
-            /> 
-          {errors.description && errors.description.type === "required" && <Text style={styles.error_msg}>Description is required</Text>}
+            )} 
+            />   
+            {errors.title && errors.title.type === "required" && <Text style={styles.error_msg}>Title is required</Text>}
+          <Text style={styles.des_title}> Type: </Text> 
+          <View style={{flexDirection: 'row', backgroundColor: 'white', padding: 0}}>
+            <CheckBox
+                // center
+                containerStyle={{backgroundColor: 'white', width: 90, height: 50 ,top: 10, borderRadius: 20, marginEnd: 0, marginStart: 1}}
+                textStyle={{fontWeight: '400', fontSize: 13}}
+                title="Price"
+                checkedIcon="dot-circle-o"
+                uncheckedIcon="circle-o"
+                checked={price}
+                onPress={() => setPrice(!price)}
+              />
+              <CheckBox
+                // center
+                containerStyle={{backgroundColor: 'white', width: 110, top: 10, borderRadius: 20, marginEnd: 0, height: 50, marginStart: 10}}
+                textStyle={{fontWeight: '400', fontSize: 13}}
+                title="Location"
+                checkedIcon="dot-circle-o"
+                uncheckedIcon="circle-o"
+                checked={location}
+                onPress={() => setLocation(!location)}
+              />
+              <CheckBox
+                // center
+                containerStyle={{backgroundColor: 'white', width: 100, top: 10, borderRadius: 20,marginEnd: 0, marginStart: 10}}
+                textStyle={{fontWeight: '400', fontSize: 13}}
+                title="Side Effects"
+                checkedIcon="dot-circle-o"
+                uncheckedIcon="circle-o"
+                checked={effect}
+                onPress={() => setEffect(!effect)}
+              />
+          </View>
 
-      </Card>
-      <TouchableOpacity onPress={pressedQuestion} style={styles.submit}>
-            <Text style={styles.textbutton}>Post</Text>
-        </TouchableOpacity>
+            <Text style={styles.des_title}> Description: </Text>       
+            <Controller
+              control={control}
+              rules={{ maxLength: 450, required: true }}
+              name="description"
+              render={({
+                field: { onChange, onBlur, value },
+              }) => (
+                <TextInput 
+                  style={styles.description}  
+                  onBlur={onBlur} // notify when input is touched
+                  multiline
+                  maxLength={450}
+                  onChangeText={onChange} 
+                  value={value} 
+                  placeholder="Type a description"
+                />
+              )}
+              /> 
+            {errors.description && errors.description.type === "required" && <Text style={styles.error_msg}>Description is required</Text>}
+
+        </Card>
+        <TouchableOpacity onPress={pressedQuestion} style={styles.submit}>
+              <Text style={styles.textbutton}>Post</Text>
+          </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 }
@@ -222,6 +224,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#2D9CDB",
     borderRadius: 100,
     justifyContent: "center",
+    left: 65
   },
   textbutton: {
     textAlign: "center",

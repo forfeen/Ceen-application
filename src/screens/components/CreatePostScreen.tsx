@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput, Alert, TouchableOpacity } from 'react-native';
+import { StyleSheet, TextInput, Alert, TouchableOpacity, ScrollView } from 'react-native';
 import { useForm, Controller } from "react-hook-form";
 import { Text, View } from './Themed';
 import { Card } from 'react-native-elements';
@@ -24,7 +24,7 @@ const CreatePostScreen = ({route, navigation}) => {
      dislikes: 0,
      date: date
   };
-  const data = await vaccineService.createPost(vaccineId, post)
+  return await vaccineService.createPost(vaccineId, post)
       .then(response => {
         Alert.alert(
           'Success',
@@ -38,8 +38,7 @@ const CreatePostScreen = ({route, navigation}) => {
       })
       .catch(e => {
           console.error(e);
-      })
-      return data;
+      });
   }
 
  useEffect(() => {
@@ -64,53 +63,56 @@ const CreatePostScreen = ({route, navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Card containerStyle={styles.card_info}>
-          <Text style={styles.vaccine_name}> {vaccineName} </Text>
-          <Text style={styles.title}> Title: </Text>
-          <Controller
-            control={control}
-            rules={{ maxLength: 70, required: true }}
-            name="title"
-            render={({
-              field: { onChange, onBlur, value },
-            }) => (
-              <TextInput 
-                style={styles.input}  
-                onBlur={onBlur} // notify when input is touched
-                multiline
-                maxLength={70}
-                onChangeText={onChange} 
-                value={value} 
-                placeholder="Type a title"
-            />
-          )} 
-          /> 
-          {errors.title && errors.title.type === "required" && <Text style={styles.error_msg}>Title is required</Text>}
-          <Text style={styles.des_title}> Description: </Text>       
-          <Controller
-            control={control}
-            rules={{ maxLength: 450, required: true }}
-            name="description"
-            render={({
-              field: { onChange, onBlur, value },
-            }) => (
-              <TextInput 
-                style={styles.description}  
-                onBlur={onBlur} // notify when input is touched
-                multiline
-                maxLength={450}
-                onChangeText={onChange} 
-                value={value} 
-                placeholder="Type a description"
-            />
-          )} 
-          /> 
-          {errors.description && errors.description.type === "required" && <Text style={styles.error_msg}>Description is required</Text>}
+      <ScrollView style={{ flexGrow:1 }}>
+        <Card containerStyle={styles.card_info}>
+            <Text style={styles.vaccine_name}> {vaccineName} </Text>
+            <Text style={styles.title}> Title: </Text>
+            <Controller
+              control={control}
+              rules={{ maxLength: 70, required: true }}
+              name="title"
+              render={({
+                field: { onChange, onBlur, value },
+              }) => (
+                <TextInput 
+                  style={styles.input}  
+                  onBlur={onBlur} // notify when input is touched
+                  multiline
+                  maxLength={70}
+                  onChangeText={onChange} 
+                  value={value} 
+                  placeholder="Type a title"
+              />
+            )} 
+            /> 
+            {errors.title && errors.title.type === "required" && <Text style={styles.error_msg}>Title is required</Text>}
+            <Text style={styles.des_title}> Description: </Text>       
+            <Controller
+              control={control}
+              rules={{ maxLength: 450, required: true }}
+              name="description"
+              render={({
+                field: { onChange, onBlur, value },
+              }) => (
+                <TextInput 
+                  style={styles.description}  
+                  onBlur={onBlur} // notify when input is touched
+                  multiline
+                  maxLength={450}
+                  onChangeText={onChange} 
+                  value={value} 
+                  placeholder="Type a description"
+              />
+            )} 
+            /> 
+            {errors.description && errors.description.type === "required" && <Text style={styles.error_msg}>Description is required</Text>}
 
-      </Card>
-        <TouchableOpacity onPress={pressedPost} style={styles.submit}>
-            <Text style={styles.textbutton}>Post</Text>
-        </TouchableOpacity>
+        </Card>
+          <TouchableOpacity onPress={pressedPost} style={styles.submit}>
+              <Text style={styles.textbutton}>Post</Text>
+          </TouchableOpacity>
+      </ScrollView>
+
     </View>
   );
 }
@@ -175,6 +177,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#2D9CDB",
     borderRadius: 100,
     justifyContent: "center",
+    left: 65
   },
   textbutton: {
     textAlign: "center",
