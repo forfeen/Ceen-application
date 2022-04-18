@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Swiper from 'react-native-swiper';
-import { StyleSheet, TouchableOpacity , FlatList, Linking, ScrollView} from 'react-native';
+import { StyleSheet, TouchableOpacity , FlatList, Linking } from 'react-native';
 import { AntDesign, FontAwesome} from '@expo/vector-icons'; 
 import Svg, { Rect, Circle} from 'react-native-svg';
 import ContentLoader from 'react-native-masked-loader';

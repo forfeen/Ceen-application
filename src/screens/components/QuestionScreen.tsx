@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, FlatList } from 'react-native';
 import ActionButton from 'react-native-action-button';
+import Svg, { Circle, Rect } from 'react-native-svg';
+import ContentLoader from 'react-native-masked-loader';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Card } from 'react-native-elements';
 import { AntDesign } from '@expo/vector-icons'; 
@@ -22,6 +24,32 @@ const QuestionScreen = ({route, navigation}) => {
 
     const [ question, setQuestion ] = useState<Question>();
     const [ answer, setAnswer] = useState<Answer[]>();
+
+    const MaskedInfoElement = getMaskedInfoElement();
+    const MaskedElement = getMaskedElement();
+
+    function getMaskedInfoElement() {
+      return (
+        <Svg height="100%" width="100%" fill={'black'}>
+          <Rect x="10" y="10" rx="0" ry="0" width="40%" height="8" />
+          <Rect x="10" y="30" rx="0" ry="0" width="94%" height="8" />
+          <Rect x="10" y="50" rx="0" ry="0" width="94%" height="8" />
+          <Rect x="67%" y="70" rx="0" ry="0" width="30%" height="8" />
+          <Rect x="10" y="90" rx="0" ry="0" width="94%" height="120" />
+        </Svg>
+      );
+    }
+  
+    function getMaskedElement() {
+      return (
+        <Svg height="100%" width="100%" fill={'black'}>
+          <Circle cx="28" cy="28" r="22" />
+          <Rect x="70" y="12" rx="0" ry="0" width="75%" height="8" />
+          <Rect x="60" y="32" rx="0" ry="0" width="78%" height="8" />
+          <Rect x="62%" y="52" rx="0" ry="0" width="35%" height="8" />
+        </Svg> 
+      );
+    }
 
     async function getQuestion() {
         const data = await vaccineService.getEachQuestion(vaccineId, questionId)
@@ -147,6 +175,29 @@ const QuestionScreen = ({route, navigation}) => {
       fetchQuestion();
       fetchAnswer();
     }, []);
+
+    if (question === undefined && answer === undefined) {
+      return <View style={styles.masked_container}>
+      <Card containerStyle={styles.masked_info}>
+        <ContentLoader MaskedElement={MaskedInfoElement} dir={'rtl'} duration={2000} forColor="#93c2db" backColor="#5c96b8"/>
+        {/* <ContentLoader MaskedElement={MaskedElement} dir={'rtl'} duration={2000} forColor="#87b9d4" backColor="#529fcc"/> */}
+      </Card>
+      <View style={{marginVertical: 30, backgroundColor: 'transparent'}}>
+        <Card containerStyle={styles.masked_card}>
+          <ContentLoader MaskedElement={MaskedElement} dir={'rtl'} duration={2000} forColor="#93c2db" backColor="#5c96b8"/>
+        </Card>
+        <Card containerStyle={styles.masked_card}>
+          <ContentLoader MaskedElement={MaskedElement} dir={'rtl'} duration={2000} forColor="#93c2db" backColor="#5c96b8"/>
+        </Card>
+        <Card containerStyle={styles.masked_card}>
+          <ContentLoader MaskedElement={MaskedElement} dir={'rtl'} duration={2000} forColor="#93c2db" backColor="#5c96b8"/>
+        </Card>
+        <Card containerStyle={styles.masked_card}>
+          <ContentLoader MaskedElement={MaskedElement} dir={'rtl'} duration={2000} forColor="#93c2db" backColor="#5c96b8"/>
+        </Card>
+      </View>
+    </View>
+    }
 
     return (
         <View style={styles.container}>
@@ -327,5 +378,31 @@ const styles = StyleSheet.create({
     fontSize: 25,
     height: 30,
     color: 'white',
+  },
+  //  masked_element
+  masked_container: {
+    flex: 1,
+    backgroundColor: '#CAEAF2',
+    alignItems: 'center',
+  },
+  masked_info: {
+    backgroundColor: 'white',
+    // padding: 20,
+    marginVertical: 20,
+    // borderRadius: 10,
+    width: 343,
+    height: 250,
+    borderRadius: 20,
+    elevation:0,
+    borderWidth: 0
+  },
+  masked_card: {
+    backgroundColor: 'white',
+    marginVertical: 15,
+    width: 343,
+    height: 100,
+    borderRadius: 20,
+    elevation:0,
+    borderWidth: 0
   },
 });
