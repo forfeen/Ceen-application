@@ -177,6 +177,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#2D9CDB",
     borderRadius: 100,
     justifyContent: "center",
+    left: 65
   },
   textbutton: {
     textAlign: "center",
