@@ -1,5 +1,5 @@
 import React, {} from 'react';
-import { StyleSheet, TextInput, Alert, TouchableOpacity } from 'react-native';
+import { StyleSheet, TextInput, Alert, TouchableOpacity, ScrollView } from 'react-native';
 import { Card } from 'react-native-elements';
 import { useForm, Controller } from "react-hook-form";
 import { Text, View } from './Themed';
@@ -46,6 +46,8 @@ const CreateAnswerScreen = ({route, navigation}) => {
    
     return (
         <View style={styles.container}>
+        <ScrollView>
+
         <Card containerStyle={styles.card_info}>
           <Text style={styles.title}>{question?.title || ''}  </Text>
           <Text style={styles.description}>{question?.description || ' '} </Text>
@@ -100,6 +102,8 @@ const CreateAnswerScreen = ({route, navigation}) => {
         <TouchableOpacity onPress={pressedPost} style={styles.submit}>
           <Text style={styles.textbutton}>Post</Text>
         </TouchableOpacity>
+        </ScrollView>
+
         </View>
     );
 }
@@ -167,6 +171,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#2D9CDB",
     borderRadius: 100,
     justifyContent: "center",
+    left: 60
   },
   title: {
     top: 10.73,
@@ -192,11 +197,10 @@ const styles = StyleSheet.create({
   },
   title_section: {
     fontSize: 22,
-    // marginHorizontal: 50,
     color: '#112A38',
     marginTop: 25,
-    marginRight: 250
-    // left: 2
+    marginRight: 250,
+    left: 5
   },
   textbutton: {
     textAlign: "center",

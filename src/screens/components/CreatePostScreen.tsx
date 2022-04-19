@@ -45,7 +45,7 @@ const CreatePostScreen = ({route, navigation}) => {
     const getNameVaccine = () => {
         switch(vaccineId) {
             case '1':
-                return setName('Sinovac');
+                return setName('Sinovac: CoronaVac');
             case '2':
                 return setName('AstraZeneca');
             case '3':
