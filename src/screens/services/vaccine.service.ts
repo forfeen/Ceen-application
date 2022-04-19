@@ -10,6 +10,7 @@ import Post from '../../types/posts.type';
 import Review from '../../types/reviews.type';
 import Answer from '../../types/answer.type';
 import Locations from '../../types/locations.type';
+import Comment from '../../types/comment.type';
 
 class VaccineDataService {
 
@@ -35,6 +36,18 @@ class VaccineDataService {
 
     getAnswer(vaccineId) {
         return axios.get<Vaccine>(baseURL + '/answers/'+ vaccineId);
+    }
+
+    getEachQuestion(vaccineId, questionId) {
+        return axios.get<Question>(baseURL + '/questions/'+ vaccineId + '/' + questionId);
+    }
+
+    getEachPost(vaccineId, postId) {
+        return axios.get<Post>(baseURL + '/timelines/'+ vaccineId + '/' + postId);
+    }
+
+    getComment(vaccineId) {
+        return axios.get<Comment>(baseURL + '/comments/'+ vaccineId);
     }
 
     getCovidCase() {
@@ -91,8 +104,8 @@ class VaccineDataService {
         return axios.post<Answer>(baseURL + '/answers/'+ vaccineId + '&method=PUT' , data);
     }
 
-    getEachQuestion(vaccineId, questionId) {
-        return axios.get<Question>(baseURL + '/questions/'+ vaccineId + '/' + questionId);
+    likeComment(vaccineId, data) {
+        return axios.post<Comment>(baseURL + '/comments/'+ vaccineId + '&method=PUT' , data);
     }
 
     deleteReviews(id, reviewId) {
@@ -109,6 +122,10 @@ class VaccineDataService {
 
     deletePost(id, postId) {
         return axios.post<Post>(baseURL + '/timelines/'+ id + '/' + postId + '&method=DELETE');
+    }
+
+    deleteComment(id, commentId) {
+        return axios.post<Comment>(baseURL + '/comments/'+ id + '/' + commentId + '&method=DELETE');
     }
 
 }

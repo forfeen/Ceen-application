@@ -9,4 +9,5 @@ export default interface Post {
   like: number;
   date: string;
   isLike: string;
+  comments: number
 }

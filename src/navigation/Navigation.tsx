@@ -9,8 +9,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
 import { ColorSchemeName, Pressable, Text } from 'react-native';
 
-import Colors from '../constants/Colors';
-import useColorScheme from '../hooks/useColorScheme';
 import IndexScreen from '../screens/IndexScreen';
 import VaccineInfoScreen from '../screens/components/VaccineInfoScreen';
 import SignUpScreen from '../screens/components/SignUpScreen';
@@ -18,10 +16,7 @@ import LoginScreen from '../screens/components/LoginScreen';
 import MapScreen from '../screens/components/MapScreen';
 import UserProfile from '../screens/components/UserProfile';
 import StartScreen from '../screens/components/StartScreen';
-import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
-import TabOneScreen from '../screens/TabOneScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../../types';
 import LinkingConfiguration from './LinkingConfiguration';
 import CreateReviewScreen from '../screens/components/CreateReview';
@@ -29,6 +24,7 @@ import CreateQuestionScreen from '../screens/components/CreateQuestionScreen';
 import CreatePostScreen from '../screens/components/CreatePostScreen';
 import QuestionScreen from '../screens/components/QuestionScreen';
 import CreateAnswerScreen from '../screens/components/CreateAnswerScreen';
+import PostScreen from '../screens/components/PostScreen';
 
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
@@ -218,7 +214,25 @@ function RootNavigator() {
           headerLeft: () => (
             <Pressable
               onPress={() => {
-                navigation.goBack();
+                navigation.push('Index');
+              }}
+              style={({ pressed }) => ({
+                opacity: pressed ? 0.5 : 1,
+              })}>
+                {({}) => (
+              <Ionicons name="chevron-back-outline" size={24} color="black" />
+          )}
+            </Pressable>
+          ), 
+        })}
+      />
+      <Stack.Screen name="Post" 
+        component={PostScreen}
+        options ={({ navigation }) => ({ 
+          headerLeft: () => (
+            <Pressable
+              onPress={() => {
+                navigation.push('Index');
               }}
               style={({ pressed }) => ({
                 opacity: pressed ? 0.5 : 1,

@@ -663,6 +663,14 @@ const VaccineInfoScreen = ({route, navigation}) => {
                 data={post}
                 renderItem={( {item} ) => {
                     return (
+                       <TouchableOpacity
+                        onPress={
+                          () => {
+                            navigation.navigate('Post', {vaccineId: vaccineId, postId: item['#'], commentNumber: item.comments});
+                          }
+                        }>
+
+
                       <View style={styles.card_section}>
                         <Text style={styles.date}> {Moment.utc(item.date).local().startOf('seconds').fromNow()} </Text>
                         <View style={styles.list}>
@@ -678,7 +686,7 @@ const VaccineInfoScreen = ({route, navigation}) => {
                             name="delete"
                             size={15}
                             color="black"
-                            style={{left: 275, top: 30}}
+                            style={{left: 245, top: 30.5}}
                             onPress={()=> deletePost(item['#'])} />
                         : false
                       }
@@ -688,20 +696,21 @@ const VaccineInfoScreen = ({route, navigation}) => {
                                 checkLike(item.isLike) ? 
                                   <View style={{backgroundColor: 'transparent'}}>
                                     <Text>
-                                      <AntDesign name="like1" size={16} color="green" onPress={ () => {  dislikePost(item)}} /> {item.likes}
+                                      <AntDesign name="like1" size={16} color="green" onPress={ () => {  dislikePost(item)}} /> {item.likes} <FontAwesome name="comment-o" size={16} color="black" /> {item.comments}
                                     </Text>
                                   </View>
                                 :
                                   <View style={{backgroundColor: 'transparent'}}>
                                     <Text>
-                                      <AntDesign name="like2" size={16} color="green" onPress={ () => {  likePost(item)}} /> {item.likes}
+                                      <AntDesign name="like2" size={16} color="green" onPress={ () => {  likePost(item)}} /> {item.likes} <FontAwesome name="comment-o" size={16} color="black" /> {item.comments}
                                     </Text>
                                 </View>
                             }
                           </Text>
                         </View>
                       </View>
-                    );
+                  </TouchableOpacity>
+                );
                 }}/>
             </View>
           </Swiper>
