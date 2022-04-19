@@ -3,7 +3,7 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
-import { Feather, FontAwesome } from '@expo/vector-icons';
+import { Feather, FontAwesome, Ionicons } from '@expo/vector-icons';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
@@ -204,9 +204,7 @@ function RootNavigator() {
                 opacity: pressed ? 0.5 : 1,
               })}>
                 {({ pressed }) => (
-              <Text style={{color: "#2D9CDB", fontSize: 25, fontWeight: '500',}}>
-                {pressed ? '' : '<'}
-              </Text>
+              <Ionicons name="chevron-back-outline" size={24} color="black" />
           )}
             </Pressable>
           ),
@@ -216,7 +214,7 @@ function RootNavigator() {
       <Stack.Screen name="Profile" component={UserProfile} />
       <Stack.Screen name="Question" 
         component={QuestionScreen}
-        options ={({ route, navigation }) => ({ 
+        options ={({ navigation }) => ({ 
           headerLeft: () => (
             <Pressable
               onPress={() => {
@@ -225,19 +223,89 @@ function RootNavigator() {
               style={({ pressed }) => ({
                 opacity: pressed ? 0.5 : 1,
               })}>
-                {({ pressed }) => (
-              <Text style={{color: "#2D9CDB", fontSize: 25, fontWeight: '500',}}>
-                {pressed ? '' : '<'}
-              </Text>
+                {({}) => (
+              <Ionicons name="chevron-back-outline" size={24} color="black" />
           )}
             </Pressable>
           ), 
         })}
       />
-      <Stack.Screen name="Create Review" component={CreateReviewScreen} />
-      <Stack.Screen name="Create Post" component={CreatePostScreen} />
-      <Stack.Screen name="Create Question" component={CreateQuestionScreen} />
-      <Stack.Screen name="Create Answer" component={CreateAnswerScreen} />
+      <Stack.Screen 
+        name="Create Review" 
+        component={CreateReviewScreen}
+        options ={({ navigation }) => ({ 
+          headerLeft: () => (
+            <Pressable
+              onPress={() => {
+                navigation.goBack();
+              }}
+              style={({ pressed }) => ({
+                opacity: pressed ? 0.5 : 1,
+              })}>
+                {({ }) => (
+              <Ionicons name="chevron-back-outline" size={24} color="black" />
+          )}
+            </Pressable>
+          ), 
+        })}  
+      />
+      <Stack.Screen 
+        name="Create Post" 
+        component={CreatePostScreen}
+        options ={({ navigation }) => ({ 
+          headerLeft: () => (
+            <Pressable
+              onPress={() => {
+                navigation.goBack();
+              }}
+              style={({ pressed }) => ({
+                opacity: pressed ? 0.5 : 1,
+              })}>
+                {({ }) => (
+              <Ionicons name="chevron-back-outline" size={24} color="black" />
+          )}
+            </Pressable>
+          ), 
+        })}   
+      />
+      <Stack.Screen 
+        name="Create Question" 
+        component={CreateQuestionScreen}
+        options ={({ navigation }) => ({ 
+          headerLeft: () => (
+            <Pressable
+              onPress={() => {
+                navigation.goBack();
+              }}
+              style={({ pressed }) => ({
+                opacity: pressed ? 0.5 : 1,
+              })}>
+                {({ }) => (
+              <Ionicons name="chevron-back-outline" size={24} color="black" />
+          )}
+            </Pressable>
+          ), 
+        })}  
+        />
+      <Stack.Screen 
+        name="Create Answer" 
+        component={CreateAnswerScreen}
+        options ={({ navigation }) => ({ 
+          headerLeft: () => (
+            <Pressable
+              onPress={() => {
+                navigation.goBack();
+              }}
+              style={({ pressed }) => ({
+                opacity: pressed ? 0.5 : 1,
+              })}>
+                {({ }) => (
+              <Ionicons name="chevron-back-outline" size={24} color="black" />
+          )}
+            </Pressable>
+          ), 
+        })}
+      />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
     </Stack.Navigator>
   );
