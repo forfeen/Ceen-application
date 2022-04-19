@@ -492,6 +492,7 @@ const VaccineInfoScreen = ({route, navigation}) => {
             />
           }
         >
+          {/* Review */}
           <View style={{backgroundColor: 'transparent', marginBottom: 100}}>
             <Text style={styles.title_section}>Reviews</Text>
             <FlatList 
@@ -574,6 +575,7 @@ const VaccineInfoScreen = ({route, navigation}) => {
               }}/>
           </View>
 
+           {/* Questions */}
           <View style={{backgroundColor: 'transparent'}}>
               <Text style={styles.title_section}>Questions/Answers</Text>
               <FlatList 
@@ -656,89 +658,7 @@ const VaccineInfoScreen = ({route, navigation}) => {
                 }}/>
             </View>
 
-            <View style={{backgroundColor: 'transparent'}}>
-              <Text style={styles.title_section}>Questions/Answers</Text>
-              <FlatList 
-                data={question}
-                renderItem={( {item} ) => {
-                    return (
-                      <TouchableOpacity
-                        onPress={
-                          () => {
-                            navigation.navigate('Question', {vaccineId: vaccineId, questionId: item['#'], answerNumber: item.answers});
-                          }
-                      }>
-                        <View style={styles.card_section} >
-                            <Text style={styles.date}> {Moment.utc(item.date).local().startOf('seconds').fromNow()} </Text>
-                            <View style={{backgroundColor: 'white', flexDirection: 'row', top: 14}}>
-                              <View style={styles.circle_question}>
-                                <Text>{item.ownerName.charAt(0)}</Text>
-                              </View>
-                              {
-                                item?.typeLocation ? 
-                                  <Card containerStyle={styles.title_type}>
-                                    <Text style={styles.info_type}> Location </Text>
-                                  </Card> 
-                                :
-                                  false
-                              } 
-                              {
-                                item?.typePrice ? 
-                                  <Card containerStyle={styles.title_type}>
-                                    <Text style={styles.info_type}> Price </Text>
-                                  </Card> 
-                                :
-                                  false
-                              }
-                              {
-                                item?.typeEffect? 
-                                  <Card containerStyle={styles.title_type}>
-                                    <Text style={styles.info_type}> Effects </Text>
-                                  </Card> 
-                                :
-                                  false
-                              }
-                          </View>
-                            {/* <View style={styles.list}> */}
-                              <Text style={{marginStart: 75, marginTop: 15, marginHorizontal: 60, left: 10, lineHeight: 25, fontWeight: '800'}}>
-                                {item.title}
-                              </Text>
-                          {/* </View> */}
-                          {
-                            isOwner(item.ownerId) ?
-                              <AntDesign
-                                name="delete"
-                                size={15}
-                                color="black"
-                                style={{left: 245, top: 30.5}}
-                                onPress={()=> deleteQuestion(item['#'])} />
-                            : false
-                          }
-                          <View style={styles.like}>
-                            <Text>
-                            {
-                                checkLike(item.isLike) ? 
-                                  <View style={{backgroundColor: 'transparent'}}>
-                                    <Text>
-                                      <AntDesign name="like1" size={16} color="green" onPress={ () => {  dislikeQuestion(item)}} /> {item.likes} <FontAwesome name="comment-o" size={16} color="black" /> {item.answers}
-                                    </Text>
-                                  </View>
-                                :
-                                  <View style={{backgroundColor: 'transparent'}}>
-                                    <Text>
-                                      <AntDesign name="like2" size={16} color="green" onPress={ () => {  likeQuestion(item)}} /> {item.likes} <FontAwesome name="comment-o" size={16} color="black" /> {item.answers}
-                                    </Text>
-                                </View>
-                              }
-
-                            </Text>
-                          </View>
-                        </View>
-                      </TouchableOpacity>
-                    );
-                }}/>
-            </View>
-            
+            {/* Timelines */}
             <View style={{backgroundColor: 'transparent'}}>
               <Text style={styles.title_section}>Timelines</Text>
               <FlatList 
@@ -800,43 +720,6 @@ const VaccineInfoScreen = ({route, navigation}) => {
               }}/>
           </View>
           
-          <View style={{backgroundColor: 'transparent', marginBottom: 100}}>
-            <Text style={styles.title_section}>Timelines</Text>
-            <FlatList 
-              data={post}
-              renderItem={( {item} ) => {
-                  return (
-                    <View style={styles.card_section}>
-                      <Text style={styles.date}> {Moment.utc(item.date).local().startOf('seconds').fromNow()} </Text>
-                      <View style={styles.list}>
-                        <View style={styles.circle}>
-                          <Text style={{color: "black"}}>{item.ownerName.charAt(0)}</Text>
-                        </View> 
-                        <Text style={{marginStart: 40, marginTop: 5, marginHorizontal: 60, color: "black"}}>
-                        {item.description}</Text>
-                    </View>
-                      <View style={styles.like}>
-                        <Text>
-                          {
-                              checkLike(item.isLike) ? 
-                                <View style={{backgroundColor: 'transparent'}}>
-                                  <Text>
-                                    <AntDesign name="like1" size={16} color="green" onPress={ () => {  dislikePost(item)}} /> {item.likes}
-                                  </Text>
-                                </View>
-                              :
-                                <View style={{backgroundColor: 'transparent'}}>
-                                  <Text>
-                                    <AntDesign name="like2" size={16} color="green" onPress={ () => {  likePost(item)}} /> {item.likes}
-                                  </Text>
-                              </View>
-                          }
-                        </Text>
-                      </View>
-                    </View>
-                  );
-              }}/>
-          </View>
         </Swiper>
        <ActionButton buttonColor="rgba(231,76,60,1)">
           <ActionButton.Item buttonColor='#9b59b6' title="New Review" onPress={() => navigation.push('Create Review', {vaccineId: vaccineId})}>
