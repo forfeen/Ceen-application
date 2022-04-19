@@ -120,10 +120,13 @@ return (
     <View style={{backgroundColor: "#F0F7F9", flex: 1}}>
         <Card containerStyle={styles.profile}>
             <View style={{backgroundColor: "transparent", alignItems:'center'}}>
-                <Image source={{uri:"https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"}} style={styles.pic_circle}></Image>
+                {/* <Image source={{uri:"https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"}} style={styles.pic_circle}></Image>
                 <TouchableOpacity onPress={openImagePickerAsync}>
                     <Text style={styles.change_photo}>Change profile photo</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
+                <View style={styles.pic_circle}>
+                    <Text style={{fontSize: 80}}>{user?.displayName.charAt(0)}</Text>
+                </View> 
             </View>
             <TextInput
                 label='Name'

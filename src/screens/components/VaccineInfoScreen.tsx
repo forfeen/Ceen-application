@@ -117,8 +117,11 @@ const VaccineInfoScreen = ({route, navigation}) => {
               .catch(e => {
                   console.error(e);
               })
+          },
+          {text: 'Cancle', 
+          onPress: () => console.log('Cancle')
           }
-      ]
+      ],  { cancelable: false }
     );
   }
 
@@ -136,8 +139,11 @@ const VaccineInfoScreen = ({route, navigation}) => {
               .catch(e => {
                   console.error(e);
               })
+          },
+          {text: 'Cancle', 
+          onPress: () => console.log('Cancle')
           }
-      ]
+      ],  { cancelable: false }
     );
   }
 
@@ -155,8 +161,11 @@ const VaccineInfoScreen = ({route, navigation}) => {
               .catch(e => {
                   console.error(e);
               })
+          },
+          {text: 'Cancle', 
+          onPress: () => console.log('Cancle')
           }
-      ]
+      ],  { cancelable: false }
     );
   }
 
@@ -619,8 +628,8 @@ const VaccineInfoScreen = ({route, navigation}) => {
                               }
                           </View>
                             {/* <View style={styles.list}> */}
-                              <Text style={{marginStart: 75, marginTop: 15, marginHorizontal: 60, left: 10, lineHeight: 25}}>
-                                {item.description}
+                              <Text style={{marginStart: 75, marginTop: 15, marginHorizontal: 60, left: 10, lineHeight: 25, fontWeight: '800'}}>
+                                {item.title}
                               </Text>
                           {/* </View> */}
                           {

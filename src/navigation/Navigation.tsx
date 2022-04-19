@@ -214,7 +214,7 @@ function RootNavigator() {
           headerLeft: () => (
             <Pressable
               onPress={() => {
-                navigation.push('Index');
+                navigation.goBack();
               }}
               style={({ pressed }) => ({
                 opacity: pressed ? 0.5 : 1,
@@ -232,7 +232,7 @@ function RootNavigator() {
           headerLeft: () => (
             <Pressable
               onPress={() => {
-                navigation.push('Index');
+                navigation.goBack();
               }}
               style={({ pressed }) => ({
                 opacity: pressed ? 0.5 : 1,

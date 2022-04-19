@@ -66,7 +66,7 @@ const CreatePostScreen = ({route, navigation}) => {
       <ScrollView style={{ flexGrow:1 }}>
         <Card containerStyle={styles.card_info}>
             <Text style={styles.vaccine_name}> {vaccineName} </Text>
-            <Text style={styles.title}> Title: </Text>
+            {/* <Text style={styles.title}> Title: </Text>
             <Controller
               control={control}
               rules={{ maxLength: 70, required: true }}
@@ -84,9 +84,9 @@ const CreatePostScreen = ({route, navigation}) => {
                   placeholder="Type a title"
               />
             )} 
-            /> 
+            />  */}
             {errors.title && errors.title.type === "required" && <Text style={styles.error_msg}>Title is required</Text>}
-            <Text style={styles.des_title}> Description: </Text>       
+            {/* <Text style={styles.des_title}> Description: </Text>        */}
             <Controller
               control={control}
               rules={{ maxLength: 450, required: true }}
@@ -101,7 +101,7 @@ const CreatePostScreen = ({route, navigation}) => {
                   maxLength={450}
                   onChangeText={onChange} 
                   value={value} 
-                  placeholder="Type a description"
+                  placeholder="What's happening?"
               />
             )} 
             /> 
