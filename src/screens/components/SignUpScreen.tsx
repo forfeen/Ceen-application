@@ -10,8 +10,9 @@ import Colors from '../../constants/Colors';
 import { MonoText } from './StyledText';
 import { Text, View } from './Themed';
 import Icon from '@expo/vector-icons/FontAwesome5';
+import Navigation from '../../navigation/Navigation';
 
-const SignUpScreen = () => {
+const SignUpScreen = ({ navigation }) => {
     const { control, setValue, handleSubmit, formState: { errors } } = useForm<User>();
     const [hidePass, setHidePass] = useState(true);
     const pressedSignUp = handleSubmit(data => {
@@ -27,6 +28,7 @@ const SignUpScreen = () => {
                 sendEmailVerification(user);
                 // console.log(user);
                 alert("Signed up success\nCheck your email for verification")
+                navigation.push("LogIn")
             })
             .catch(error => alert(error.message))
         }
@@ -48,10 +50,11 @@ const SignUpScreen = () => {
                             onChangeText={onChange}
                             value={value}
                             placeholder="Name"
+                            placeholderTextColor="gray" 
                         />
                     )}
                 />
-                {errors.name && errors.name.type === "required" && <Text>Name is required</Text>}
+                {errors.name && errors.name.type === "required" && <Text style={{color: "red"}}>Name is required</Text>}
                 <Controller
                     control={control}
                     rules={{ maxLength: 100, required: true}}
@@ -63,10 +66,11 @@ const SignUpScreen = () => {
                             onChangeText={onChange}
                             value={value}
                             placeholder="Email"
+                            placeholderTextColor="gray" 
                         />
                     )}
                 />
-                {errors.email && errors.email.type === "required" && <Text>Email is required</Text>}
+                {errors.email && errors.email.type === "required" && <Text style={{color: "red"}}>Email is required</Text>}
                 <Controller
                     control={control}
                     rules={{ maxLength: 100, required: true}}
@@ -80,6 +84,7 @@ const SignUpScreen = () => {
                                 value={value}
                                 secureTextEntry={hidePass ? true : false}
                                 placeholder="Password"
+                                placeholderTextColor="gray" 
                             />
                             <Icon
                                 style={styles.hide}
@@ -92,7 +97,7 @@ const SignUpScreen = () => {
                         
                     )}
                 />
-                {errors.password && errors.password.type === "required" && <Text>Password is required</Text>}
+                {errors.password && errors.password.type === "required" && <Text style={{color: "red"}}>Password is required</Text>}
                 <Controller
                     control={control}
                     rules={{ maxLength: 100, required: true}}
@@ -106,6 +111,7 @@ const SignUpScreen = () => {
                                 value={value}
                                 secureTextEntry
                                 placeholder="Confirm your password"
+                                placeholderTextColor="gray" 
                             />
                         </View>
                         
