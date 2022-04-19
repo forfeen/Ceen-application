@@ -3,14 +3,12 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
-import { Feather, FontAwesome } from '@expo/vector-icons';
+import { Feather, FontAwesome, Ionicons } from '@expo/vector-icons';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
 import { ColorSchemeName, Pressable, Text } from 'react-native';
 
-import Colors from '../constants/Colors';
-import useColorScheme from '../hooks/useColorScheme';
 import IndexScreen from '../screens/IndexScreen';
 import VaccineInfoScreen from '../screens/components/VaccineInfoScreen';
 import SignUpScreen from '../screens/components/SignUpScreen';
@@ -18,10 +16,7 @@ import LoginScreen from '../screens/components/LoginScreen';
 import MapScreen from '../screens/components/MapScreen';
 import UserProfile from '../screens/components/UserProfile';
 import StartScreen from '../screens/components/StartScreen';
-import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
-import TabOneScreen from '../screens/TabOneScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../../types';
 import LinkingConfiguration from './LinkingConfiguration';
 import CreateReviewScreen from '../screens/components/CreateReview';
@@ -29,6 +24,7 @@ import CreateQuestionScreen from '../screens/components/CreateQuestionScreen';
 import CreatePostScreen from '../screens/components/CreatePostScreen';
 import QuestionScreen from '../screens/components/QuestionScreen';
 import CreateAnswerScreen from '../screens/components/CreateAnswerScreen';
+import PostScreen from '../screens/components/PostScreen';
 
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
@@ -204,9 +200,7 @@ function RootNavigator() {
                 opacity: pressed ? 0.5 : 1,
               })}>
                 {({ pressed }) => (
-              <Text style={{color: "#2D9CDB", fontSize: 25, fontWeight: '500',}}>
-                {pressed ? '' : '<'}
-              </Text>
+              <Ionicons name="chevron-back-outline" size={24} color="black" />
           )}
             </Pressable>
           ),
@@ -216,7 +210,44 @@ function RootNavigator() {
       <Stack.Screen name="Profile" component={UserProfile} />
       <Stack.Screen name="Question" 
         component={QuestionScreen}
-        options ={({ route, navigation }) => ({ 
+        options ={({ navigation }) => ({ 
+          headerLeft: () => (
+            <Pressable
+              onPress={() => {
+                navigation.push('Index');
+              }}
+              style={({ pressed }) => ({
+                opacity: pressed ? 0.5 : 1,
+              })}>
+                {({}) => (
+              <Ionicons name="chevron-back-outline" size={24} color="black" />
+          )}
+            </Pressable>
+          ), 
+        })}
+      />
+      <Stack.Screen name="Post" 
+        component={PostScreen}
+        options ={({ navigation }) => ({ 
+          headerLeft: () => (
+            <Pressable
+              onPress={() => {
+                navigation.push('Index');
+              }}
+              style={({ pressed }) => ({
+                opacity: pressed ? 0.5 : 1,
+              })}>
+                {({}) => (
+              <Ionicons name="chevron-back-outline" size={24} color="black" />
+          )}
+            </Pressable>
+          ), 
+        })}
+      />
+      <Stack.Screen 
+        name="Create Review" 
+        component={CreateReviewScreen}
+        options ={({ navigation }) => ({ 
           headerLeft: () => (
             <Pressable
               onPress={() => {
@@ -225,30 +256,71 @@ function RootNavigator() {
               style={({ pressed }) => ({
                 opacity: pressed ? 0.5 : 1,
               })}>
-                {({ pressed }) => (
-              <Text style={{color: "#2D9CDB", fontSize: 25, fontWeight: '500',}}>
-                {pressed ? '' : '<'}
-              </Text>
+                {({ }) => (
+              <Ionicons name="chevron-back-outline" size={24} color="black" />
+          )}
+            </Pressable>
+          ), 
+        })}  
+      />
+      <Stack.Screen 
+        name="Create Post" 
+        component={CreatePostScreen}
+        options ={({ navigation }) => ({ 
+          headerLeft: () => (
+            <Pressable
+              onPress={() => {
+                navigation.goBack();
+              }}
+              style={({ pressed }) => ({
+                opacity: pressed ? 0.5 : 1,
+              })}>
+                {({ }) => (
+              <Ionicons name="chevron-back-outline" size={24} color="black" />
+          )}
+            </Pressable>
+          ), 
+        })}   
+      />
+      <Stack.Screen 
+        name="Create Question" 
+        component={CreateQuestionScreen}
+        options ={({ navigation }) => ({ 
+          headerLeft: () => (
+            <Pressable
+              onPress={() => {
+                navigation.goBack();
+              }}
+              style={({ pressed }) => ({
+                opacity: pressed ? 0.5 : 1,
+              })}>
+                {({ }) => (
+              <Ionicons name="chevron-back-outline" size={24} color="black" />
+          )}
+            </Pressable>
+          ), 
+        })}  
+        />
+      <Stack.Screen 
+        name="Create Answer" 
+        component={CreateAnswerScreen}
+        options ={({ navigation }) => ({ 
+          headerLeft: () => (
+            <Pressable
+              onPress={() => {
+                navigation.goBack();
+              }}
+              style={({ pressed }) => ({
+                opacity: pressed ? 0.5 : 1,
+              })}>
+                {({ }) => (
+              <Ionicons name="chevron-back-outline" size={24} color="black" />
           )}
             </Pressable>
           ), 
         })}
       />
-      <Stack.Screen name="Create Review" component={CreateReviewScreen} />
-      <Stack.Screen name="Create Post" component={CreatePostScreen} />
-      <Stack.Screen name="Create Question" component={CreateQuestionScreen} />
-      <Stack.Screen name="Create Answer" component={CreateAnswerScreen} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
     </Stack.Navigator>
   );
 }
-
-// /**
-//  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
-//  */
-// function TabBarIcon(props: {
-//   name: React.ComponentProps<typeof FontAwesome>['name'];
-//   color: string;
-// }) {
-//   return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
-// }

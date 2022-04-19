@@ -85,7 +85,7 @@ const CreateReviewScreen = ({route, navigation}) => {
       .then(response => {
           Alert.alert(
             'Success',
-            'The review was created',
+            'The review was created.',
             [   
                 {text: 'OK', 
                 onPress: () => navigation.push('Details', {vaccineId: vaccineId})},

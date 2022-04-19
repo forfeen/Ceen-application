@@ -32,6 +32,7 @@ const CreateQuestionScreen = ({route, navigation}) => {
      typeEffect: effect,
      likes: 0,
      dislikes: 0,
+     answers: 0,
      date: date
   };
 
@@ -39,7 +40,7 @@ const CreateQuestionScreen = ({route, navigation}) => {
       .then(response => {
           Alert.alert(
             'Success',
-            'The question was created',
+            'The question was created.',
             [   
                 {text: 'OK', 
                 onPress: () => navigation.push('Details', {vaccineId: vaccineId})},
@@ -56,7 +57,7 @@ const CreateQuestionScreen = ({route, navigation}) => {
     const getNameVaccine = () => {
         switch(vaccineId) {
             case '1':
-                return setName('Sinovac');
+                return setName('Sinovac: CoronaVac');
             case '2':
                 return setName('AstraZeneca');
             case '3':
@@ -75,7 +76,6 @@ const CreateQuestionScreen = ({route, navigation}) => {
   return (
     <View style={styles.container}>
       <ScrollView>
-
         <Card containerStyle={styles.card_info}>
             <Text style={styles.vaccine_name}> {vaccineName} </Text>
             <Text style={styles.title}> Title: </Text> 
