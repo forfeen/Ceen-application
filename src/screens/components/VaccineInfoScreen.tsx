@@ -574,84 +574,84 @@ const VaccineInfoScreen = ({route, navigation}) => {
               }}/>
           </View>
 
-          <View style={{backgroundColor: 'transparent', marginBottom: 100}}>
-            <Text style={styles.title_section}>Questions/Answers</Text>
-            <FlatList 
-              data={question}
-              renderItem={( {item} ) => {
-                  return (
-                    <TouchableOpacity
-                      onPress={
-                        () => {
-                          navigation.navigate('Question', {vaccineId: vaccineId, questionId: item['#']});
-                        }
-                    }>
-                      <View style={styles.card_section} >
-                          <Text style={styles.date}> {Moment.utc(item.date).local().startOf('seconds').fromNow()} </Text>
-                          <View style={{backgroundColor: 'white', flexDirection: 'row', top: 14}}>
-                            <View style={styles.circle_question}>
-                              <Text style={{color: "black"}}>{item.ownerName.charAt(0)}</Text>
-
-                            </View>
-                            : false
+          <View style={{backgroundColor: 'transparent'}}>
+              <Text style={styles.title_section}>Questions/Answers</Text>
+              <FlatList 
+                data={question}
+                renderItem={( {item} ) => {
+                    return (
+                      <TouchableOpacity
+                        onPress={
+                          () => {
+                            navigation.navigate('Question', {vaccineId: vaccineId, questionId: item['#'], answerNumber: item.answers});
                           }
-                          {
-                            item.secondDose ?  
-                            <View style={styles.vaccineDose}>
-                              <Text style={{fontSize: 13, lineHeight: 25}}>
-                                <IconFont name="syringe" size={10}/><IconFont name="syringe" size={10}/> {item.secondDose} (2nd)
+                      }>
+                        <View style={styles.card_section} >
+                            <Text style={styles.date}> {Moment.utc(item.date).local().startOf('seconds').fromNow()} </Text>
+                            <View style={{backgroundColor: 'white', flexDirection: 'row', top: 14}}>
+                              <View style={styles.circle_question}>
+                                <Text>{item.ownerName.charAt(0)}</Text>
+                              </View>
+                              {
+                                item?.typeLocation ? 
+                                  <Card containerStyle={styles.title_type}>
+                                    <Text style={styles.info_type}> Location </Text>
+                                  </Card> 
+                                :
+                                  false
+                              } 
+                              {
+                                item?.typePrice ? 
+                                  <Card containerStyle={styles.title_type}>
+                                    <Text style={styles.info_type}> Price </Text>
+                                  </Card> 
+                                :
+                                  false
+                              }
+                              {
+                                item?.typeEffect? 
+                                  <Card containerStyle={styles.title_type}>
+                                    <Text style={styles.info_type}> Effects </Text>
+                                  </Card> 
+                                :
+                                  false
+                              }
+                          </View>
+                            {/* <View style={styles.list}> */}
+                              <Text style={{marginStart: 75, marginTop: 15, marginHorizontal: 60, left: 10, lineHeight: 25, fontWeight: '800'}}>
+                                {item.title}
                               </Text>
-                            </View>
-                            : false
-                          }
+                          {/* </View> */}
                           {
-                            item.thirdDose ?  
-                            <View style={styles.vaccineDose}>
-                              <Text style={{fontSize: 13, lineHeight: 25}}>
-                                <IconFont name="syringe" size={10}/><IconFont name="syringe" size={10}/><IconFont name="syringe" size={10}/> {item.thirdDose} (3rd)
-                              </Text>
-                            </View>
+                            isOwner(item.ownerId) ?
+                              <AntDesign
+                                name="delete"
+                                size={15}
+                                color="black"
+                                style={{left: 245, top: 30.5}}
+                                onPress={()=> deleteQuestion(item['#'])} />
                             : false
                           }
-                          {
-                            item.fourthDose ?  
-                            <View style={styles.vaccineDose}>
-                              <Text style={{fontSize: 13, lineHeight: 25}}>
-                                <IconFont name="syringe" size={10}/><IconFont name="syringe" size={10}/><IconFont name="syringe" size={10}/><IconFont name="syringe" size={10}/> {item.fourthDose} (4th)
-                              </Text>
-                            </View>
-                            : false
-                          }
-                      </View>
-                      {
-                        isOwner(item.ownerId) ? 
-                          <AntDesign 
-                            name="delete" 
-                            size={15} 
-                            color="black" 
-                            style={{left: 275, top: 30}}
-                            onPress={()=> deleteReview(item['#'])} />
-                        : false
-                      }
-                        <View style={styles.like}>
-                          <Text>
+                          <View style={styles.like}>
+                            <Text>
                             {
                                 checkLike(item.isLike) ? 
                                   <View style={{backgroundColor: 'transparent'}}>
                                     <Text>
-                                      <AntDesign name="like1" size={16} color="green" onPress={ () => {  dislikeReview(item)}} /> {item.likes}
+                                      <AntDesign name="like1" size={16} color="green" onPress={ () => {  dislikeQuestion(item)}} /> {item.likes} <FontAwesome name="comment-o" size={16} color="black" /> {item.answers}
                                     </Text>
                                   </View>
                                 :
                                   <View style={{backgroundColor: 'transparent'}}>
                                     <Text>
-                                      <AntDesign name="like2" size={16} color="green" onPress={ () => {  likeReview(item)}} /> {item.likes}
+                                      <AntDesign name="like2" size={16} color="green" onPress={ () => {  likeQuestion(item)}} /> {item.likes} <FontAwesome name="comment-o" size={16} color="black" /> {item.answers}
                                     </Text>
                                 </View>
                               }
-                          </Text>
+                            </Text>
+                          </View>
                         </View>
-                      </View>
+                      </TouchableOpacity>
                     );
                 }}/>
             </View>
