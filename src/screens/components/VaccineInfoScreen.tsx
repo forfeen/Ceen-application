@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Swiper from 'react-native-swiper';
-import { StyleSheet, TouchableOpacity , FlatList, Linking } from 'react-native';
+import { StyleSheet, TouchableOpacity , FlatList, Linking, Alert } from 'react-native';
 import { AntDesign, FontAwesome} from '@expo/vector-icons'; 
 import Svg, { Rect, Circle} from 'react-native-svg';
 import ContentLoader from 'react-native-masked-loader';
@@ -101,6 +101,63 @@ const VaccineInfoScreen = ({route, navigation}) => {
         .catch(e => {
             console.error(e);
         });
+  }
+
+  function deleteReview(id) {
+    Alert.alert(
+      'Delete review?',
+      'This action cannot be undone. Are you sure you want to delete this review?',
+      [   
+          {text: 'OK', 
+          onPress: () => vaccineService.deleteReviews(vaccineId, id)
+              .then(response => {
+                  navigation.push('Details', {vaccineId: vaccineId})
+                  return response.data;
+              })
+              .catch(e => {
+                  console.error(e);
+              })
+          }
+      ]
+    );
+  }
+
+  function deleteQuestion(id) {
+    Alert.alert(
+      'Delete question?',
+      'This action cannot be undone. Are you sure you want to delete this question?',
+      [   
+          {text: 'OK', 
+          onPress: () => vaccineService.deleteQuestion(vaccineId, id)
+              .then(response => {
+                  navigation.push('Details', {vaccineId: vaccineId})
+                  return response.data;
+              })
+              .catch(e => {
+                  console.error(e);
+              })
+          }
+      ]
+    );
+  }
+
+  function deletePost(id) {
+    Alert.alert(
+      'Delete post?',
+      'This action cannot be undone. Are you sure you want to delete this post?',
+      [   
+          {text: 'OK', 
+          onPress: () => vaccineService.deletePost(vaccineId, id)
+              .then(response => {
+                  navigation.push('Details', {vaccineId: vaccineId})
+                  return response.data;
+              })
+              .catch(e => {
+                  console.error(e);
+              })
+          }
+      ]
+    );
   }
 
   function getUserList(user) {
@@ -286,17 +343,17 @@ const VaccineInfoScreen = ({route, navigation}) => {
     
     const fetchReviews = async () => {
       const reviewData = await getAllReviews();
-      setReviews(reviewData);
+      setReviews(reviewData.reverse());
     }
 
     const fetchQuestions = async () => {
       const questionData = await getAllQuestions();
-      setQuestions(questionData);
+      setQuestions(questionData.reverse());
     }
     
     const fetchPosts = async () => {
       const postData = await getAllPosts();
-      setPosts(postData);
+      setPosts(postData.reverse());
     }
  
    fetchInfos();
@@ -316,6 +373,10 @@ const VaccineInfoScreen = ({route, navigation}) => {
         })
     }
     return userLike;
+  }
+
+  function isOwner(id): boolean {
+    return userMail === id;
   }
 
   function getMaskedInfoElement() {
@@ -481,6 +542,16 @@ const VaccineInfoScreen = ({route, navigation}) => {
                             : false
                           }
                       </View>
+                      {
+                        isOwner(item.ownerId) ? 
+                          <AntDesign 
+                            name="delete" 
+                            size={15} 
+                            color="black" 
+                            style={{left: 275, top: 30}}
+                            onPress={()=> deleteReview(item['#'])} />
+                        : false
+                      }
                         <View style={styles.like}>
                           <Text>
                             {
@@ -552,7 +623,16 @@ const VaccineInfoScreen = ({route, navigation}) => {
                                 {item.description}
                               </Text>
                           {/* </View> */}
-
+                          {
+                            isOwner(item.ownerId) ?
+                              <AntDesign
+                                name="delete"
+                                size={15}
+                                color="black"
+                                style={{left: 245, top: 30.5}}
+                                onPress={()=> deleteQuestion(item['#'])} />
+                            : false
+                          }
                           <View style={styles.like}>
                             <Text>
                             {
@@ -592,6 +672,16 @@ const VaccineInfoScreen = ({route, navigation}) => {
                           <Text style={{marginStart: 40, marginTop: 5, marginHorizontal: 60}}>
                           {item.description}</Text>
                       </View>
+                      {
+                        isOwner(item.ownerId) ?
+                          <AntDesign
+                            name="delete"
+                            size={15}
+                            color="black"
+                            style={{left: 275, top: 30}}
+                            onPress={()=> deletePost(item['#'])} />
+                        : false
+                      }
                         <View style={styles.like}>
                           <Text>
                             {

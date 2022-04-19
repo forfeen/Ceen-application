@@ -32,6 +32,7 @@ const CreateQuestionScreen = ({route, navigation}) => {
      typeEffect: effect,
      likes: 0,
      dislikes: 0,
+     answers: 0,
      date: date
   };
 
@@ -39,7 +40,7 @@ const CreateQuestionScreen = ({route, navigation}) => {
       .then(response => {
           Alert.alert(
             'Success',
-            'The question was created',
+            'The question was created.',
             [   
                 {text: 'OK', 
                 onPress: () => navigation.push('Details', {vaccineId: vaccineId})},

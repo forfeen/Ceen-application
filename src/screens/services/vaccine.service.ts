@@ -17,24 +17,24 @@ class VaccineDataService {
         return axios.get<Vaccine[]>(baseURL + '/vaccines');
     }
 
-    getVaccine(id) {
-        return axios.get<Vaccine>(baseURL + '/vaccines/' + id);
+    getVaccine(vaccineId) {
+        return axios.get<Vaccine>(baseURL + '/vaccines/' + vaccineId);
     }
 
-    getReview(id) {
-        return axios.get<Review>(baseURL + '/reviews/'+ id);
+    getReview(vaccineId) {
+        return axios.get<Review>(baseURL + '/reviews/'+ vaccineId);
     }
 
-    getQuestion(id) {
-        return axios.get<Question>(baseURL + '/questions/'+ id);
+    getQuestion(vaccineId) {
+        return axios.get<Question>(baseURL + '/questions/'+ vaccineId);
     }
 
-    getPost(id) {
-        return axios.get<Post>(baseURL + '/timelines/'+ id);
+    getPost(vaccineId) {
+        return axios.get<Post>(baseURL + '/timelines/'+ vaccineId);
     }
 
-    getAnswer(id) {
-        return axios.get<Vaccine>(baseURL + '/answers/'+id);
+    getAnswer(vaccineId) {
+        return axios.get<Vaccine>(baseURL + '/answers/'+ vaccineId);
     }
 
     getCovidCase() {
@@ -59,40 +59,56 @@ class VaccineDataService {
     // getVaccinationFullData() {
     //     return axios.get<VaccinationData>(vaccinationUrl);
     // }
-    createQuestion(id, data) {
-        return axios.post<Question>(baseURL + '/questions/'+ id, data);
+    createQuestion(vaccineId, data) {
+        return axios.post<Question>(baseURL + '/questions/'+ vaccineId, data);
     }
 
-    createPost(id, data) {
-        return axios.post<Post>(baseURL + '/timelines/'+ id, data);
+    createPost(vaccineId, data) {
+        return axios.post<Post>(baseURL + '/timelines/'+ vaccineId, data);
     }
 
-    createReview(id, data) {
-        return axios.post<Review>(baseURL + '/reviews/'+ id, data);
+    createReview(vaccineId, data) {
+        return axios.post<Review>(baseURL + '/reviews/'+ vaccineId, data);
     }
 
-    createAnswer(id, data) {
-        return axios.post<Answer>(baseURL + '/answers/'+ id, data);
+    createAnswer(vaccineId, data) {
+        return axios.post<Answer>(baseURL + '/answers/'+ vaccineId, data);
     }
 
-    likeReview(id, data) {
-        return axios.post<Review>(baseURL + '/reviews/'+ id + '&method=PUT' , data);
+    likeReview(vaccineId, data) {
+        return axios.post<Review>(baseURL + '/reviews/'+ vaccineId + '&method=PUT' , data);
     }
 
-    likePost(id, data) {
-        return axios.post<Post>(baseURL + '/timelines/'+ id + '&method=PUT' , data);
+    likePost(vaccineId, data) {
+        return axios.post<Post>(baseURL + '/timelines/'+ vaccineId + '&method=PUT' , data);
     }
 
-    likeQuestion(id, data) {
-        return axios.post<Question>(baseURL + '/questions/'+ id + '&method=PUT' , data);
+    likeQuestion(vaccineId, data) {
+        return axios.post<Question>(baseURL + '/questions/'+ vaccineId + '&method=PUT' , data);
     }
 
-    likeAnswer(id, data) {
-        return axios.post<Answer>(baseURL + '/answers/'+ id + '&method=PUT' , data);
+    likeAnswer(vaccineId, data) {
+        return axios.post<Answer>(baseURL + '/answers/'+ vaccineId + '&method=PUT' , data);
     }
 
     getEachQuestion(vaccineId, questionId) {
         return axios.get<Question>(baseURL + '/questions/'+ vaccineId + '/' + questionId);
+    }
+
+    deleteReviews(id, reviewId) {
+        return axios.post<Review>(baseURL + '/reviews/'+ id + '/' + reviewId + '&method=DELETE');
+    }
+
+    deleteQuestion(id, questionId) {
+        return axios.post<Question>(baseURL + '/questions/'+ id + '/' + questionId + '&method=DELETE');
+    }
+
+    deleteAnswer(id, answerId) {
+        return axios.post<Answer>(baseURL + '/answers/'+ id + '/' + answerId + '&method=DELETE');
+    }
+
+    deletePost(id, postId) {
+        return axios.post<Post>(baseURL + '/timelines/'+ id + '/' + postId + '&method=DELETE');
     }
 
 }

@@ -31,10 +31,10 @@ const CreateAnswerScreen = ({route, navigation}) => {
             .then(response => {
                 Alert.alert(
                     'Success',
-                    'The answer was created',
+                    'The answer was created.',
                     [
                         {text: 'OK',
-                        onPress: () => navigation.navigate('Question', {vaccineId: vaccineId})},
+                        onPress: () => navigation.push('Question', {vaccineId: vaccineId, questionId: question['#'], answerNumber: question.answers})},
                     ]
                 );
                 return response.data;

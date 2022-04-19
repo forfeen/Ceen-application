@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, FlatList } from 'react-native';
+import { StyleSheet, FlatList, Alert } from 'react-native';
 import ActionButton from 'react-native-action-button';
 import Svg, { Circle, Rect } from 'react-native-svg';
 import ContentLoader from 'react-native-masked-loader';
@@ -105,6 +105,29 @@ const QuestionScreen = ({route, navigation}) => {
           return data;
     }
 
+    function deleteAnswer(id) {
+      Alert.alert(
+        'Delete answer?',
+        'This action cannot be undone. Are you sure you want to delete this answer?',
+        [   
+            {text: 'OK', 
+            onPress: () => vaccineService.deleteAnswer(vaccineId, id)
+                .then(response => {
+                    navigation.push('Question', {vaccineId: vaccineId, questionId: questionId, answerNumber: answerNumber})
+                    return response.data;
+                })
+                .catch(e => {
+                    console.error(e);
+                })
+            }
+        ]
+      );
+    }
+
+    function isOwner(id): boolean {
+      return userMail === id;
+    }
+
     async function dislikeAnswer(answer) {
       var likeList = getUserList(answer['isLike']);
     
@@ -160,6 +183,7 @@ const QuestionScreen = ({route, navigation}) => {
       }
       return userLike;
     }
+
     useEffect(() => {
       const fetchQuestion = async () => {
         const question = await getQuestion();
@@ -169,7 +193,7 @@ const QuestionScreen = ({route, navigation}) => {
       const fetchAnswer = async () => {
         const answers = await getAnswer();
         const answerSameId = answers.filter((a) => a.answer_id === questionId);
-        setAnswer(answerSameId);        
+        setAnswer(answerSameId.reverse());
       }
 
       fetchQuestion();
@@ -246,6 +270,16 @@ const QuestionScreen = ({route, navigation}) => {
                         <Text style={{marginStart: 20, marginTop: 5, marginHorizontal: 60}}>
                         {item.description}</Text>
                     </View>
+                    {
+                            isOwner(item.ownerId) ? 
+                              <AntDesign 
+                                name="delete" 
+                                size={15} 
+                                color="black" 
+                                style={{left: 275, top: 57}}
+                                onPress={()=> deleteAnswer(item['#'])} />
+                            : false
+                          }
                       <View style={styles.like}>
                         <Text>
                           {

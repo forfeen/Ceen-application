@@ -28,7 +28,7 @@ const CreatePostScreen = ({route, navigation}) => {
       .then(response => {
         Alert.alert(
           'Success',
-          'The post was created',
+          'The post was created.',
           [
               {text: 'OK', 
               onPress: () => navigation.push('Details', {vaccineId: vaccineId})},
