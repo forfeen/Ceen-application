@@ -47,63 +47,61 @@ const CreateAnswerScreen = ({route, navigation}) => {
     return (
         <View style={styles.container}>
         <ScrollView>
-
-        <Card containerStyle={styles.card_info}>
-          <Text style={styles.title}>{question?.title || ''}  </Text>
-          <Text style={styles.description}>{question?.description || ' '} </Text>
-          <View style={{backgroundColor: 'white', flexDirection: 'row'}}>
-              {
-                  question?.typeEffect ? 
-                    <Card containerStyle={styles.title_info}>
-                      <Text style={styles.info}> Effects </Text>
-                    </Card>
-                  : false
-              }
-              {
-                  question?.typeLocation ? 
-                    <Card containerStyle={styles.title_info}>
-                      <Text style={styles.info}> Location </Text>
-                    </Card>
-                  : false
-              }
-              {
-                  question?.typePrice ? 
-                    <Card containerStyle={styles.title_info}>
-                      <Text style={styles.info}> Price </Text>
-                    </Card>
-                  : false
-              }
-            </View>
-        </Card>
-        <View style={{backgroundColor: 'transparent'}}>
-            <Text style={styles.title_section}>Answers</Text>
-        </View>
-        <Card containerStyle={styles.card_info}>
-            <Controller
-              control={control}
-              rules={{ maxLength: 450, required: true }}
-              name="description"
-              render={({
-                field: { onChange, onBlur, value},
-              }) => (
-                <TextInput 
-                  style={styles.description_input}  
-                  onBlur={onBlur} // notify when input is touched
-                  multiline
-                  maxLength={450}
-                  onChangeText={onChange} 
-                  value={value} 
-                  placeholder="Type a description"
+          <Card containerStyle={styles.card_info}>
+            <Text style={styles.title}>{question?.title || ''}  </Text>
+            <Text style={styles.description}>{question?.description || ' '} </Text>
+            <View style={{backgroundColor: 'white', flexDirection: 'row'}}>
+                {
+                    question?.typeEffect ?
+                      <Card containerStyle={styles.title_info}>
+                        <Text style={styles.info}> Effects </Text>
+                      </Card>
+                    : false
+                }
+                {
+                    question?.typeLocation ?
+                      <Card containerStyle={styles.title_info}>
+                        <Text style={styles.info}> Location </Text>
+                      </Card>
+                    : false
+                }
+                {
+                    question?.typePrice ?
+                      <Card containerStyle={styles.title_info}>
+                        <Text style={styles.info}> Price </Text>
+                      </Card>
+                    : false
+                }
+              </View>
+          </Card>
+          <View style={{backgroundColor: 'transparent'}}>
+              <Text style={styles.title_section}>Answers</Text>
+          </View>
+          <Card containerStyle={styles.card_info}>
+              <Controller
+                control={control}
+                rules={{ maxLength: 450, required: true }}
+                name="description"
+                render={({
+                  field: { onChange, onBlur, value},
+                }) => (
+                  <TextInput
+                    style={styles.description_input}
+                    onBlur={onBlur} // notify when input is touched
+                    multiline
+                    maxLength={450}
+                    onChangeText={onChange}
+                    value={value}
+                    placeholder="Type a description"
+                />
+                )}
               />
-              )} 
-            /> 
-            {errors.description && errors.description.type === "required" && <Text style={styles.error_msg}>Description is required</Text>}
-        </Card>
-        <TouchableOpacity onPress={pressedPost} style={styles.submit}>
-          <Text style={styles.textbutton}>Post</Text>
-        </TouchableOpacity>
+              {errors.description && errors.description.type === "required" && <Text style={styles.error_msg}>Description is required</Text>}
+          </Card>
+          <TouchableOpacity onPress={pressedPost} style={styles.submit}>
+            <Text style={styles.textbutton}>Post</Text>
+          </TouchableOpacity>
         </ScrollView>
-
         </View>
     );
 }
