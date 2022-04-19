@@ -1,5 +1,5 @@
 import React, {} from 'react';
-import { StyleSheet, TextInput, Alert, TouchableOpacity } from 'react-native';
+import { StyleSheet, TextInput, Alert, TouchableOpacity, ScrollView } from 'react-native';
 import { Card } from 'react-native-elements';
 import { useForm, Controller } from "react-hook-form";
 import { Text, View } from './Themed';
@@ -27,80 +27,81 @@ const CreateAnswerScreen = ({route, navigation}) => {
             date: date
         };
 
-        const data = await vaccineService.createAnswer(vaccineId, answer)
+        return await vaccineService.createAnswer(vaccineId, answer)
             .then(response => {
                 Alert.alert(
                     'Success',
-                    'The answer was created',
+                    'The answer was created.',
                     [
                         {text: 'OK',
-                        onPress: () => navigation.navigate('Question', {vaccineId: vaccineId})},
+                        onPress: () => navigation.push('Question', {vaccineId: vaccineId, questionId: question['#'], answerNumber: question.answers})},
                     ]
                 );
                 return response.data;
             })
             .catch(e => {
                 console.error(e);
-            })
-            return data;
+            });
     }
    
     return (
         <View style={styles.container}>
-        <Card containerStyle={styles.card_info}>
-          <Text style={styles.title}>{question?.title || ''}  </Text>
-          <Text style={styles.description}>{question?.description || ' '} </Text>
-          <View style={{backgroundColor: 'white', flexDirection: 'row'}}>
-              {
-                  question?.typeEffect ? 
-                    <Card containerStyle={styles.title_info}>
-                      <Text style={styles.info}> Effects </Text>
-                    </Card>
-                  : false
-              }
-              {
-                  question?.typeLocation ? 
-                    <Card containerStyle={styles.title_info}>
-                      <Text style={styles.info}> Location </Text>
-                    </Card>
-                  : false
-              }
-              {
-                  question?.typePrice ? 
-                    <Card containerStyle={styles.title_info}>
-                      <Text style={styles.info}> Price </Text>
-                    </Card>
-                  : false
-              }
-            </View>
-        </Card>
-        <View style={{backgroundColor: 'transparent'}}>
-            <Text style={styles.title_section}>Answers</Text>
-        </View>
-        <Card containerStyle={styles.card_info}>
-            <Controller
-              control={control}
-              rules={{ maxLength: 450, required: true }}
-              name="description"
-              render={({
-                field: { onChange, onBlur, value},
-              }) => (
-                <TextInput 
-                  style={styles.description_input}  
-                  onBlur={onBlur} // notify when input is touched
-                  multiline
-                  maxLength={450}
-                  onChangeText={onChange} 
-                  value={value} 
-                  placeholder="Type a description"
+        <ScrollView>
+          <Card containerStyle={styles.card_info}>
+            <Text style={styles.title}>{question?.title || ''}  </Text>
+            <Text style={styles.description}>{question?.description || ' '} </Text>
+            <View style={{backgroundColor: 'white', flexDirection: 'row'}}>
+                {
+                    question?.typeEffect ?
+                      <Card containerStyle={styles.title_info}>
+                        <Text style={styles.info}> Effects </Text>
+                      </Card>
+                    : false
+                }
+                {
+                    question?.typeLocation ?
+                      <Card containerStyle={styles.title_info}>
+                        <Text style={styles.info}> Location </Text>
+                      </Card>
+                    : false
+                }
+                {
+                    question?.typePrice ?
+                      <Card containerStyle={styles.title_info}>
+                        <Text style={styles.info}> Price </Text>
+                      </Card>
+                    : false
+                }
+              </View>
+          </Card>
+          <View style={{backgroundColor: 'transparent'}}>
+              <Text style={styles.title_section}>Answers</Text>
+          </View>
+          <Card containerStyle={styles.card_info}>
+              <Controller
+                control={control}
+                rules={{ maxLength: 450, required: true }}
+                name="description"
+                render={({
+                  field: { onChange, onBlur, value},
+                }) => (
+                  <TextInput
+                    style={styles.description_input}
+                    onBlur={onBlur} // notify when input is touched
+                    multiline
+                    maxLength={450}
+                    onChangeText={onChange}
+                    value={value}
+                    placeholder="Type a description"
+                />
+                )}
               />
-              )} 
-            /> 
-            {errors.description && errors.description.type === "required" && <Text style={styles.error_msg}>Description is required</Text>}
-        </Card>
-        <TouchableOpacity onPress={pressedPost} style={styles.submit}>
-          <Text style={styles.textbutton}>Post</Text>
-        </TouchableOpacity>
+              {errors.description && errors.description.type === "required" && <Text style={styles.error_msg}>Description is required</Text>}
+          </Card>
+          <TouchableOpacity onPress={pressedPost} style={styles.submit}>
+            <Text style={styles.textbutton}>Post</Text>
+          </TouchableOpacity>
+        </ScrollView>
         </View>
     );
 }
@@ -168,6 +169,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#2D9CDB",
     borderRadius: 100,
     justifyContent: "center",
+    left: 60
   },
   title: {
     top: 10.73,
@@ -193,11 +195,10 @@ const styles = StyleSheet.create({
   },
   title_section: {
     fontSize: 22,
-    // marginHorizontal: 50,
     color: '#112A38',
     marginTop: 25,
-    marginRight: 250
-    // left: 2
+    marginRight: 250,
+    left: 5
   },
   textbutton: {
     textAlign: "center",

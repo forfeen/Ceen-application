@@ -23,8 +23,8 @@ return (
     source={require('../../assets/images/bg-start.jpeg')} 
     style={styles.container}>
         <View  style={styles.header}>
-            <Text style={styles.textheader}>Covid{'\n'}Vaccine</Text>
-            <Text style={styles.textbody}>Lorem ipsum dolor sit amet, consectetur{'\n'}adipiscing elit, sed do eiusmod.</Text>
+            <Text style={styles.textheader}>Ceen{'\n'}Application</Text>
+            <Text style={styles.textbody}>Mobile Application for providing information{'\n'}About COVID-19 vaccine.</Text>
         </View>
         <View style={{alignItems: 'center'}}>
             <TouchableOpacity onPress={pressedStart} style={styles.button}>
@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
     textbody: {
         fontSize: 13,
         color: 'black',
-        marginTop: 5
+        marginTop: 10,
+        lineHeight: 25
     }
 });

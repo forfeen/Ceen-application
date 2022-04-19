@@ -10,20 +10,20 @@ import { Text, View } from './Themed';
 import Moment from 'moment';
 
 import vaccineService from '../services/vaccine.service';
-import Question from '../../types/questions.type';
-import Answer from '../../types/answer.type';
 import { auth } from '../../../firebase';
+import Post from '../../types/posts.type';
+import Comment from '../../types/comment.type';
 
-const QuestionScreen = ({route, navigation}) => {
+const PostScreen = ({route, navigation}) => {
 
     const vaccineId  = route.params.vaccineId;
-    const questionId = route.params.questionId;
-    const answerNumber = route.params.answerNumber;
+    const postId = route.params.postId;
+    const commentNumber = route.params.commentNumber;
     
     const userMail = auth.currentUser.email;
 
-    const [ question, setQuestion ] = useState<Question>();
-    const [ answer, setAnswer] = useState<Answer[]>();
+    const [ post, setPost ] = useState<Post>();
+    const [ comment, setComment] = useState<Comment[]>();
 
     const MaskedInfoElement = getMaskedInfoElement();
     const MaskedElement = getMaskedElement();
@@ -51,8 +51,8 @@ const QuestionScreen = ({route, navigation}) => {
       );
     }
 
-    async function getQuestion() {
-        const data = await vaccineService.getEachQuestion(vaccineId, questionId)
+    async function getPost() {
+        const data = await vaccineService.getEachPost(vaccineId, postId)
             .then(response => {
                 return response.data;
             })
@@ -62,8 +62,8 @@ const QuestionScreen = ({route, navigation}) => {
             return data;
     }
 
-    async function getAnswer() {
-      const data = await vaccineService.getAnswer(vaccineId)
+    async function getComment() {
+      const data = await vaccineService.getComment(vaccineId)
           .then(response => {
               return response.data.items;
           })
@@ -94,9 +94,10 @@ const QuestionScreen = ({route, navigation}) => {
       return userString;
     }
 
-    function putLikeAnswer(putData) {
-      const data = vaccineService.likeAnswer(vaccineId, putData)
+    function putLikeComment(putData) {        
+      const data = vaccineService.likeComment(vaccineId, putData)
           .then(response => {
+              navigation.push('Post', {vaccineId: vaccineId, postId: postId, commentNumber: commentNumber});
               return response.data;
           })
           .catch(e => {
@@ -105,15 +106,15 @@ const QuestionScreen = ({route, navigation}) => {
           return data;
     }
 
-    function deleteAnswer(id) {
+    function deleteComment(id) {
       Alert.alert(
-        'Delete answer?',
-        'This action cannot be undone. Are you sure you want to delete this answer?',
+        'Delete comment?',
+        'This action cannot be undone. Are you sure you want to delete this comment?',
         [   
             {text: 'OK', 
-            onPress: () => vaccineService.deleteAnswer(vaccineId, id)
+            onPress: () => vaccineService.deleteComment(vaccineId, id)
                 .then(response => {
-                    navigation.push('Question', {vaccineId: vaccineId, questionId: questionId, answerNumber: answerNumber})
+                    navigation.push('Post', {vaccineId: vaccineId, postId: postId, commentNumber: commentNumber})
                     return response.data;
                 })
                 .catch(e => {
@@ -128,8 +129,8 @@ const QuestionScreen = ({route, navigation}) => {
       return userMail === id;
     }
 
-    async function dislikeAnswer(answer) {
-      var likeList = getUserList(answer['isLike']);
+    async function dislikeComment(commentData) {
+      var likeList = getUserList(commentData['isLike']);
     
       if (likeList.includes(userMail)) {
         var index = likeList.indexOf(userMail);
@@ -139,36 +140,36 @@ const QuestionScreen = ({route, navigation}) => {
       var dislikeString = getUserString(likeList);
     
       const dislikeData = {
-        '#': answer['#'],
-        ownerId: answer.ownerId,
-        ownerName: answer.ownerName,
-        answer_id: answer.answer_id,
-        description: answer.description,
-        likes: answer.likes - 1,
-        date: answer.date,
+        '#': commentData['#'],
+        ownerId: commentData.ownerId,
+        ownerName: commentData.ownerName,
+        post_id: commentData.post_id,
+        description: commentData.description,
+        likes: commentData.likes - 1,
+        date: commentData.date,
         isLike: dislikeString,
       };
-      await putLikeAnswer(dislikeData);
+      await putLikeComment(dislikeData);
     }
     
-    async function likeAnswer(answer) {
+    async function likeComment(commentData) {
     
-      var likeList = getUserList(answer['isLike']);
+      var likeList = getUserList(commentData['isLike']);
       if (!likeList.includes(userMail)) {
         likeList.push(userMail);
       }
       var likeString = getUserString(likeList);      
       const likeData = {
-        '#': answer['#'],
-        ownerId: answer.ownerId,
-        ownerName: answer.ownerName,
-        answer_id: answer.answer_id,
-        description: answer.description,
-        likes: answer.likes + 1,
-        date: answer.date,
+        '#': commentData['#'],
+        ownerId: commentData.ownerId,
+        ownerName: commentData.ownerName,
+        post_id: commentData.post_id,
+        description: commentData.description,
+        likes: commentData.likes + 1,
+        date: commentData.date,
         isLike: likeString,
       };
-      await putLikeAnswer(likeData);
+      await putLikeComment(likeData);
     }
 
     function checkLike(id): boolean{
@@ -185,22 +186,22 @@ const QuestionScreen = ({route, navigation}) => {
     }
 
     useEffect(() => {
-      const fetchQuestion = async () => {
-        const question = await getQuestion();
-        setQuestion(question);
+      const fetchPost = async () => {
+        const post = await getPost();
+        setPost(post);
       }
 
-      const fetchAnswer = async () => {
-        const answers = await getAnswer();
-        const answerSameId = answers.filter((a) => a.answer_id === questionId);
-        setAnswer(answerSameId.reverse());
+      const fetchCommet = async () => {
+        const comments = await getComment();
+        const commentSameId = comments.filter((a) => a.post_id === postId);
+        setComment(commentSameId.reverse());
       }
 
-      fetchQuestion();
-      fetchAnswer();
+      fetchPost();
+      fetchCommet();
     }, []);
 
-    if (question === undefined && answer === undefined) {
+    if (post === undefined && comment === undefined) {
       return <View style={styles.masked_container}>
       <Card containerStyle={styles.masked_info}>
         <ContentLoader MaskedElement={MaskedInfoElement} dir={'rtl'} duration={2000} forColor="#93c2db" backColor="#5c96b8"/>
@@ -226,39 +227,16 @@ const QuestionScreen = ({route, navigation}) => {
     return (
         <View style={styles.container}>
           <Card containerStyle={styles.card_info}>
-            <Text style={styles.title}>{question?.title || ''}  </Text>
-            <Text style={styles.description}>{question?.description || ' '} </Text>
-            <View style={{backgroundColor: 'white', flexDirection: 'row'}}>
-              {
-                  question?.typeEffect ? 
-                    <Card containerStyle={styles.title_info}>
-                      <Text style={styles.info}> Effects </Text>
-                    </Card>
-                  : false
-              }
-              {
-                  question?.typeLocation ? 
-                    <Card containerStyle={styles.title_info}>
-                      <Text style={styles.info}> Location </Text>
-                    </Card>
-                  : false
-              }
-              {
-                  question?.typePrice ? 
-                    <Card containerStyle={styles.title_info}>
-                      <Text style={styles.info}> Price </Text>
-                    </Card>
-                  : false
-              }
-            </View>
+            <Text style={styles.title}>{post?.title || ''}  </Text>
+            <Text style={styles.description}>{post?.description || ' '} </Text>
           </Card>
           <View style={{backgroundColor: 'transparent'}}>
-            <Text style={styles.title_section}>Answers</Text>
+            <Text style={styles.title_section}>Comments</Text>
           </View>
           {
-            answerNumber > 0 ?
+            commentNumber > 0 ?
             <FlatList 
-              data={answer}
+              data={comment}
               renderItem={( {item} ) => {
                   return (
                     <View style={styles.card_section}>
@@ -277,7 +255,7 @@ const QuestionScreen = ({route, navigation}) => {
                                 size={15} 
                                 color="black" 
                                 style={{left: 275, top: 57}}
-                                onPress={()=> deleteAnswer(item['#'])} />
+                                onPress={()=> deleteComment(item['#'])} />
                             : false
                           }
                       <View style={styles.like}>
@@ -286,13 +264,13 @@ const QuestionScreen = ({route, navigation}) => {
                                 checkLike(item.isLike) ? 
                                   <View style={{backgroundColor: 'transparent'}}>
                                     <Text>
-                                      <AntDesign name="like1" size={16} color="green" onPress={ () => {  dislikeAnswer(item)}} /> {item.likes}
+                                      <AntDesign name="like1" size={16} color="green" onPress={ () => {  dislikeComment(item)}} /> {item.likes}
                                     </Text>
                                   </View>
                                 :
                                   <View style={{backgroundColor: 'transparent'}}>
                                     <Text>
-                                      <AntDesign name="like2" size={16} color="green" onPress={ () => {  likeAnswer(item)}} /> {item.likes}
+                                      <AntDesign name="like2" size={16} color="green" onPress={ () => {  likeComment(item)}} /> {item.likes}
                                     </Text>
                                 </View>
                             }                        
@@ -302,7 +280,7 @@ const QuestionScreen = ({route, navigation}) => {
                   );
               }}/>
               :               
-               <Text style={{top: 100, fontSize: 20}}> No Answer </Text>
+               <Text style={{top: 100, fontSize: 20}}> No Comment </Text>
             } 
               <ActionButton buttonColor="rgba(231,76,60,1)" onPress={() => navigation.navigate('Create Answer', {vaccineId: vaccineId, question: question})} />
         </View>
@@ -310,7 +288,7 @@ const QuestionScreen = ({route, navigation}) => {
   );
 }
 
-export default QuestionScreen;
+export default PostScreen;
 
 
 const styles = StyleSheet.create({

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Swiper from 'react-native-swiper';
-import { StyleSheet, TouchableOpacity , FlatList, Linking} from 'react-native';
+import { StyleSheet, TouchableOpacity , FlatList, Linking, Alert } from 'react-native';
 import { AntDesign, FontAwesome} from '@expo/vector-icons'; 
 import Svg, { Rect, Circle} from 'react-native-svg';
 import ContentLoader from 'react-native-masked-loader';
@@ -31,80 +31,142 @@ const VaccineInfoScreen = ({route, navigation}) => {
   const MaskedElement = getMaskedElement();
 
   async function getAllInfos() {
-    const data = await vaccineService.getVaccine(vaccineId)
+    return await vaccineService.getVaccine(vaccineId)
         .then(response => {
             return response.data;
         })
         .catch(e => {
             console.error(e);
-        })
-        return data;
+        });
   }
 
   async function getAllReviews() {
-    const data = await vaccineService.getReview(vaccineId)
+    return await vaccineService.getReview(vaccineId)
         .then(response => {
             return response.data.items;
         })
         .catch(e => {
             console.error(e);
-        })
-        return data;
+        });
   }
 
   async function getAllQuestions() {
-    const data = await vaccineService.getQuestion(vaccineId)
+    return await vaccineService.getQuestion(vaccineId)
         .then(response => {
             return response.data.items;
         })
         .catch(e => {
             console.error(e);
-        })
-        return data;
+        });
   }
 
   async function getAllPosts() {
-    const data = await vaccineService.getPost(vaccineId)
+    return await vaccineService.getPost(vaccineId)
         .then(response => {
             return response.data.items;
         })
         .catch(e => {
             console.error(e);
-        })
-        return data;
+        });
   }
 
   function putLikeQuestion(putData) {
-    const data = vaccineService.likeQuestion(vaccineId, putData)
+    return vaccineService.likeQuestion(vaccineId, putData)
         .then(response => {
+            navigation.push('Details', {vaccineId: vaccineId})
             return response.data;
         })
         .catch(e => {
             console.error(e);
-        })
-        return data;
+        });
   }
   
   function putLikeReview(putData) {
-    const data = vaccineService.likeReview(vaccineId, putData)
+    return vaccineService.likeReview(vaccineId, putData)
         .then(response => {
+            navigation.push('Details', {vaccineId: vaccineId})
             return response.data;
         })
         .catch(e => {
             console.error(e);
-        })
-        return data;
+        });
   }
 
   function putLikePost(putData) {
-    const data = vaccineService.likePost(vaccineId, putData)
+    return vaccineService.likePost(vaccineId, putData)
         .then(response => {
+            navigation.push('Details', {vaccineId: vaccineId})
             return response.data;
         })
         .catch(e => {
             console.error(e);
-        })
-        return data;
+        });
+  }
+
+  function deleteReview(id) {
+    Alert.alert(
+      'Delete review?',
+      'This action cannot be undone. Are you sure you want to delete this review?',
+      [   
+          {text: 'OK', 
+          onPress: () => vaccineService.deleteReviews(vaccineId, id)
+              .then(response => {
+                  navigation.push('Details', {vaccineId: vaccineId})
+                  return response.data;
+              })
+              .catch(e => {
+                  console.error(e);
+              })
+          },
+          {text: 'Cancle', 
+          onPress: () => console.log('Cancle')
+          }
+      ],  { cancelable: false }
+    );
+  }
+
+  function deleteQuestion(id) {
+    Alert.alert(
+      'Delete question?',
+      'This action cannot be undone. Are you sure you want to delete this question?',
+      [   
+          {text: 'OK', 
+          onPress: () => vaccineService.deleteQuestion(vaccineId, id)
+              .then(response => {
+                  navigation.push('Details', {vaccineId: vaccineId})
+                  return response.data;
+              })
+              .catch(e => {
+                  console.error(e);
+              })
+          },
+          {text: 'Cancle', 
+          onPress: () => console.log('Cancle')
+          }
+      ],  { cancelable: false }
+    );
+  }
+
+  function deletePost(id) {
+    Alert.alert(
+      'Delete post?',
+      'This action cannot be undone. Are you sure you want to delete this post?',
+      [   
+          {text: 'OK', 
+          onPress: () => vaccineService.deletePost(vaccineId, id)
+              .then(response => {
+                  navigation.push('Details', {vaccineId: vaccineId})
+                  return response.data;
+              })
+              .catch(e => {
+                  console.error(e);
+              })
+          },
+          {text: 'Cancle', 
+          onPress: () => console.log('Cancle')
+          }
+      ],  { cancelable: false }
+    );
   }
 
   function getUserList(user) {
@@ -290,17 +352,17 @@ const VaccineInfoScreen = ({route, navigation}) => {
     
     const fetchReviews = async () => {
       const reviewData = await getAllReviews();
-      setReviews(reviewData);
+      setReviews(reviewData.reverse());
     }
 
     const fetchQuestions = async () => {
       const questionData = await getAllQuestions();
-      setQuestions(questionData);
+      setQuestions(questionData.reverse());
     }
     
     const fetchPosts = async () => {
       const postData = await getAllPosts();
-      setPosts(postData);
+      setPosts(postData.reverse());
     }
  
    fetchInfos();
@@ -320,6 +382,10 @@ const VaccineInfoScreen = ({route, navigation}) => {
         })
     }
     return userLike;
+  }
+
+  function isOwner(id): boolean {
+    return userMail === id;
   }
 
   function getMaskedInfoElement() {
@@ -525,40 +591,190 @@ const VaccineInfoScreen = ({route, navigation}) => {
                           <View style={{backgroundColor: 'white', flexDirection: 'row', top: 14}}>
                             <View style={styles.circle_question}>
                               <Text style={{color: "black"}}>{item.ownerName.charAt(0)}</Text>
-                            </View>
-                            {
-                              item?.typeLocation ? 
-                                <Card containerStyle={styles.title_type}>
-                                  <Text style={styles.info_type}> Location </Text>
-                                </Card> 
-                              :
-                                false
-                            } 
-                            {
-                              item?.typePrice ? 
-                                <Card containerStyle={styles.title_type}>
-                                  <Text style={styles.info_type}> Price </Text>
-                                </Card> 
-                              :
-                                false
-                            }
-                            {
-                              item?.typeEffect? 
-                                <Card containerStyle={styles.title_type}>
-                                  <Text style={styles.info_type}> Effects </Text>
-                                </Card> 
-                              :
-                                false
-                            }
-                        </View>
-                          {/* <View style={styles.list}> */}
-                            <Text style={{marginStart: 75, marginTop: 15, marginHorizontal: 60, left: 10, lineHeight: 25, color: "black"}}>
-                              {item.description}
-                            </Text>
-                        {/* </View> */}
 
+                            </View>
+                            : false
+                          }
+                          {
+                            item.secondDose ?  
+                            <View style={styles.vaccineDose}>
+                              <Text style={{fontSize: 13, lineHeight: 25}}>
+                                <IconFont name="syringe" size={10}/><IconFont name="syringe" size={10}/> {item.secondDose} (2nd)
+                              </Text>
+                            </View>
+                            : false
+                          }
+                          {
+                            item.thirdDose ?  
+                            <View style={styles.vaccineDose}>
+                              <Text style={{fontSize: 13, lineHeight: 25}}>
+                                <IconFont name="syringe" size={10}/><IconFont name="syringe" size={10}/><IconFont name="syringe" size={10}/> {item.thirdDose} (3rd)
+                              </Text>
+                            </View>
+                            : false
+                          }
+                          {
+                            item.fourthDose ?  
+                            <View style={styles.vaccineDose}>
+                              <Text style={{fontSize: 13, lineHeight: 25}}>
+                                <IconFont name="syringe" size={10}/><IconFont name="syringe" size={10}/><IconFont name="syringe" size={10}/><IconFont name="syringe" size={10}/> {item.fourthDose} (4th)
+                              </Text>
+                            </View>
+                            : false
+                          }
+                      </View>
+                      {
+                        isOwner(item.ownerId) ? 
+                          <AntDesign 
+                            name="delete" 
+                            size={15} 
+                            color="black" 
+                            style={{left: 275, top: 30}}
+                            onPress={()=> deleteReview(item['#'])} />
+                        : false
+                      }
                         <View style={styles.like}>
                           <Text>
+                            {
+                                checkLike(item.isLike) ? 
+                                  <View style={{backgroundColor: 'transparent'}}>
+                                    <Text>
+                                      <AntDesign name="like1" size={16} color="green" onPress={ () => {  dislikeReview(item)}} /> {item.likes}
+                                    </Text>
+                                  </View>
+                                :
+                                  <View style={{backgroundColor: 'transparent'}}>
+                                    <Text>
+                                      <AntDesign name="like2" size={16} color="green" onPress={ () => {  likeReview(item)}} /> {item.likes}
+                                    </Text>
+                                </View>
+                              }
+                          </Text>
+                        </View>
+                      </View>
+                    );
+                }}/>
+            </View>
+
+            <View style={{backgroundColor: 'transparent'}}>
+              <Text style={styles.title_section}>Questions/Answers</Text>
+              <FlatList 
+                data={question}
+                renderItem={( {item} ) => {
+                    return (
+                      <TouchableOpacity
+                        onPress={
+                          () => {
+                            navigation.navigate('Question', {vaccineId: vaccineId, questionId: item['#'], answerNumber: item.answers});
+                          }
+                      }>
+                        <View style={styles.card_section} >
+                            <Text style={styles.date}> {Moment.utc(item.date).local().startOf('seconds').fromNow()} </Text>
+                            <View style={{backgroundColor: 'white', flexDirection: 'row', top: 14}}>
+                              <View style={styles.circle_question}>
+                                <Text>{item.ownerName.charAt(0)}</Text>
+                              </View>
+                              {
+                                item?.typeLocation ? 
+                                  <Card containerStyle={styles.title_type}>
+                                    <Text style={styles.info_type}> Location </Text>
+                                  </Card> 
+                                :
+                                  false
+                              } 
+                              {
+                                item?.typePrice ? 
+                                  <Card containerStyle={styles.title_type}>
+                                    <Text style={styles.info_type}> Price </Text>
+                                  </Card> 
+                                :
+                                  false
+                              }
+                              {
+                                item?.typeEffect? 
+                                  <Card containerStyle={styles.title_type}>
+                                    <Text style={styles.info_type}> Effects </Text>
+                                  </Card> 
+                                :
+                                  false
+                              }
+                          </View>
+                            {/* <View style={styles.list}> */}
+                              <Text style={{marginStart: 75, marginTop: 15, marginHorizontal: 60, left: 10, lineHeight: 25, fontWeight: '800'}}>
+                                {item.title}
+                              </Text>
+                          {/* </View> */}
+                          {
+                            isOwner(item.ownerId) ?
+                              <AntDesign
+                                name="delete"
+                                size={15}
+                                color="black"
+                                style={{left: 245, top: 30.5}}
+                                onPress={()=> deleteQuestion(item['#'])} />
+                            : false
+                          }
+                          <View style={styles.like}>
+                            <Text>
+                            {
+                                checkLike(item.isLike) ? 
+                                  <View style={{backgroundColor: 'transparent'}}>
+                                    <Text>
+                                      <AntDesign name="like1" size={16} color="green" onPress={ () => {  dislikeQuestion(item)}} /> {item.likes} <FontAwesome name="comment-o" size={16} color="black" /> {item.answers}
+                                    </Text>
+                                  </View>
+                                :
+                                  <View style={{backgroundColor: 'transparent'}}>
+                                    <Text>
+                                      <AntDesign name="like2" size={16} color="green" onPress={ () => {  likeQuestion(item)}} /> {item.likes} <FontAwesome name="comment-o" size={16} color="black" /> {item.answers}
+                                    </Text>
+                                </View>
+                              }
+
+                            </Text>
+                          </View>
+                        </View>
+                      </TouchableOpacity>
+                    );
+                }}/>
+            </View>
+            
+            <View style={{backgroundColor: 'transparent'}}>
+              <Text style={styles.title_section}>Timelines</Text>
+              <FlatList 
+                data={post}
+                renderItem={( {item} ) => {
+                    return (
+                       <TouchableOpacity
+                        onPress={
+                          () => {
+                            navigation.navigate('Post', {vaccineId: vaccineId, postId: item['#'], commentNumber: item.comments});
+                          }
+                        }>
+
+
+                      <View style={styles.card_section}>
+                        <Text style={styles.date}> {Moment.utc(item.date).local().startOf('seconds').fromNow()} </Text>
+                        <View style={styles.list}>
+                          <View style={styles.circle}>
+                            <Text>{item.ownerName.charAt(0)}</Text>
+                          </View> 
+                          <Text style={{marginStart: 40, marginTop: 5, marginHorizontal: 60}}>
+                          {item.description}</Text>
+                      </View>
+                      {
+                        isOwner(item.ownerId) ?
+                          <AntDesign
+                            name="delete"
+                            size={15}
+                            color="black"
+                            style={{left: 245, top: 30.5}}
+                            onPress={()=> deletePost(item['#'])} />
+                        : false
+                      }
+                        <View style={styles.like}>
+                          <Text>
+
                           {
                               checkLike(item.isLike) ? 
                                 <View style={{backgroundColor: 'transparent'}}>
@@ -574,6 +790,7 @@ const VaccineInfoScreen = ({route, navigation}) => {
                                     <FontAwesome name="comment-o" size={16} color="black" /> {item.answers}
                                   </Text>
                               </View>
+
                             }
                           </Text>
                         </View>
@@ -700,7 +917,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginVertical: 5,
     backgroundColor: 'transparent',
-    lineHeight: 40,
+    lineHeight: 20
   },
   info_text:{
     fontSize: 14, 

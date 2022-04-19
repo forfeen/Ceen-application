@@ -59,7 +59,7 @@ import { FontAwesome } from '@expo/vector-icons';
                                         <Text style={styles.name}>{item.name}</Text>
                                         <Text style={styles.review_title}>{item.review} reviews</Text>
                                       </View>
-                                      {/* <Text>{item.short_description}</Text> */}
+                                      <Text numberOfLines={1} ellipsizeMode='tail' style={{lineHeight: 30}}>{item.long_description}</Text>
                                     </Card>
                                   </View>
                           </TouchableOpacity>
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   card_vaccine: {
     width: 309,
     height: 85,
-    paddingVertical: 25,
+    paddingVertical: 20,
     paddingHorizontal: 20,
     marginTop: 10,
     marginBottom: 20,
