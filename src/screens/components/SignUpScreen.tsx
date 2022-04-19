@@ -10,8 +10,9 @@ import Colors from '../../constants/Colors';
 import { MonoText } from './StyledText';
 import { Text, View } from './Themed';
 import Icon from '@expo/vector-icons/FontAwesome5';
+import Navigation from '../../navigation/Navigation';
 
-const SignUpScreen = () => {
+const SignUpScreen = ({ navigation }) => {
     const { control, setValue, handleSubmit, formState: { errors } } = useForm<User>();
     const [hidePass, setHidePass] = useState(true);
     const pressedSignUp = handleSubmit(data => {
@@ -27,6 +28,7 @@ const SignUpScreen = () => {
                 sendEmailVerification(user);
                 // console.log(user);
                 alert("Signed up success\nCheck your email for verification")
+                navigation.push("LogIn")
             })
             .catch(error => alert(error.message))
         }
