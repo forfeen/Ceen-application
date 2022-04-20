@@ -36,12 +36,11 @@ export default function LoginScreen({ route, navigation }) {
 
     };
 
-    const forgetPasswordHandler = handleSubmit(data => {
-        sendPasswordResetEmail(auth, data.email)
-        .then(() => alert("Check your email for reset password"))
-        .then(auth.signOut)
-    });
-    
+    const forgetPasswordHandler = () => {
+        navigation.push("ForgotPass")
+
+    }
+
     return (
         <View style={{backgroundColor: "white", flex: 1}}>
             <View style={{backgroundColor: "transparent", marginTop:50, alignItems: 'center'}}>
