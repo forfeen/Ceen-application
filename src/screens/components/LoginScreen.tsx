@@ -9,11 +9,10 @@ import { signInWithEmailAndPassword,
     sendPasswordResetEmail
 } from 'firebase/auth';
 
-import Colors from '../../constants/Colors';
-import { MonoText } from './StyledText';
 import { Text, View } from './Themed';
 import Icon from '@expo/vector-icons/FontAwesome5';
-import { FontAwesome5 } from '@expo/vector-icons';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
 
 export default function LoginScreen({ route, navigation }) {
     const { control, setValue, handleSubmit, formState: { errors } } = useForm<User>();
@@ -127,57 +126,57 @@ export default function LoginScreen({ route, navigation }) {
 
 const styles = StyleSheet.create({
     input: {
-      height: 50,
-      width: 343,
-      margin: 12,
-      padding: 10,
+      height: hp('6%'),
+      width: wp('85%'),
+      margin: hp('1.8%'),
+      paddingLeft: '4%',
       borderRadius: 5,
       borderWidth: 1,
       borderColor: "#E8E8E8",
       backgroundColor: "#F6F6F6",
-      fontSize: 16
+      fontSize: wp('4.2%')
     },
     button: {
-        height: 51,
-        width: 343,
-        marginTop: 50,
+        height: hp('7.7'),
+        width: wp('85%'),
+        marginTop: hp('8%'),
         backgroundColor: "#2D9CDB",
         borderRadius: 100,
         justifyContent: "center",
     },
     withButton: {
-        height: 51,
-        width: 343,
-        marginTop: 50,
+        height: hp('7.7'),
+        width: wp('85%'),
+        marginTop: hp('7.5%'),
         backgroundColor: "#e8e8e8",
         borderRadius: 100,
         justifyContent: "center",
     },
     hide: {
         position: "absolute",
-        left: 320,
-        top: 30,
+        left: wp('80%'),
+        top: hp('4%'),
     },
 
     textLogin: {
         textAlign: "center",
-        fontSize: 16,
+        fontSize: wp('4.2%'),
         fontWeight: 'bold',
         color: "white",
     },
     textWithGoogle:{
         textAlign: "center",
-        fontSize: 16,
+        fontSize: wp('4.2%'),
         fontWeight: 'bold',
         color: "black",
-        paddingLeft: 15
+        paddingLeft: wp('2%')
     },
     forgot: {
         textAlign: "center",
-        fontSize: 16,
+        fontSize: wp('4.2%'),
         fontWeight: 'bold',
         color: "#2D9CDB",
-        marginTop: 10,
+        marginTop: hp('1.5%'),
     },
     icon: {
         width: 35,

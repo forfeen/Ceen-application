@@ -6,6 +6,8 @@ import vaccineService from '../services/vaccine.service';
 import { useEffect, useState } from 'react';
 import Covid from '../../types/covid.type';
 import VaccinationData from '../../types/vaccination.type';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
 
 export default function VaccinationCharts({ path }: { path: string }) {
 
@@ -132,7 +134,7 @@ export default function VaccinationCharts({ path }: { path: string }) {
         <Swiper 
           style={styles.wrapper}
           paginationStyle={{
-            top: 340,
+            top: wp('90%'),
           }}
           dot={
             <View
@@ -226,7 +228,7 @@ export default function VaccinationCharts({ path }: { path: string }) {
 const styles = StyleSheet.create({
   container: {
     flex: 0,
-    height: 330,
+    height: wp('90%'),
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'transparent'

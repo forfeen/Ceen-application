@@ -18,7 +18,6 @@ import UserProfile from '../screens/components/UserProfile';
 import StartScreen from '../screens/components/StartScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../../types';
-import LinkingConfiguration from './LinkingConfiguration';
 import CreateReviewScreen from '../screens/components/CreateReview';
 import CreateQuestionScreen from '../screens/components/CreateQuestionScreen';
 import CreatePostScreen from '../screens/components/CreatePostScreen';
@@ -30,7 +29,6 @@ import PostScreen from '../screens/components/PostScreen';
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
     <NavigationContainer
-      linking={LinkingConfiguration}
       theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <RootNavigator />
     </NavigationContainer>
@@ -46,7 +44,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootNavigator() {
   return (
     <Stack.Navigator
-      initialRouteName='Start' ///the name of the initial screen
+      initialRouteName='Index' ///the name of the initial screen
       >
       <Stack.Screen 
       name="Start" 
@@ -68,6 +66,7 @@ function RootNavigator() {
         component={LoginScreen}
         options ={({ route, navigation }) => ({ 
           title: 'Log In',
+          headerTitleAlign: 'center',
           headerShadowVisible: false,
           headerBackVisible: false,
           headerStatusBarHeight: 50,
@@ -101,6 +100,7 @@ function RootNavigator() {
       component={SignUpScreen} 
       options ={({ route, navigation }) => ({ 
         title: 'Sign Up',
+        headerTitleAlign: 'center',
         headerShadowVisible: false,
         headerStatusBarHeight: 50,
         headerStyle: {

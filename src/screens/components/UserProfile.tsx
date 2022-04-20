@@ -6,6 +6,7 @@ import UserDetail from '../../types/userDetail.type';
 import { TextInput } from 'react-native-paper';
 import Dialog from "react-native-dialog";
 import * as ImagePicker from 'expo-image-picker';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 import { auth } from '../../../firebase'
 import { signOut,  
@@ -117,7 +118,7 @@ const UserProfile = ({navigation}: {navigation: any}) => {
     }, []);
     
 return (
-    <View style={{backgroundColor: "#F0F7F9", flex: 1}}>
+    <View style={{backgroundColor: "#F0F7F9", flex: 1, alignItems: 'center'}}>
         <Card containerStyle={styles.profile}>
             <View style={{backgroundColor: "transparent", alignItems:'center'}}>
                 {/* <Image source={{uri:"https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"}} style={styles.pic_circle}></Image>
@@ -125,7 +126,7 @@ return (
                     <Text style={styles.change_photo}>Change profile photo</Text>
                 </TouchableOpacity> */}
                 <View style={styles.pic_circle}>
-                    <Text style={{fontSize: 80}}>{user?.displayName.charAt(0)}</Text>
+                    <Text style={{fontSize: 60, top: 4}}>{user?.displayName.charAt(0)}</Text>
                 </View> 
             </View>
             <TextInput
@@ -208,11 +209,11 @@ export default UserProfile;
 
 const styles = StyleSheet.create({
     profile: {
-        width: 360,
-        height: 500,
+        width: wp('90%'),
+        height: 450,
         paddingVertical: 25,
         paddingHorizontal: 20,
-        marginTop: 10,
+        marginTop: 20,
         marginBottom: 20,
         borderRadius: 20,
         fontSize: 18,
@@ -220,20 +221,20 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 8 },
         shadowOpacity: 0.09,
         shadowRadius: 8,  
-        elevation: 3
+        elevation: 3,
     },
     button: {
-        height: 51,
-        width: 200,
+        height: hp('7.7'),
+        width: wp('50%'),
         marginTop: 60,
         backgroundColor: "#2D9CDB",
         borderRadius: 100,
         justifyContent: "center",
     },
     logout_button: {
-        height: 51,
-        width: 300,
-        marginTop: 120,
+        height: hp('7.7'),
+        width: wp('80%'),
+        marginTop: hp('8.5%'),
         backgroundColor: "gray",
         borderRadius: 100,
         justifyContent: "center",
@@ -247,13 +248,14 @@ const styles = StyleSheet.create({
     pic_circle: {
         width: 90,
         height: 90,
+        
         borderRadius: 100,
         backgroundColor: '#2F80ED',
         alignItems: 'center',
     },
     change_photo: {
         textAlign: "center",
-        fontSize: 14,
+        fontSize: wp('3.4%'),
         fontWeight: 'bold',
         color: "#2D9CDB",
         padding: 10

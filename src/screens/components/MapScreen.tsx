@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions, Platform } from 'react-native';
+import { StyleSheet, Dimensions, Platform , Alert} from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import MapView, { Marker, Callout, PROVIDER_GOOGLE, AnimatedRegion} from 'react-native-maps';
 import Geohash from 'latlon-geohash';
@@ -24,14 +24,22 @@ const MapScreen = ({navigation}: {navigation: any}) => {
   const locationPermission = async () => {
     if (Platform.OS === 'ios' || Platform.OS === 'android') {
       let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status == 'granted') {
+      if (status == 'denied') {
+        Alert.alert(
+          'Please allow location access in ' + Platform.OS +' setting'),
+          [   
+              {text: 'OK', 
+              onPress: () => navigation.push("Index")
+              }
+          ]
+      } else if (status == 'granted') {
         let currentL = await Location.getCurrentPositionAsync({});
         let latitude = currentL.coords.latitude
         let longitude = currentL.coords.longitude
         let latitudeDelta = 0.0922
         let longitudeDelta =  0.0421
         setuserLocation({latitude, longitude, latitudeDelta, longitudeDelta});
-      }
+      } 
     }
   };
 

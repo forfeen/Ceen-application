@@ -1,73 +1,83 @@
-import { StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, FlatList, TouchableOpacity, Animated, ScrollView } from 'react-native';
 import Vaccine from '../types/vaccine.type';
 import VaccinationCharts from './components/VaccinationsCharts';
 import { Text, View } from './components/Themed';
 import { Card } from 'react-native-elements';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {AxiosResponse} from 'axios';
 import vaccineService from './services/vaccine.service';
 import { FontAwesome } from '@expo/vector-icons';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-    const IndexScreen = ({navigation}: {navigation: any}) => {
+const IndexScreen = ({navigation}: {navigation: any}) => {
 
-        const [vaccine, setVaccine] = useState<Vaccine[]>([]);
+    const [vaccine, setVaccine] = useState<Vaccine[]>([]);
+    const offset = useRef(new Animated.Value(0)).current;
 
-        useEffect(() => {
-            vaccineService.getAllVaccine()
-             .then((responese: AxiosResponse) => {
-                setVaccine(responese.data.items);       
-                // console.log(responese)         
-            });
-        }, []);
+    useEffect(() => {
+        vaccineService.getAllVaccine()
+          .then((responese: AxiosResponse) => {
+            setVaccine(responese.data.items);       
+            // console.log(responese)         
+        });
+    }, []);
 
-        return (
-            <View style={styles.container}>
-              {/* <Text style={styles.title}>Vaccinations Overview</Text> */}
-              <View style={{ backgroundColor: 'transparent', alignItems: 'center'}}>
-              <VaccinationCharts path="/screens/ModalScreen.tsx" />
-             </View>
-        
-              {/* <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" /> */}
-            <View>
+    return (
+          <SafeAreaProvider>
+              <ScrollView
+                style={styles.container}
+                contentContainerStyle={{
+                  paddingTop: 10,
+                }}
+                showsVerticalScrollIndicator={false}
+                scrollEventThrottle={16}
+                onScroll={Animated.event(
+                  [{ nativeEvent: { contentOffset: { y: offset } } }],
+                  { useNativeDriver: false }
+                )}
+              >
+                <View style={{ backgroundColor: 'transparent', alignItems: 'center'}}>
+                  <VaccinationCharts path="/screens/ModalScreen.tsx" />
+                </View>
 
-            </View>
-              <View style={styles.list}>
-                <Text style={styles.title}>Vaccines</Text>
-                <TouchableOpacity onPress={() => navigation.push("Map")} style={styles.map}>
-                  <FontAwesome
-                  name="map-marker"
-                  size={25}
-                  color="#b34646"
-                  style={{ marginLeft:13, marginTop: 7}}/>
-                </TouchableOpacity>
+                <View style={styles.list}>
+                  <Text style={styles.title}>Vaccines</Text>
+                  <TouchableOpacity onPress={() => navigation.push("Map")} style={styles.map}>
+                      <FontAwesome
+                        name="map-marker"
+                        size={25}
+                        color="#b34646"
+                        style={{ marginLeft:13, marginTop: 7}}/>
+                  </TouchableOpacity>
+                </View>
 
-              </View>
                 <FlatList 
-                      data={vaccine}
-                      keyExtractor={(vaccine) => vaccine.id}
-                      renderItem={( {item} ) => {
-                          return (
-                          <TouchableOpacity 
-                              onPress={
-                                  () => {
-                                    navigation.push('Details', {vaccineId: item.id});
-                                  }
-                              }>
-                              <View style={{alignItems: 'center',  backgroundColor: 'transparent'}}>
-                                    <Card containerStyle={styles.card_vaccine}>
-                                      <View style={styles.list}>
-                                        <Text style={styles.name}>{item.name}</Text>
-                                        <Text style={styles.review_title}>{item.review} reviews</Text>
-                                      </View>
-                                      <Text numberOfLines={1} ellipsizeMode='tail' style={{lineHeight: 30}}>{item.long_description}</Text>
-                                    </Card>
-                                  </View>
-                          </TouchableOpacity>
-                          );
-                      }}/>
-              {/* Use a light status bar on iOS to account for the black space above the modal */}
-              {/* <StatusBar style={Platform.OS === 'ios' ? 'black' : 'auto'} /> */}
-            </View>
+                  data={vaccine}
+                  keyExtractor={(vaccine) => vaccine.id}
+                  renderItem={( {item} ) => {
+                      return (
+                      <TouchableOpacity 
+                          onPress={
+                              () => {
+                                navigation.push('Details', {vaccineId: item.id});
+                              }
+                      }>
+                        <View style={{alignItems: 'center',  backgroundColor: 'transparent'}}>
+                          <Card containerStyle={styles.card_vaccine}>
+                            <View style={styles.list}>
+                              <Text style={styles.name}>{item.name}</Text>
+                              <Text style={styles.review_title}>{item.review} reviews</Text>
+                            </View>
+                            <Text numberOfLines={1} ellipsizeMode='tail' style={{lineHeight: 30}}>{item.long_description}</Text>
+                          </Card>
+                        </View>
+                      </TouchableOpacity>
+                      );
+                  }}/>
+              </ScrollView>
+    
+          </SafeAreaProvider>
           );
    };
 
@@ -81,7 +91,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F0F7F9'
   },
   title: {
-    fontSize: 20,
+    fontSize: wp('5.2'),
     fontWeight: '600',
     textAlign: 'left',
     color: '#000',

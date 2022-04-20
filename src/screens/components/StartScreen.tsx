@@ -1,9 +1,8 @@
 import { StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
 import { Text, View } from '../components/Themed';
-import { Card } from 'react-native-elements';
 import React, {useState, useEffect} from 'react';
 import { auth } from '../../../firebase'
-import { onAuthStateChanged } from 'firebase/auth';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const StartScreen = ({navigation}: {navigation: any}) => {
 
@@ -20,7 +19,7 @@ const StartScreen = ({navigation}: {navigation: any}) => {
     
 return (
     <ImageBackground 
-    source={require('../../assets/images/bg-start.jpeg')} 
+    source={require('../../assets/images/bg-start.png')} 
     style={styles.container}>
         <View  style={styles.header}>
             <Text style={styles.textheader}>Ceen{'\n'}Application</Text>
@@ -40,18 +39,19 @@ export default StartScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        width: null,
-        height: null,
+        width: '100%',
+        height: '100%',
+        resizeMode: "cover",
     },
     header: {
         backgroundColor: 'transparent',
-        marginTop: 300,
-        marginLeft: 60
+        top: hp('40%'),
+        left: wp('15%')
     },
     button: {
-        height: 51,
-        width: 343,
-        marginTop: 180,
+        height: hp('7'),
+        width: wp('70%'),
+        top: hp('60%'),
         backgroundColor: '#2D9CDB',
         borderRadius: 100,
         justifyContent: 'center',
@@ -59,18 +59,18 @@ const styles = StyleSheet.create({
     },
     textbutton: {
         textAlign: 'center',
-        fontSize: 16,
+        fontSize: wp('4.2%'),
         fontWeight: 'bold',
         color: 'white',
     },
     textheader: {
-        fontSize: 43,
+        fontSize: wp('12%'),
         color: 'black',
     },
     textbody: {
-        fontSize: 13,
+        fontSize: wp('3.4%'),
         color: 'black',
         marginTop: 10,
-        lineHeight: 25
+        lineHeight: hp('3%')
     }
 });

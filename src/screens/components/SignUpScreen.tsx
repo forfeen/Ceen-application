@@ -6,11 +6,9 @@ import React, {useState} from 'react';;
 import { auth } from '../../../firebase'
 import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from 'firebase/auth';
 
-import Colors from '../../constants/Colors';
-import { MonoText } from './StyledText';
 import { Text, View } from './Themed';
 import Icon from '@expo/vector-icons/FontAwesome5';
-import Navigation from '../../navigation/Navigation';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const SignUpScreen = ({ navigation }) => {
     const { control, setValue, handleSubmit, formState: { errors } } = useForm<User>();
@@ -134,9 +132,9 @@ export default SignUpScreen;
 
 const styles = StyleSheet.create({
     input: {
-      height: 50,
-      width: 343,
-      margin: 12,
+      height: hp('6%'),
+      width: wp('85%'),
+      margin: hp('1.8%'),
       padding: 10,
       borderRadius: 5,
       borderWidth: 1,
@@ -145,17 +143,17 @@ const styles = StyleSheet.create({
       fontSize: 16
     },
     button: {
-        height: 51,
-        width: 343,
-        marginTop: 90,
+        height: hp('7.7'),
+        width: wp('85%'),
+        marginTop: hp('12%'),
         backgroundColor: "#2D9CDB",
         borderRadius: 100,
         justifyContent: "center",
     },
     hide: {
         position: "absolute",
-        left: 320,
-        top: 30,
+        left: wp('80%'),
+        top: hp('4%'),
 
     },
     textbutton: {
