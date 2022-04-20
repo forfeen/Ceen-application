@@ -99,7 +99,7 @@ export default function LoginScreen({ route, navigation }) {
                 <TouchableOpacity onPress={forgetPasswordHandler}>
                     <Text style={styles.forgot}>Forgot your password?</Text>
                 </TouchableOpacity>
-                <View style={{
+                {/* <View style={{
                     backgroundColor: "transparent", 
                     flexDirection: 'row', 
                     alignItems: 'center',
@@ -107,8 +107,8 @@ export default function LoginScreen({ route, navigation }) {
                     <View style={{flex: 1, height: 1, backgroundColor: '#808080'}} />
                         <Text style={{width: 50, textAlign: 'center', color: "#808080"}}>or</Text>
                     <View style={{flex: 1, height: 1, backgroundColor: '#808080'}} />
-                </View>
-                <TouchableOpacity onPress={pressedLoginGoogle} style={styles.withButton}>
+                </View> */}
+                {/* <TouchableOpacity onPress={pressedLoginGoogle} style={styles.withButton}>
                 <View style={{
                     backgroundColor: "transparent", 
                     flexDirection: 'row',
@@ -117,7 +117,7 @@ export default function LoginScreen({ route, navigation }) {
                     <Image source={require('../../assets/images/icon-google.png')} style={styles.icon}/>
                     <Text style={styles.textWithGoogle}>Log In with Google</Text>
                 </View>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             
             </View>
         </View>
