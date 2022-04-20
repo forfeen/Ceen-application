@@ -24,7 +24,7 @@ export default function VaccinationCharts({ path }: { path: string }) {
   const [day, setDay] = useState<number>();
   const [month, setMonth] = useState<string>();
   const [year, setYear] = useState<number>();
-  const [date, setDate] = useState<string>('4/14/22');
+  const [date, setDate] = useState<string>('4/18/22');
 
   async function getCovidCase() {
     const data = await vaccineService.getCovidCase()
@@ -110,6 +110,10 @@ export default function VaccinationCharts({ path }: { path: string }) {
           136324,
           130479,
           97746,
+          57104,
+          50519,
+          48447,
+          39289
         ]
       }
     ],

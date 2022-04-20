@@ -126,7 +126,7 @@ return (
                     <Text style={styles.change_photo}>Change profile photo</Text>
                 </TouchableOpacity> */}
                 <View style={styles.pic_circle}>
-                    <Text style={{fontSize: 60, top: 4}}>{user?.displayName.charAt(0)}</Text>
+                    <Text style={{fontSize: 60, top: 4}}>{user?.displayName.charAt(0)}{user?.displayName.charAt(1)}</Text>
                 </View> 
             </View>
             <TextInput

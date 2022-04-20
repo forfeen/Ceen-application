@@ -22,7 +22,8 @@ const CreatePostScreen = ({route, navigation}) => {
      description: postData.description,
      likes: 0,
      dislikes: 0,
-     date: date
+     date: date,
+     comments: 0
   };
   return await vaccineService.createPost(vaccineId, post)
       .then(response => {
