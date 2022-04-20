@@ -44,7 +44,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootNavigator() {
   return (
     <Stack.Navigator
-      initialRouteName='Index' ///the name of the initial screen
+      initialRouteName='Start' ///the name of the initial screen
       >
       <Stack.Screen 
       name="Start" 
