@@ -445,12 +445,12 @@ const VaccineInfoScreen = ({route, navigation}) => {
             {vaccine?.long_description || ''} </Text>
             <Text style={styles.more_info}  onPress={ () => {  Linking.openURL(vaccineLink)}}>more infomation...</Text>
           <View style={styles.vac_info}>
-            <Text style={styles.info_text}>Name: {vaccine?.name || ''}</Text>
-            <Text style={styles.info_text}>Type: {vaccine?.type || ''}</Text>
-            <Text style={styles.info_text}>Developer: {vaccine?.manufacturer || ''}</Text>
-            <Text style={styles.info_text}>Performance: {vaccine?.performance || ''}%</Text>
-            <Text style={styles.info_text}>Side effects: {vaccine?.effects || ''}</Text>
-            <Text style={styles.info_text}>Average price per dose: {vaccine?.average_per_dose || '0'} Baht.</Text>
+            <Text style={styles.info_text}>ชื่อ: {vaccine?.name || ''}</Text>
+            <Text style={styles.info_text}>ประเภท: {vaccine?.type || ''}</Text>
+            <Text style={styles.info_text}>ผู้ผลิต: {vaccine?.manufacturer || ''}</Text>
+            <Text style={styles.info_text}>ประสิทธิภาพ: {vaccine?.performance || ''}%</Text>
+            <Text style={styles.info_text}>อาการไม่พึงประสงค์: {vaccine?.effects || ''}</Text>
+            <Text style={styles.info_text}>ราคา: {vaccine?.average_per_dose || '0'} บาท</Text>
           </View>
       </Card>
       <Swiper
@@ -552,6 +552,16 @@ const VaccineInfoScreen = ({route, navigation}) => {
                           : false
                         }
                      </View>
+                     {
+                            isOwner(item.ownerId) ?
+                              <AntDesign
+                                name="delete"
+                                size={15}
+                                color="black"
+                                style={{left: 275, top: 30.5}}
+                                onPress={()=> deleteReview(item['#'])} />
+                            : false
+                          }
                       <View style={styles.like}>
                         <Text>
                           {
@@ -699,14 +709,14 @@ const VaccineInfoScreen = ({route, navigation}) => {
                               checkLike(item.isLike) ? 
                                 <View style={{backgroundColor: 'transparent'}}>
                                   <Text style={{color: "black"}}>
-                                    <AntDesign name="like1" size={16} color="green" onPress={ () => {  dislikeQuestion(item)}} /> {item.likes} 
+                                    <AntDesign name="like1" size={16} color="green" onPress={ () => {  dislikePost(item)}} /> {item.likes} 
                                     <FontAwesome name="comment-o" size={16} color="black" /> {item.answers}
                                   </Text>
                                 </View>
                               :
                                 <View style={{backgroundColor: 'transparent'}}>
                                   <Text style={{color: "black"}}>
-                                    <AntDesign name="like2" size={16} color="green" onPress={ () => {  likeQuestion(item)}} /> {item.likes} 
+                                    <AntDesign name="like2" size={16} color="green" onPress={ () => {  likePost(item)}} /> {item.likes} 
                                     <FontAwesome name="comment-o" size={16} color="black" /> {item.answers}
                                   </Text>
                               </View>
