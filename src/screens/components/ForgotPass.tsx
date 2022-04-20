@@ -14,32 +14,14 @@ import Icon from '@expo/vector-icons/FontAwesome5';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 
-export default function LoginScreen({ route, navigation }) {
+export default function ForgotPass({ route, navigation }) {
     const { control, setValue, handleSubmit, formState: { errors } } = useForm<User>();
-    const [hidePass, setHidePass] = useState(true);
-
-    const pressedLogin = handleSubmit(data => {
-        signInWithEmailAndPassword(auth, data.email, data.password)
-        .then(userCredentials => {
-            const user = userCredentials.user;
-            if (user && user.emailVerified) {
-                navigation.push("Index");
-            } else {
-                sendEmailVerification(user);
-                alert("Check your email for verification mail before logging in")
-            }
-        })
-        .catch(error => alert(error.message));
-    });
-
-    const pressedLoginGoogle = () => {
-
-    };
 
     const forgetPasswordHandler = handleSubmit(data => {
         sendPasswordResetEmail(auth, data.email)
         .then(() => alert("Check your email for reset password"))
         .then(auth.signOut)
+
     });
     
     return (
@@ -61,44 +43,14 @@ export default function LoginScreen({ route, navigation }) {
                     )}
                 />
                 {errors.email && errors.email.type === "required" && <Text style={{color: "red"}} >Email is required</Text>}
-                <Controller
-                    control={control}
-                    rules={{ maxLength: 100, required: true}}
-                    name="password"
-                    render={({ field: { onChange, onBlur, value } }) => (
-                        <View style={{backgroundColor: "transparent"}}>
-                            <TextInput
-                                style={styles.input}
-                                onBlur={onBlur}
-                                onChangeText={onChange}
-                                value={value}
-                                secureTextEntry={hidePass ? true : false}
-                                placeholder="Password"
-                                placeholderTextColor="gray" 
-                            />
-                            <Icon
-                                style={styles.hide}
-                                name={hidePass ? 'eye-slash' : 'eye'}
-                                size={16}
-                                color="#2D9CDB"
-                                onPress={() => setHidePass(!hidePass)}
-                            />
-                        </View>
-                        
-                    )}
-                />
-    
-                {errors.password && errors.password.type === "required" && <Text style={{color: "red"}}>Password is required</Text>}
 
                 <TouchableOpacity 
-                    onPress={pressedLogin} 
+                    onPress={forgetPasswordHandler}
                     style={styles.button}>
-                    <Text style={styles.textLogin}>Log In</Text>
+                    <Text style={styles.textLogin}>Send Email</Text>
                 </TouchableOpacity>
                 
-                <TouchableOpacity onPress={forgetPasswordHandler}>
-                    <Text style={styles.forgot}>Forgot your password?</Text>
-                </TouchableOpacity>
+    
                 {/* <View style={{
                     backgroundColor: "transparent", 
                     flexDirection: 'row', 

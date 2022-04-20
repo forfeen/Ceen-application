@@ -16,6 +16,7 @@ import LoginScreen from '../screens/components/LoginScreen';
 import MapScreen from '../screens/components/MapScreen';
 import UserProfile from '../screens/components/UserProfile';
 import StartScreen from '../screens/components/StartScreen';
+import ForgotPass from '../screens/components/ForgotPass';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../../types';
 import CreateReviewScreen from '../screens/components/CreateReview';
@@ -305,6 +306,37 @@ function RootNavigator() {
         name="Create Answer" 
         component={CreateAnswerScreen}
         options ={({ navigation }) => ({ 
+          headerLeft: () => (
+            <Pressable
+              onPress={() => {
+                navigation.goBack();
+              }}
+              style={({ pressed }) => ({
+                opacity: pressed ? 0.5 : 1,
+              })}>
+                {({ }) => (
+              <Ionicons name="chevron-back-outline" size={24} color="black" />
+          )}
+            </Pressable>
+          ), 
+        })}
+      />
+      <Stack.Screen 
+        name="ForgotPass" 
+        component={ForgotPass}
+        options ={({ navigation }) => ({ 
+          title: 'Reset Password',
+        headerTitleAlign: 'center',
+        headerShadowVisible: false,
+        headerStatusBarHeight: 50,
+        headerStyle: {
+          backgroundColor: 'white',
+        },
+        headerTintColor: '#000',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+          fontSize: 25,
+        },
           headerLeft: () => (
             <Pressable
               onPress={() => {
