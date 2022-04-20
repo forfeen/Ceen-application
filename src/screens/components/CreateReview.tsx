@@ -1,6 +1,6 @@
-import { StyleSheet, TextInput, ScrollView, Alert, TouchableOpacity } from 'react-native';
+import { StyleSheet, TextInput, ScrollView, Alert, TouchableOpacity, Animated } from 'react-native';
 import { Card } from 'react-native-elements';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import SelectBox from 'react-native-multi-selectbox';
 import { useForm, Controller } from "react-hook-form";
 import { xorBy } from 'lodash';
@@ -26,6 +26,8 @@ const CreateReviewScreen = ({route, navigation}) => {
  const [firstDose, setFirstDose] = useState({});
  const [secondDose, setSecondDose] = useState({});
  const [thirdDose, setThirdDose] = useState({});
+
+ const offset = useRef(new Animated.Value(0)).current;
 
  async function createReview(reviewData) {
    
@@ -141,7 +143,18 @@ const CreateReviewScreen = ({route, navigation}) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView>
+       <ScrollView
+        style={styles.container}
+        contentContainerStyle={{
+          paddingTop: 10,
+          alignItems: 'center'
+        }}
+        showsVerticalScrollIndicator={false}
+        scrollEventThrottle={16}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: offset } } }],
+          { useNativeDriver: false }
+        )}>
         <Card containerStyle={styles.card_info}>
             <Text style={styles.vaccine_name}> {vaccineName} </Text>
             <Text style={styles.title}> Location: </Text>
@@ -188,7 +201,7 @@ const CreateReviewScreen = ({route, navigation}) => {
                   keyboardType="numeric"
                   value={value}
                   maxLength={5}
-                  placeholder="Type a number"
+                  placeholder="Type 0 if the price is unknown"
                 />
               )}
             />
@@ -317,12 +330,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#CAEAF2',
-    alignItems: 'center',
   },
   card_info: {
     backgroundColor: 'white',
     marginVertical: 18,
     width: 343,
+    height: 700,
     borderRadius: 20,
     elevation:0,
     borderWidth: 0
@@ -380,7 +393,7 @@ const styles = StyleSheet.create({
     height: 51,
     width: 250,
     marginTop: 25,
-    left: 70,
+    marginBottom: 30,
     backgroundColor: "#2D9CDB",
     borderRadius: 100,
     justifyContent: "center",
