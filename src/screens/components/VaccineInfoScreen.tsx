@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Swiper from 'react-native-swiper';
-import { StyleSheet, TouchableOpacity , FlatList, Linking, Alert } from 'react-native';
+import { StyleSheet, TouchableOpacity, 
+  FlatList, Linking, Alert, ScrollView, Animated } from 'react-native';
 import { AntDesign, FontAwesome} from '@expo/vector-icons'; 
 import Svg, { Rect, Circle} from 'react-native-svg';
 import ContentLoader from 'react-native-masked-loader';
@@ -17,6 +18,8 @@ import Review from '../../types/reviews.type';
 import Question from '../../types/questions.type';
 import Post from '../../types/posts.type';
 import vaccineService from '../services/vaccine.service';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const VaccineInfoScreen = ({route, navigation}) => {
   const { vaccineId } = route.params;
@@ -29,6 +32,8 @@ const VaccineInfoScreen = ({route, navigation}) => {
 
   const MaskedInfoElement = getMaskedInfoElement();
   const MaskedElement = getMaskedElement();
+
+  const offset = useRef(new Animated.Value(0)).current;
 
   async function getAllInfos() {
     return await vaccineService.getVaccine(vaccineId)
@@ -435,8 +440,21 @@ const VaccineInfoScreen = ({route, navigation}) => {
   </View>
   }
   return (
-    <View style={styles.container}>
-      {/* <ScrollView> */}
+    <SafeAreaProvider>
+       {/* <ScrollView
+        style={styles.container}
+        contentContainerStyle={{
+          paddingTop: 10,
+          alignItems: 'center'
+        }}
+        showsVerticalScrollIndicator={false}
+        scrollEventThrottle={16}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: offset } } }],
+          { useNativeDriver: false }
+        )}
+      > */}
+      <View style={styles.container}>
       <Card containerStyle={styles.card_info}>
           <Card containerStyle={styles.title_info}>
                 <Text style={styles.info}>Information </Text>
@@ -459,6 +477,7 @@ const VaccineInfoScreen = ({route, navigation}) => {
             position: 'absolute',
             bottom: '89%',
             left: '70%',
+            // height: hp('80%'),
           }}
           // onMomentumScrollEnd={(state) =>
           //   console.log('index:', state.index)
@@ -495,6 +514,7 @@ const VaccineInfoScreen = ({route, navigation}) => {
           {/* Review */}
           <View style={{backgroundColor: 'transparent', marginBottom: 100}}>
             <Text style={styles.title_section}>Reviews</Text>
+            <View style={{backgroundColor: 'transparent', alignItems: 'center'}}>
             <FlatList 
               data={review}
               renderItem={( {item} ) => {
@@ -503,7 +523,7 @@ const VaccineInfoScreen = ({route, navigation}) => {
                       <Text style={styles.date}> {Moment.utc(item.date).local().startOf('seconds').fromNow()} </Text>
                       <View style={styles.list}>
                         <View style={styles.circle}>
-                          <Text>{item.ownerName.charAt(0)}</Text>
+                          <Text>{item.ownerName.charAt(0)}{item.ownerName.charAt(1)}</Text>
                         </View> 
                         <Text style={{marginStart: 20, marginTop: 5, marginHorizontal: 60, color: "black"}}>
                           {item.description}
@@ -551,6 +571,13 @@ const VaccineInfoScreen = ({route, navigation}) => {
                           </View>
                           : false
                         }
+                        <Text style={{fontSize: 13, left: 82, top: 10, bottom: 5, width: 250, lineHeight: 24, color: "black"}}>
+                         Price: {item.price}
+                       </Text>
+                       <Text style={{fontSize: 13, left: 82, top: 10, bottom: 5, width: 250, lineHeight: 24, color: "black"}}>
+                         Location: {item.location}
+                       </Text>
+                        
                      </View>
                      {
                             isOwner(item.ownerId) ?
@@ -583,11 +610,13 @@ const VaccineInfoScreen = ({route, navigation}) => {
                     </View>
                   );
               }}/>
+              </View>
           </View>
 
            {/* Questions */}
           <View style={{backgroundColor: 'transparent'}}>
               <Text style={styles.title_section}>Questions/Answers</Text>
+              <View style={{backgroundColor: 'transparent', alignItems: 'center'}}>
               <FlatList 
                 data={question}
                 renderItem={( {item} ) => {
@@ -602,9 +631,16 @@ const VaccineInfoScreen = ({route, navigation}) => {
                             <Text style={styles.date}> {Moment.utc(item.date).local().startOf('seconds').fromNow()} </Text>
                             <View style={{backgroundColor: 'white', flexDirection: 'row', top: 14}}>
                               <View style={styles.circle_question}>
-                                <Text>{item.ownerName.charAt(0)}</Text>
+                                <Text><Text>{item.ownerName.charAt(0)}{item.ownerName.charAt(1)}</Text></Text>
                               </View>
-                              {
+                          </View>
+                            {/* <View style={styles.list}> */}
+                              <Text style={{marginStart: 75, marginTop: 2, marginHorizontal: 60, left: 10, lineHeight: 15, fontWeight: '800'}}>
+                                {item.title}
+                              </Text>
+                          {/* </View> */}
+                          <View style={styles.list}>
+                          {
                                 item?.typeLocation ? 
                                   <Card containerStyle={styles.title_type}>
                                     <Text style={styles.info_type}> Location </Text>
@@ -629,11 +665,6 @@ const VaccineInfoScreen = ({route, navigation}) => {
                                   false
                               }
                           </View>
-                            {/* <View style={styles.list}> */}
-                              <Text style={{marginStart: 75, marginTop: 15, marginHorizontal: 60, left: 10, lineHeight: 25, fontWeight: '800'}}>
-                                {item.title}
-                              </Text>
-                          {/* </View> */}
                           {
                             isOwner(item.ownerId) ?
                               <AntDesign
@@ -666,11 +697,13 @@ const VaccineInfoScreen = ({route, navigation}) => {
                       </TouchableOpacity>
                     );
                 }}/>
+                </View>
             </View>
 
             {/* Timelines */}
             <View style={{backgroundColor: 'transparent'}}>
               <Text style={styles.title_section}>Timelines</Text>
+              <View style={{backgroundColor: 'transparent', alignItems: 'center'}}>
               <FlatList 
                 data={post}
                 renderItem={( {item} ) => {
@@ -709,15 +742,13 @@ const VaccineInfoScreen = ({route, navigation}) => {
                               checkLike(item.isLike) ? 
                                 <View style={{backgroundColor: 'transparent'}}>
                                   <Text style={{color: "black"}}>
-                                    <AntDesign name="like1" size={16} color="green" onPress={ () => {  dislikePost(item)}} /> {item.likes} 
-                                    <FontAwesome name="comment-o" size={16} color="black" /> {item.answers}
+                                    <AntDesign name="like1" size={16} color="green" onPress={ () => {  dislikeQuestion(item)}} /> {item.likes} <FontAwesome name="comment-o" size={16} color="black" /> {item.comments}
                                   </Text>
                                 </View>
                               :
                                 <View style={{backgroundColor: 'transparent'}}>
                                   <Text style={{color: "black"}}>
-                                    <AntDesign name="like2" size={16} color="green" onPress={ () => {  likePost(item)}} /> {item.likes} 
-                                    <FontAwesome name="comment-o" size={16} color="black" /> {item.answers}
+                                    <AntDesign name="like2" size={16} color="green" onPress={ () => {  likeQuestion(item)}} /> {item.likes} <FontAwesome name="comment-o" size={16} color="black" /> {item.comments}
                                   </Text>
                               </View>
 
@@ -728,6 +759,7 @@ const VaccineInfoScreen = ({route, navigation}) => {
                     </TouchableOpacity>
                   );
               }}/>
+            </View>
           </View>
           
         </Swiper>
@@ -742,7 +774,9 @@ const VaccineInfoScreen = ({route, navigation}) => {
             <Icon name="md-create" style={styles.actionButtonIcon} />
           </ActionButton.Item>
         </ActionButton>
-    </View>
+        </View>
+    {/* </ScrollView> */}
+    </SafeAreaProvider>
   );
 }
 
@@ -752,7 +786,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#CAEAF2',
-    alignItems: 'center',
   },
   card_info: {
     backgroundColor: 'white',
@@ -833,7 +866,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     elevation:0,
     borderWidth: 0,
-    marginHorizontal: 25,
+    // marginHorizontal: wp('5%'),
     paddingBottom: 40,
   },
   text: {
