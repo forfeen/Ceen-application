@@ -571,6 +571,13 @@ const VaccineInfoScreen = ({route, navigation}) => {
                           </View>
                           : false
                         }
+                        <Text style={{fontSize: 13, left: 82, top: 10, bottom: 5, width: 250, lineHeight: 24, color: "black"}}>
+                         Price: {item.price}
+                       </Text>
+                       <Text style={{fontSize: 13, left: 82, top: 10, bottom: 5, width: 250, lineHeight: 24, color: "black"}}>
+                         Location: {item.location}
+                       </Text>
+                        
                      </View>
                       <View style={styles.like}>
                         <Text>
