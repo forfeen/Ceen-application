@@ -4,13 +4,13 @@
     "slug": "ceenApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "src/assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "src/assets/images/splash_cus.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#2D9CDB"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -19,11 +19,22 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ske16.ceen",
+      "config": {
+        "googleMapsApiKey": "${process.env.iOSMapsApiKey}"
+      }
+      
     },
     "android": {
+      "package": "com.ske16.ceen",
+      "config" : {
+        "googleMaps": {
+        "apiKey": "${process.env.iOSMapsApiKey}"
+        }
+      },
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "src/assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       }
     },

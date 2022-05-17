@@ -1,7 +1,13 @@
 export default interface Post {
-    id: string,
-    description: string,
-    like: number,
-    dislike: number,
-    date: string
-  }
+  items?: any;
+  "#"?: string;
+  ownerName: string;
+  ownerId: string;
+  id: string;
+  title: string;
+  description: string;
+  like: number;
+  date: string;
+  isLike: string;
+  comments: number
+}
