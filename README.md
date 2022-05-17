@@ -15,7 +15,7 @@ Ceen, a mobile application that provides information. Not only broad vaccination
 
 2. Change directory to the directory that contain _app.json_ directory.
     ```
-    cd Ceen-application
+    $ cd Ceen-application
     ```
 3. Create .env for your local app environment settings to access the vaccination locations and firebase
 
