@@ -78,7 +78,7 @@ const CreateQuestionScreen = ({route, navigation}) => {
       <ScrollView>
         <Card containerStyle={styles.card_info}>
             <Text style={styles.vaccine_name}> {vaccineName} </Text>
-            <Text style={styles.title}> Title: </Text> 
+            <Text style={styles.title}> หัวข้อ: </Text> 
             <Controller
               control={control}
               rules={{ maxLength: 70, required: true }}
@@ -98,7 +98,7 @@ const CreateQuestionScreen = ({route, navigation}) => {
             )} 
             />   
             {errors.title && errors.title.type === "required" && <Text style={styles.error_msg}>Title is required</Text>}
-          <Text style={styles.des_title}> Type: </Text> 
+          <Text style={styles.des_title}> ประเภท: </Text> 
           <View style={{flexDirection: 'row', backgroundColor: 'white', padding: 0}}>
             <CheckBox
                 // center
@@ -132,7 +132,7 @@ const CreateQuestionScreen = ({route, navigation}) => {
               />
           </View>
 
-            <Text style={styles.des_title}> Description: </Text>       
+            <Text style={styles.des_title}> คำอธิบาย: </Text>       
             <Controller
               control={control}
               rules={{ maxLength: 450, required: true }}

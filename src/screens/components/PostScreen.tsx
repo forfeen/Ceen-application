@@ -195,6 +195,7 @@ const PostScreen = ({route, navigation}) => {
         const comments = await getComment();
         const commentSameId = comments.filter((a) => a.post_id === postId);
         setComment(commentSameId.reverse());
+        console.log(comment);
       }
 
       fetchPost();
@@ -227,7 +228,6 @@ const PostScreen = ({route, navigation}) => {
     return (
         <View style={styles.container}>
           <Card containerStyle={styles.card_info}>
-            <Text style={styles.title}>{post?.title || ''}  </Text>
             <Text style={styles.description}>{post?.description || ' '} </Text>
           </Card>
           <View style={{backgroundColor: 'transparent'}}>
@@ -282,7 +282,7 @@ const PostScreen = ({route, navigation}) => {
               :               
                <Text style={{top: 100, fontSize: 20}}> No Comment </Text>
             } 
-              <ActionButton buttonColor="rgba(231,76,60,1)" onPress={() => navigation.navigate('Create Answer', {vaccineId: vaccineId, question: question})} />
+              <ActionButton buttonColor="rgba(231,76,60,1)" onPress={() => navigation.navigate('Create Comment', {vaccineId: vaccineId, post: post})} />
         </View>
         
   );

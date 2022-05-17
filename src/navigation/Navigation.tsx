@@ -25,6 +25,7 @@ import CreatePostScreen from '../screens/components/CreatePostScreen';
 import QuestionScreen from '../screens/components/QuestionScreen';
 import CreateAnswerScreen from '../screens/components/CreateAnswerScreen';
 import PostScreen from '../screens/components/PostScreen';
+import CreateCommentScreen from '../screens/components/CreateCommentScreen';
 
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
@@ -320,6 +321,25 @@ function RootNavigator() {
             </Pressable>
           ), 
         })}
+      />
+      <Stack.Screen 
+        name="Create Comment" 
+        component={CreateCommentScreen}
+        options ={({ navigation }) => ({ 
+          headerLeft: () => (
+            <Pressable
+              onPress={() => {
+                navigation.goBack();
+              }}
+              style={({ pressed }) => ({
+                opacity: pressed ? 0.5 : 1,
+              })}>
+                {({ }) => (
+              <Ionicons name="chevron-back-outline" size={24} color="black" />
+          )}
+            </Pressable>
+          ), 
+        })}  
       />
       <Stack.Screen 
         name="ForgotPass" 
