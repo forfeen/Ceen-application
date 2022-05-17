@@ -157,7 +157,7 @@ const CreateReviewScreen = ({route, navigation}) => {
         )}>
         <Card containerStyle={styles.card_info}>
             <Text style={styles.vaccine_name}> {vaccineName} </Text>
-            <Text style={styles.title}> Location: </Text>
+            <Text style={styles.title}> สถานที่: </Text>
             <Controller
               control={control}
               rules={{ maxLength: 70, required: true }}
@@ -186,7 +186,7 @@ const CreateReviewScreen = ({route, navigation}) => {
               value={location}
               placeholder="Type a location"
               /> */}
-            <Text style={styles.title}> Price: </Text>
+            <Text style={styles.title}> ราคา: </Text>
             <Controller
               control={control}
               rules={{ maxLength: 5, required: true}}
@@ -205,7 +205,7 @@ const CreateReviewScreen = ({route, navigation}) => {
                 />
               )}
             />
-            <Text style={styles.currect_title}> Current Dose: </Text>       
+            <Text style={styles.currect_title}> เข็มปัจจุบัน: </Text>       
             <View style={{backgroundColor: '#white', paddingTop: 20, paddingLeft: 5}}>
               <SelectBox
                   label
@@ -217,7 +217,7 @@ const CreateReviewScreen = ({route, navigation}) => {
                 <View style={styles.selectBox}>
                   {numDose['id'] == 2 ?  
                     <SelectBox
-                      label = "Please select first dose"
+                      label = "โปรดเลือกเข็มที่ 1"
                       options={VACCINE_OPTIONS}
                       value={firstDose}
                       onChange={selectFirstDose()}
@@ -229,14 +229,14 @@ const CreateReviewScreen = ({route, navigation}) => {
                   {numDose['id'] == 3 ?  
                     <View style={styles.selectBox}>
                       <SelectBox
-                      label = "Please select first dose"
+                      label = "โปรดเลือกเข็มที่ 1"
                       options={VACCINE_OPTIONS}
                       value={firstDose}
                       onChange={selectFirstDose()}
                       hideInputFilter
                       />
                       <SelectBox
-                        label = "Please select second dose"
+                        label = "โปรดเลือกเข็มที่ 2"
                         options={VACCINE_OPTIONS}
                         value={secondDose}
                         onChange={selectSecondtDose()}
@@ -249,21 +249,21 @@ const CreateReviewScreen = ({route, navigation}) => {
                     <View style={styles.selectBox}>
                       <SelectBox
                       style={{margin: 2}}
-                      label = "Please select first dose"
+                      label = "โปรดเลือกเข็มที่ 1"
                       options={VACCINE_OPTIONS}
                       value={firstDose}
                       onChange={selectFirstDose()}
                       hideInputFilter
                       />
                       <SelectBox
-                        label = "Please select second dose"
+                        label = "โปรดเลือกเข็มที่ 2"
                         options={VACCINE_OPTIONS}
                         value={secondDose}
                         onChange={selectSecondtDose()}
                         hideInputFilter
                       />
                       <SelectBox
-                        label = "Please select thrid dose"
+                        label = "โปรดเลือกเข็มที่ 3"
                         options={VACCINE_OPTIONS}
                         value={thirdDose}
                         onChange={selectThirdDose()}
@@ -274,7 +274,7 @@ const CreateReviewScreen = ({route, navigation}) => {
                   }
               </View>
             </View>
-          <Text style={styles.currect_title}> Side effects: </Text> 
+          <Text style={styles.currect_title}> อาการไม่พึงประสงค์: </Text> 
           <View style={{backgroundColor: '#white', paddingTop: 25, paddingLeft: 5}}>
               <SelectBox
                   label
@@ -286,7 +286,7 @@ const CreateReviewScreen = ({route, navigation}) => {
                   hideInputFilter
                 />
             </View>
-          <Text style={styles.currect_title}> Description: </Text> 
+          <Text style={styles.currect_title}> คำอธิบาย: </Text> 
           {/* <TextInput 
             multiline 
             style={styles.description}  
@@ -335,7 +335,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     marginVertical: 18,
     width: 343,
-    height: 700,
+    // height: 800,
     borderRadius: 20,
     elevation:0,
     borderWidth: 0

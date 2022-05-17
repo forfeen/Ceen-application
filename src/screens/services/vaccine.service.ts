@@ -67,6 +67,8 @@ class VaccineDataService {
                 "X-CLIENT-SECRET": process.env.X_CLIENT_SECRET
             }
         });
+        console.log(process.env.X_CLIENT_SECRET);
+        
     }
 
     // getVaccinationFullData() {
@@ -86,6 +88,10 @@ class VaccineDataService {
 
     createAnswer(vaccineId, data) {
         return axios.post<Answer>(baseURL + '/answers/'+ vaccineId, data);
+    }
+
+    createComment(vaccineId, data) {
+        return axios.post<Comment>(baseURL + '/comments/'+ vaccineId, data);
     }
 
     likeReview(vaccineId, data) {
