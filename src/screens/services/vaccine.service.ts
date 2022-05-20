@@ -59,16 +59,7 @@ class VaccineDataService {
     }
 
     getLocations() {
-        return axios.get<Locations>(vacLocationsURL
-            , {
-            headers: { 
-                "Content-Type": "application/json",
-                "X-CLIENT-ID": process.env.X_CLIENT_ID,
-                "X-CLIENT-SECRET": process.env.X_CLIENT_SECRET
-            }
-        });
-        console.log(process.env.X_CLIENT_SECRET);
-        
+        return axios.get<Locations>(vacLocationsURL);
     }
 
     // getVaccinationFullData() {

@@ -46,7 +46,7 @@ const MapScreen = ({navigation}: {navigation: any}) => {
   async function getAllLocation() {
     const data = await vaccineService.getLocations()
         .then(response => {
-          return response.data.data;
+          return response.data.items;
         })
         .catch(e => {
             console.error(e);
@@ -84,12 +84,12 @@ const MapScreen = ({navigation}: {navigation: any}) => {
     const fetchLo = async () => {
       const locationData = await getAllLocation();
       for(let i=0; i<locationData.length; i++){
-        if(locationData[i].location.properties.name !== "undefined" &&
-        locationData[i].location.properties.name !== "หมุดซ้ำ" &&
-        locationData[i].location.geometry){
-          getCoor.push({name: locationData[i].location.properties.name, 
-            lat: Geohash.decode(locationData[i].location.geometry).lat,
-            lon: Geohash.decode(locationData[i].location.geometry).lon
+        if(locationData[i].properties_name !== "undefined" &&
+        locationData[i].properties_name !== "หมุดซ้ำ" &&
+        locationData[i].location_geometry){
+          getCoor.push({name: locationData[i].properties_name, 
+            lat: Geohash.decode(locationData[i].location_geometry).lat,
+            lon: Geohash.decode(locationData[i].location_geometry).lon
           })
         }
       }
